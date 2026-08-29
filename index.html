@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>个人工具站 · 淡绿导航</title>
+    <title>Python 基础 · 学习导航</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
@@ -20,12 +19,13 @@
             justify-content: center;
             align-items: center;
             padding: 24px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         .app {
-            max-width: 1240px;
+            max-width: 1100px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.70);
+            background: rgba(255, 255, 255, 0.72);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             border-radius: 48px 48px 32px 32px;
@@ -35,6 +35,7 @@
             transition: all 0.2s ease;
         }
 
+        /* ===== 顶栏 ===== */
         .top-bar {
             display: flex;
             flex-wrap: wrap;
@@ -60,6 +61,12 @@
             font-size: 1.25rem;
             color: #1f3a2b;
             letter-spacing: -0.3px;
+            text-decoration: none;
+            transition: 0.15s;
+        }
+
+        .brand:hover {
+            color: #0f2a1a;
         }
 
         .brand i {
@@ -76,40 +83,29 @@
             font-weight: 500;
             letter-spacing: 0.2px;
             border: 1px solid rgba(100, 150, 120, 0.2);
-        }
-
-        .search-area {
-            background: rgba(235, 248, 230, 0.7);
-            backdrop-filter: blur(2px);
-            border-radius: 60px;
-            padding: 6px 16px 6px 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 6px 0 22px 0;
-            border: 1px solid rgba(130, 180, 140, 0.25);
+            text-decoration: none;
             transition: 0.15s;
         }
 
-        .search-area i {
-            color: #3a7050;
-            font-size: 0.9rem;
+        .top-badge:hover {
+            background: rgba(70, 130, 100, 0.25);
         }
 
-        .search-area input {
-            border: none;
-            background: transparent;
-            padding: 12px 0;
-            width: 100%;
-            font-size: 0.95rem;
-            outline: none;
-            color: #1a3324;
+        .header-date {
+            font-size: 0.8rem;
+            background: rgba(70, 130, 100, 0.10);
+            padding: 4px 14px;
+            border-radius: 40px;
+            color: #1f4d3a;
+            border: 1px solid rgba(100, 150, 120, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
         }
 
-        .search-area input::placeholder {
-            color: #5f826b;
-            font-weight: 400;
-            opacity: 0.7;
+        .header-date i {
+            color: #2b7a52;
         }
 
         /* ===== 分类标签 ===== */
@@ -133,6 +129,7 @@
             transition: 0.15s;
             cursor: pointer;
             user-select: none;
+            text-decoration: none;
         }
 
         .chip i {
@@ -161,8 +158,7 @@
             display: flex;
             align-items: baseline;
             gap: 12px;
-            margin: 30px 0 12px 0;
-            transition: 0.2s;
+            margin: 0 0 16px 0;
         }
 
         .section-label h3 {
@@ -170,7 +166,6 @@
             font-size: 1.1rem;
             color: #1a3829;
             letter-spacing: -0.2px;
-            transition: 0.2s;
         }
 
         .section-label h3 i {
@@ -189,9 +184,14 @@
         /* ===== 卡片网格 ===== */
         .module-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 24px;
             margin-top: 6px;
+        }
+
+        .module-grid:has(.card:only-child) {
+            grid-template-columns: 250px;
+            justify-content: center;
         }
 
         .card {
@@ -205,12 +205,15 @@
             transition: 0.25s ease;
             display: flex;
             flex-direction: column;
+            text-decoration: none;
+            color: inherit;
         }
 
         .card:hover {
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.8);
             border-color: rgba(110, 180, 130, 0.5);
-            box-shadow: 0 12px 30px rgba(60, 110, 70, 0.08);
+            box-shadow: 0 12px 30px rgba(60, 110, 70, 0.10);
+            transform: translateY(-3px);
         }
 
         .card.hidden {
@@ -314,7 +317,6 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            cursor: default;
         }
 
         .btn-link i {
@@ -326,53 +328,70 @@
             border-color: rgba(90, 160, 110, 0.4);
         }
 
-        /* 特色工具条 */
+        /* ===== 特色工具条（底部） ===== */
         .featured-tools-wrapper {
-            margin-top: 40px;
+            margin-top: 32px;
         }
 
         .featured-tools {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
-            background: rgba(225, 245, 220, 0.3);
+            background: rgba(225, 245, 220, 0.35);
             backdrop-filter: blur(2px);
-            padding: 20px 18px;
-            border-radius: 32px;
-            border: 1px solid rgba(160, 200, 165, 0.25);
+            padding: 18px 20px;
+            border-radius: 28px;
+            border: 1px solid rgba(160, 200, 165, 0.3);
         }
 
         .tool-item {
             display: flex;
             flex-direction: column;
             gap: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(170, 210, 175, 0.25);
+            transition: 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .tool-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(110, 180, 130, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(60, 110, 70, 0.08);
         }
 
         .tool-item .tool-name {
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #153121;
             letter-spacing: -0.1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .tool-item .tool-name i {
             color: #236b44;
-            margin-right: 6px;
-            width: 18px;
+            font-size: 1.1rem;
         }
 
         .tool-item .tool-desc {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #3e6b4e;
             line-height: 1.4;
+            opacity: 0.8;
         }
 
         .tool-item .tool-meta {
-            margin-top: 4px;
+            margin-top: 6px;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: #1f6b44;
             font-weight: 500;
         }
@@ -382,8 +401,9 @@
             color: #2b8c5a;
         }
 
+        /* ===== 底部 ===== */
         .footer-wrapper {
-            margin-top: 32px;
+            margin-top: 20px;
         }
 
         hr {
@@ -401,11 +421,23 @@
             padding-top: 6px;
         }
 
+        .footer-links a {
+            color: #3d6b4c;
+            text-decoration: none;
+            transition: 0.15s;
+        }
+
+        .footer-links a:hover {
+            color: #1a4630;
+            text-decoration: underline;
+        }
+
         .footer-links i {
             margin-right: 4px;
             color: #357a53;
         }
 
+        /* ===== 响应式 ===== */
         @media (max-width: 640px) {
             .app {
                 padding: 18px 16px;
@@ -415,314 +447,271 @@
                 align-items: start;
                 gap: 12px;
             }
-            .featured-tools {
-                grid-template-columns: 1fr;
-            }
             .module-grid {
                 grid-template-columns: 1fr;
+            }
+            .module-grid:has(.card:only-child) {
+                grid-template-columns: 1fr;
+                justify-content: center;
+            }
+            .featured-tools {
+                grid-template-columns: 1fr;
+                padding: 14px;
+            }
+            .tool-item {
+                padding: 12px 14px;
             }
         }
     </style>
 </head>
 <body>
+
 <div class="app">
 
-    <!-- 顶栏 -->
+    <!-- ===== 顶栏 ===== -->
     <div class="top-bar">
         <div class="top-left">
-            <div class="brand">
-                <i class="fas fa-leaf"></i> 个人工具站
-            </div>
-            <span class="top-badge"><i class="fas fa-circle" style="color: #2b8c5a; font-size: 0.4rem;"></i> 我的数字工作台</span>
+            <a href="#" class="brand">
+                <i class="fas fa-leaf"></i> Python 笔记
+            </a>
+            <a href="https://www.ashao.dpdns.org/#/" class="top-badge">
+                <i class="fas fa-circle" style="color: #2b8c5a; font-size: 0.4rem;"></i> 返回主目录
+            </a>
         </div>
-    </div>
-
-    <!-- 搜索 -->
-    <div class="search-area">
-        <i class="fas fa-search"></i>
-        <input type="text" placeholder="搜索工具、模块或用途" value="Q搜索工具、模块或用途">
+        <a href="./index.html" class="header-date">
+            <i class="far fa-calendar-alt"></i> <span id="todayDate">2026-08-29</span>
+        </a>
     </div>
 
     <!-- ===== 分类标签 ===== -->
     <div class="category-chips">
-        <span class="chip active" data-filter="all" data-label="效率模块"><i class="fas fa-th-large"></i> 全部</span>
-        <span class="chip" data-filter="finance" data-label="财务工具"><i class="fas fa-chart-line"></i> 财务</span>
-        <span class="chip" data-filter="report" data-label="报表工具"><i class="fas fa-table"></i> 报表</span>
-        <span class="chip" data-filter="analysis" data-label="分析工具"><i class="fas fa-chart-pie"></i> 分析</span>
-        <span class="chip" data-filter="data" data-label="数据工具"><i class="fas fa-database"></i> 数据</span>
-        <span class="chip" data-filter="software" data-label="软件工具"><i class="fas fa-laptop-code"></i> 软件</span>
-        <span class="chip" data-filter="efficiency" data-label="效率工具"><i class="fas fa-bolt"></i> 效率</span>
-        <span class="chip" data-filter="media" data-label="媒体工具"><i class="fas fa-photo-video"></i> 媒体</span>
-        <span class="chip" data-filter="planning" data-label="规划工具"><i class="fas fa-route"></i> 规划</span>
-        <span class="chip" style="background: #1f3a2b; color: #f0f9ec; border-color:#1f3a2b; cursor:default;"><i class="fas fa-arrow-right"></i> WORKFLOW · 27TOOL</span>
+        <span class="chip active" data-filter="all"><i class="fas fa-th-large"></i> 全部</span>
+        <span class="chip" data-filter="python"><i class="fab fa-python"></i> Python 基础</span>
+        <span class="chip" data-filter="flask"><i class="fas fa-flask"></i> Flask</span>
     </div>
 
-    <!-- ===== 模块标题（联动） ===== -->
-    <div class="section-label" id="sectionLabel">
-        <h3><i class="fas fa-cog"></i> <span id="moduleTitle">效率模块</span></h3>
-        <span id="moduleSub">把重复的小事交给顺手的小工具。</span>
+    <!-- ===== 模块标题 ===== -->
+    <div class="section-label">
+        <h3><i class="fas fa-book"></i> <span id="moduleTitle">学习笔记</span></h3>
+        <span id="moduleSub">Python 核心知识 · 点击卡片进入</span>
     </div>
 
-    <!-- ===== 卡片网格 ===== -->
+    <!-- ===== 卡片网格（默认全部展示） ===== -->
     <div class="module-grid" id="cardGrid">
-        <!-- 卡片1 -->
-        <div class="card" data-category="finance efficiency">
-            <div class="card-header">
-                <i class="fas fa-percent"></i>
-                <span class="title">RATE CALC</span>
-                <span class="badge">已上线</span>
-            </div>
-            <div class="card-desc">
-                存款利息与房贷、经营贷还款估算，附LPR与各行挂牌利率参考。
-            </div>
-            <div class="card-tags">
-                <span class="tag">贷款</span>
-                <span class="tag">LPR</span>
-                <span class="tag">还款计划</span>
-            </div>
-            <div class="card-footer">
-                <span class="status"><i class="fas fa-circle"></i> 进入工具 →</span>
-                <span class="btn-link"><i class="fas fa-chevron-right"></i> 已上线</span>
-            </div>
-        </div>
 
-        <!-- 卡片2 -->
-        <div class="card" data-category="finance efficiency">
-            <div class="card-header">
-                <i class="fas fa-dollar-sign"></i>
-                <span class="title">CURRENCY EXCHANGE</span>
-                <span class="badge">已上线</span>
-            </div>
-            <div class="card-desc">
-                实时获取最新汇率，自由选择币种、输入金额，一键换算160+种货币。
-            </div>
-            <div class="card-tags">
-                <span class="tag">多币种</span>
-                <span class="tag">实时</span>
-            </div>
-            <div class="card-footer">
-                <span class="status"><i class="fas fa-circle"></i> 进入工具 →</span>
-                <span class="btn-link"><i class="fas fa-chevron-right"></i> 已上线</span>
-            </div>
-        </div>
-
-        <!-- 卡片3 -->
-        <div class="card" data-category="finance efficiency">
-            <div class="card-header">
-                <i class="fas fa-chart-simple"></i>
-                <span class="title">DCA CALC</span>
-                <span class="badge">已上线</span>
-            </div>
-            <div class="card-desc">
-                每月定投、复利增长测算，直观看到最终资产、总收益与收益率。
-            </div>
-            <div class="card-tags">
-                <span class="tag">定投</span>
-                <span class="tag">复利</span>
-            </div>
-            <div class="card-footer">
-                <span class="status"><i class="fas fa-circle"></i> 进入工具 →</span>
-                <span class="btn-link"><i class="fas fa-chevron-right"></i> 已上线</span>
-            </div>
-        </div>
-
-        <!-- 卡片4 -->
-        <div class="card" data-category="finance report">
-            <div class="card-header">
-                <i class="fas fa-calculator"></i>
-                <span class="title">贷款计算器</span>
-                <span class="badge">NEW</span>
-            </div>
-            <div class="card-desc">
-                等额本息/等额本金，支持LPR浮动利率，生成详细还款计划表。
-            </div>
-            <div class="card-tags">
-                <span class="tag">房贷</span>
-                <span class="tag">经营贷</span>
-            </div>
-            <div class="card-footer">
-                <span class="status"><i class="fas fa-circle"></i> 热门</span>
-                <span class="btn-link"><i class="fas fa-chevron-right"></i> 进入</span>
-            </div>
-        </div>
-
-        <!-- 卡片5 -->
-        <div class="card" data-category="finance analysis report">
-            <div class="card-header">
-                <i class="fas fa-chart-pie"></i>
-                <span class="title">财务分析</span>
-                <span class="badge">即将上线</span>
-            </div>
-            <div class="card-desc">
-                报表可视化、杜邦分析、现金流监控，辅助经营决策。
-            </div>
-            <div class="card-tags">
-                <span class="tag">报表</span>
-                <span class="tag">分析</span>
-            </div>
-            <div class="card-footer">
-                <span class="status"><i class="fas fa-circle" style="color: #b68b40;"></i> 内测</span>
-                <span class="btn-link"><i class="fas fa-clock"></i> 即将上线</span>
-            </div>
-        </div>
-
-        <!-- 卡片6 -->
-        <div class="card" data-category="media">
-            <div class="card-header">
-                <i class="fas fa-cloud-sun"></i>
-                <span class="title">Fresh Background</span>
-                <span class="badge">热门</span>
-            </div>
-            <div class="card-desc">
-                精选壁纸与动态背景，每日更新，提升工作台氛围。
-            </div>
-            <div class="card-tags">
-                <span class="tag">媒体</span>
-                <span class="tag">壁纸</span>
-            </div>
-            <div class="card-footer">
-                <span class="status"><i class="fas fa-circle"></i> 进入</span>
-                <span class="btn-link"><i class="fas fa-chevron-right"></i> 浏览</span>
-            </div>
-        </div>
-
-        <!-- 卡片7 -->
-        <div class="card" data-category="software efficiency">
+        <!-- 卡片1：函数 -->
+        <a href="docss/08272hanshu.html" class="card" data-category="python" target="_blank">
             <div class="card-header">
                 <i class="fas fa-code"></i>
-                <span class="title">代码片段</span>
-                <span class="badge">热门</span>
+                <span class="title">Python 函数</span>
+                <span class="badge">核心</span>
             </div>
             <div class="card-desc">
-                常用代码片段管理，支持多种语言，快速检索与复用。
+                函数定义、参数传递、返回值、lambda 匿名函数、模块化编程。
             </div>
             <div class="card-tags">
-                <span class="tag">开发</span>
-                <span class="tag">代码</span>
+                <span class="tag">def</span>
+                <span class="tag">参数</span>
+                <span class="tag">return</span>
+                <span class="tag">lambda</span>
             </div>
             <div class="card-footer">
-                <span class="status"><i class="fas fa-circle"></i> 进入</span>
-                <span class="btn-link"><i class="fas fa-chevron-right"></i> 浏览</span>
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
             </div>
-        </div>
+        </a>
 
-        <!-- 卡片8 -->
-        <div class="card" data-category="data analysis">
+        <!-- 卡片2：面向对象 -->
+        <a href="docss/0828lei.html" class="card" data-category="python" target="_blank">
             <div class="card-header">
-                <i class="fas fa-chart-bar"></i>
-                <span class="title">数据看板</span>
-                <span class="badge">NEW</span>
+                <i class="fas fa-cubes"></i>
+                <span class="title">面向对象编程</span>
+                <span class="badge">第九章</span>
             </div>
             <div class="card-desc">
-                可视化数据仪表盘，支持多数据源接入，实时监控关键指标。
+                类与对象、属性修改、列表/字典存储、继承、类练习（婚礼礼金）。
             </div>
             <div class="card-tags">
-                <span class="tag">可视化</span>
-                <span class="tag">监控</span>
+                <span class="tag">class</span>
+                <span class="tag">继承</span>
+                <span class="tag">__init__</span>
+                <span class="tag">super()</span>
             </div>
             <div class="card-footer">
-                <span class="status"><i class="fas fa-circle"></i> 进入</span>
-                <span class="btn-link"><i class="fas fa-chevron-right"></i> 体验</span>
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
             </div>
-        </div>
+        </a>
+
+        <!-- 卡片3：文件处理 -->
+        <a href="docss/0828wenjian.html" class="card" data-category="python" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-file-code"></i>
+                <span class="title">文件处理</span>
+                <span class="badge">第十章</span>
+            </div>
+            <div class="card-desc">
+                文件读写、按行读取、JSON 存储、异常处理、路径操作。
+            </div>
+            <div class="card-tags">
+                <span class="tag">open</span>
+                <span class="tag">JSON</span>
+                <span class="tag">try/except</span>
+                <span class="tag">with</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
+            </div>
+        </a>
+
+        <!-- 卡片4：文件练习合集 -->
+        <a href="docss/0828wenjian.html" class="card" data-category="python" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-tasks"></i>
+                <span class="title">文件处理 · 4练习</span>
+                <span class="badge">实战</span>
+            </div>
+            <div class="card-desc">
+                英汉词典、婚礼礼金、JSON 成绩录入、异常处理成绩录入 —— 完整源码。
+            </div>
+            <div class="card-tags">
+                <span class="tag">英汉词典</span>
+                <span class="tag">礼金</span>
+                <span class="tag">JSON</span>
+                <span class="tag">异常</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入练习 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 查看</span>
+            </div>
+        </a>
+
+        <!-- 卡片5：Flask 入门 -->
+        <a href="docss/0829flask1.html" class="card" data-category="flask" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-flask"></i>
+                <span class="title">Flask · 入门</span>
+                <span class="badge">Web</span>
+            </div>
+            <div class="card-desc">
+                安装 Flask、路由与参数、请求处理、模板渲染、返回 JSON —— 从零搭建 Web 接口。
+            </div>
+            <div class="card-tags">
+                <span class="tag">路由</span>
+                <span class="tag">render_template</span>
+                <span class="tag">request</span>
+                <span class="tag">jsonify</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
+            </div>
+        </a>
+
     </div>
 
-    <!-- 特色工具条 -->
+    <!-- ===== 特色工具条 ===== -->
     <div class="featured-tools-wrapper">
         <div class="featured-tools">
-            <div class="tool-item">
-                <div class="tool-name"><i class="fas fa-coins"></i> RATE CALC</div>
-                <div class="tool-desc">存款利息 · 房贷 · LPR</div>
-                <div class="tool-meta"><i class="fas fa-circle"></i> 已上线 · 进入工具 →</div>
-            </div>
-            <div class="tool-item">
-                <div class="tool-name"><i class="fas fa-exchange-alt"></i> CURRENCY EXCHANGE</div>
-                <div class="tool-desc">实时汇率 · 160+ 币种</div>
-                <div class="tool-meta"><i class="fas fa-circle"></i> 已上线 · 进入工具 →</div>
-            </div>
-            <div class="tool-item">
-                <div class="tool-name"><i class="fas fa-chart-line"></i> DCA CALC</div>
-                <div class="tool-desc">每月定投 · 复利测算</div>
-                <div class="tool-meta"><i class="fas fa-circle"></i> 已上线 · 进入工具 →</div>
-            </div>
+            <a href="https://www.ashao.dpdns.org/#/" class="tool-item" target="_blank">
+                <div class="tool-name">
+                    <i class="fas fa-calendar-day"></i> 100天学习 Python
+                </div>
+                <div class="tool-desc">从零到精通 · 系统学习路线</div>
+                <div class="tool-meta">
+                    <i class="fas fa-circle"></i> 进入工具 →
+                </div>
+            </a>
+            <a href="https://www.ashao.dpdns.org/#/" class="tool-item" target="_blank">
+                <div class="tool-name">
+                    <i class="fas fa-folder-open"></i> 实战项目库
+                </div>
+                <div class="tool-desc">爬虫 · 数据分析 · Web 开发</div>
+                <div class="tool-meta">
+                    <i class="fas fa-circle"></i> 进入工具 →
+                </div>
+            </a>
         </div>
     </div>
 
-    <!-- 底部 -->
+    <!-- ===== 底部 ===== -->
     <div class="footer-wrapper">
         <hr>
         <div style="display: flex; flex-wrap: wrap; justify-content: space-between; font-size: 0.7rem; color: #3d6b4c; padding-top: 4px;">
-            <span><i class="fas fa-leaf" style="margin-right: 4px;"></i> 个人工具站 · 我的数字工作台</span>
-            <span><i class="fas fa-code"></i> www.grcommercial.cn 风格</span>
-            <span><i class="fab fa-github"></i> 发现优质编程学习</span>
+            <a href="./index.html" style="color: #3d6b4c; text-decoration: none;">
+                <i class="fas fa-leaf" style="margin-right: 4px;"></i> Python 基础 · 学习导航
+            </a>
+            <a href="https://github.com" target="_blank" style="color: #3d6b4c; text-decoration: none;">
+                <i class="fas fa-code"></i> 从入门到进阶
+            </a>
+            <a href="https://github.com" target="_blank" style="color: #3d6b4c; text-decoration: none;">
+                <i class="fab fa-github"></i> 源码 · 笔记
+            </a>
         </div>
         <div class="footer-links">
-            <span><i class="fas fa-fire"></i> How2J的Java教程</span>
-            <span><i class="fas fa-book"></i> 编程词典</span>
-            <span><i class="fas fa-chart-bar"></i> Apache ECharts</span>
-            <span><i class="fas fa-globe"></i> Universalis</span>
-            <span><i class="fas fa-music"></i> Free Sound Effects</span>
-            <span><i class="fas fa-gamepad"></i> CG技术教程</span>
+            <a href="./index.html?filter=python"><i class="fab fa-python"></i> Python 基础</a>
+            <a href="./index.html?filter=flask"><i class="fas fa-flask"></i> Flask</a>
+            <a href="docss/08272hanshu.html"><i class="fas fa-cogs"></i> 函数</a>
+            <a href="docss/0828lei.html"><i class="fas fa-cubes"></i> 面向对象</a>
+            <a href="docss/0828wenjian.html"><i class="fas fa-file-code"></i> 文件处理</a>
+            <a href="docss/0829flask1.html"><i class="fas fa-flask"></i> Flask 入门</a>
         </div>
     </div>
 
 </div>
 
 <script>
-    (function() {
-        const chips = document.querySelectorAll('.chip[data-filter]');
-        const cards = document.querySelectorAll('.card[data-category]');
-        const moduleTitle = document.getElementById('moduleTitle');
-        const moduleSub = document.getElementById('moduleSub');
+    // ===== 日期 =====
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    document.getElementById('todayDate').textContent = `${year}-${month}-${day}`;
 
-        // 标题映射表（可自定义）
-        const titleMap = {
-            'all': { title: '效率模块', sub: '把重复的小事交给顺手的小工具。' },
-            'finance': { title: '财务工具', sub: '理财、贷款、汇率，一站式财务管理。' },
-            'report': { title: '报表工具', sub: '数据报表、可视化，洞察业务全貌。' },
-            'analysis': { title: '分析工具', sub: '深度分析、趋势预测，辅助决策。' },
-            'data': { title: '数据工具', sub: '数据采集、处理、存储，高效管理。' },
-            'software': { title: '软件工具', sub: '开发、运维、效率软件，提升生产力。' },
-            'efficiency': { title: '效率工具', sub: '把重复的小事交给顺手的小工具。' },
-            'media': { title: '媒体工具', sub: '图片、视频、音频，创意无限。' },
-            'planning': { title: '规划工具', sub: '项目规划、日程管理，有条不紊。' }
-        };
+    // ===== 分类筛选 + 标题联动 =====
+    const chips = document.querySelectorAll('.chip[data-filter]');
+    const cards = document.querySelectorAll('.card[data-category]');
+    const moduleTitle = document.getElementById('moduleTitle');
+    const moduleSub = document.getElementById('moduleSub');
 
-        function filterCards(filter) {
-            // 切换卡片显示
-            cards.forEach(card => {
-                const categories = card.dataset.category.split(' ');
-                if (filter === 'all' || categories.includes(filter)) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
+    const titleMap = {
+        'all': { title: '学习笔记', sub: 'Python 核心知识 · 点击卡片进入' },
+        'python': { title: 'Python 基础笔记', sub: '函数 · 面向对象 · 文件处理 · 练习' },
+        'flask': { title: 'Flask 笔记', sub: '路由 · 请求 · 模板 · JSON · Web 开发' }
+    };
 
-            // 更新模块标题
-            const info = titleMap[filter] || titleMap['all'];
-            moduleTitle.textContent = info.title;
-            moduleSub.textContent = info.sub;
-        }
-
-        // 点击标签
-        chips.forEach(chip => {
-            chip.addEventListener('click', function() {
-                chips.forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                const filter = this.dataset.filter;
-                filterCards(filter);
-            });
+    function filterCards(filter) {
+        cards.forEach(card => {
+            const categories = card.dataset.category.split(' ');
+            if (filter === 'all' || categories.includes(filter)) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
         });
 
-        // 默认加载全部
-        const activeChip = document.querySelector('.chip.active[data-filter]');
-        if (activeChip) {
-            filterCards(activeChip.dataset.filter);
-        } else {
-            filterCards('all');
-        }
-    })();
+        const info = titleMap[filter] || titleMap['all'];
+        moduleTitle.textContent = info.title;
+        moduleSub.textContent = info.sub;
+    }
+
+    chips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            chips.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+            filterCards(filter);
+        });
+    });
+
+    // ===== 默认展示全部卡片 =====
+    // 移除所有卡片的 hidden 类，并确保 "全部" 标签处于 active 状态
+    cards.forEach(card => {
+        card.classList.remove('hidden');
+    });
+    // 确保 "全部" 标签激活，标题显示正确
+    filterCards('all');
 </script>
 
 </body>
