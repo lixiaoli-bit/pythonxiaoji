@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Flask · 入门笔记 · 移动紧凑版</title>
+  <!-- Font Awesome 6 (免费) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* 全局重置 & 字体 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f2f7fc 0%, #e2ecf5 100%);
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1rem 0.75rem;
+      color: #132b3f;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* 容器 — 更紧凑，手机优先 */
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 32px;
+      padding: 1.6rem 1.2rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 20, 30, 0.20), 0 6px 18px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      transition: padding 0.2s;
+    }
+
+    /* 标题区域 */
+    h1 {
+      font-size: 2.0rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 3px solid #1f6390;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.6rem;
+      color: #0a293f;
+    }
+
+    h1 i {
+      color: #1f6390;
+      font-size: 2.0rem;
+    }
+
+    .badge-header {
+      font-size: 0.78rem;
+      background: #d2e3f0;
+      padding: 0.15rem 1rem;
+      border-radius: 40px;
+      font-weight: 400;
+      color: #124263;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* 二级标题 */
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-top: 1.8rem;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1a4b6e;
+      border-left: 5px solid #3d8ec0;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(61,142,192,0.06), transparent);
+      border-radius: 0 12px 12px 0;
+    }
+
+    h2 i {
+      color: #3d8ec0;
+      font-size: 1.3rem;
+      width: 1.8rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-top: 1.4rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1d4b6b;
+    }
+
+    h3 i {
+      color: #4f9bc9;
+      font-size: 1.1rem;
+      width: 1.8rem;
+    }
+
+    /* 代码块 — 更紧凑 */
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 0.9rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.5rem 0 1rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.30), 0 4px 12px -6px rgba(0,20,30,0.2);
+      border: 1px solid #2b4b64;
+      line-height: 1.5;
+    }
+
+    .code-block i {
+      color: #8fcbff;
+      margin-right: 0.4rem;
+    }
+
+    .inline-code {
+      background: #eaf0f6;
+      padding: 0.1rem 0.6rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #0b344f;
+      border: 1px solid #cbdae6;
+      white-space: nowrap;
+    }
+
+    /* 标签 / 小徽章 */
+    .tag {
+      display: inline-block;
+      background: #d4e3f0;
+      border-radius: 30px;
+      padding: 0.05rem 0.9rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #124263;
+    }
+
+    /* 列表 */
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.2rem;
+      line-height: 1.6;
+    }
+
+    li {
+      margin-bottom: 0.15rem;
+      font-size: 0.95rem;
+    }
+
+    li i {
+      color: #2b7aa2;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.1rem;
+    }
+
+    /* 高亮框 */
+    .highlight-box {
+      background: rgba(61, 142, 192, 0.05);
+      border-radius: 18px;
+      padding: 0.8rem 1.2rem;
+      margin: 0.8rem 0 1rem 0;
+      border-left: 5px solid #3d8ec0;
+      backdrop-filter: blur(2px);
+      font-size: 0.95rem;
+    }
+
+    .highlight-box i {
+      color: #2b7aa2;
+      margin-right: 0.5rem;
+    }
+
+    /* 网格卡片 — 手机自动单列 */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem 0.8rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 0.8rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      border: 1px solid rgba(255,255,255,0.7);
+      backdrop-filter: blur(2px);
+      font-size: 0.9rem;
+    }
+
+    .grid-item i {
+      color: #2b7aa2;
+      margin-right: 0.3rem;
+    }
+
+    hr {
+      margin: 1.6rem 0 0.8rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4e8, transparent);
+    }
+
+    .footer-note {
+      margin-top: 1.8rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #4d6a82;
+      border-top: 1px solid #caddf0;
+      padding-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #3d8ec0;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #1f6390;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.05rem 0.8rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.2px;
+    }
+
+    /* 手机端优化 */
+    @media (max-width: 680px) {
+      .container {
+        padding: 1.2rem 0.9rem;
+        border-radius: 28px;
+      }
+      h1 {
+        font-size: 1.7rem;
+        gap: 0.3rem;
+      }
+      h1 i {
+        font-size: 1.6rem;
+      }
+      .badge-header {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.8rem;
+        margin-left: 0;
+        width: auto;
+      }
+      h2 {
+        font-size: 1.25rem;
+        padding-left: 0.8rem;
+        margin-top: 1.4rem;
+      }
+      h2 i {
+        font-size: 1.1rem;
+        width: 1.5rem;
+      }
+      h3 {
+        font-size: 1rem;
+      }
+      .code-block {
+        font-size: 0.78rem;
+        padding: 0.7rem 0.9rem;
+        border-radius: 14px;
+      }
+      .grid-2col {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+      }
+      .grid-item {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.85rem;
+      }
+      .highlight-box {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.9rem;
+      }
+      ul, ol {
+        margin-left: 1rem;
+      }
+      li {
+        font-size: 0.9rem;
+      }
+      .footer-note {
+        font-size: 0.75rem;
+        justify-content: center;
+        text-align: center;
+      }
+      .inline-code {
+        font-size: 0.75rem;
+        padding: 0.05rem 0.5rem;
+      }
+    }
+
+    /* 极小屏（宽度 < 400px） */
+    @media (max-width: 420px) {
+      .container {
+        padding: 0.9rem 0.6rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .badge-header {
+        font-size: 0.6rem;
+        padding: 0.05rem 0.6rem;
+      }
+      .code-block {
+        font-size: 0.72rem;
+        padding: 0.5rem 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 + 日期 -->
+  <h1>
+    <i class="fas fa-flask"></i> 
+    Flask · 入门
+    <span class="badge-header"><i class="fas fa-calendar-alt"></i> 2026.08.29</span>
+  </h1>
+
+  <!-- ===== 安装 Flask ===== -->
+  <h2><i class="fas fa-download"></i> 安装 Flask</h2>
+  <p><i class="fas fa-terminal" style="color:#2b7aa2;"></i> 按 <span class="inline-code">Ctrl + `</span> 打开终端，确保 <span class="inline-code">(.venv)</span> 标识：</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> pip install flask</div>
+
+  <!-- ===== 主程序 app.py ===== -->
+  <h2><i class="fas fa-file-code"></i> 主程序 app.py</h2>
+  <p>根目录新建 <span class="inline-code">app.py</span>：</p>
+  <div class="code-block"><i class="fab fa-python"></i> from flask import Flask
+
+app = Flask(__name__)   # __name__ 当前模块
+
+@app.route('/')
+def hello():
+    return 'Hello, World!'
+
+if __name__ == '__main__':
+    app.run(debug=True)</div>
+  <div class="highlight-box">
+    <i class="fas fa-info-circle"></i> <strong>知识点：</strong> <span class="inline-code">if __name__ == '__main__'</span> 确保直接运行启动，被导入不执行。
+  </div>
+
+  <!-- ===== 路由与参数 ===== -->
+  <h2><i class="fas fa-route"></i> 路由与参数</h2>
+  <h3><i class="fas fa-link"></i> 基础路由</h3>
+  <p>装饰器 <span class="inline-code">@app.route</span> 绑定 URL：</p>
+  <ul>
+    <li><i class="fas fa-home"></i> <span class="inline-code">/</span> → 首页</li>
+    <li><i class="fas fa-heart"></i> <span class="inline-code">/hello</span> → 问候</li>
+    <li><i class="fas fa-user"></i> <span class="inline-code">/user</span> → 用户</li>
+  </ul>
+
+  <h3><i class="fas fa-user-tag"></i> 路径参数</h3>
+  <div class="code-block"><i class="fab fa-python"></i> @app.route('/user/&lt;username&gt;')
+def show_user_profile(username):
+    return f'User {username}'</div>
+
+  <h3><i class="fas fa-methods"></i> 指定 HTTP 方法</h3>
+  <div class="code-block"><i class="fab fa-python"></i> @app.route('/login', methods=['GET', 'POST'])
+def login():
+    # 处理登录逻辑
+    pass
+测试：
+import requests
+res=requests.get("http://127.0.0.1:5000/login")
+res1=requests.post("http://127.0.0.1:5000/login")
+print(res.text)
+print(res1.text)</div>
+
+  <!-- ===== 获取请求参数 ===== -->
+  <h2><i class="fas fa-inbox"></i> 获取请求参数</h2>
+  <p>使用 <span class="inline-code">from flask import request</span> 全局对象：</p>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-search"></i> <strong>URL 查询</strong><br> <span class="inline-code">/user?parama=aa</span><br> <span class="inline-code">request.args.get("parama")</span></div>
+    <div class="grid-item"><i class="fas fa-edit"></i> <strong>表单参数</strong><br> <span class="inline-code">request.form.get("username")</span></div>
+    <div class="grid-item"><i class="fas fa-database"></i> <strong>JSON 数据</strong><br> <span class="inline-code">json.loads(request.data)</span></div>
+    <div class="grid-item"><i class="fas fa-cookie"></i> <strong>Cookie</strong><br> <span class="inline-code">request.cookies</span></div>
+  </div>
+  <div class="highlight-box">
+    <i class="fas fa-code"></i> <strong>请求头：</strong> <span class="inline-code">request.headers</span>
+  </div>
+
+  <!-- ===== 模板开发 ===== -->
+  <h2><i class="fas fa-palette"></i> 模板开发</h2>
+  <p><i class="fas fa-question-circle" style="color:#d99f2b;"></i> 为什么不用 Python 拼接 HTML？</p>
+  <ul>
+    <li><i class="fas fa-check-circle" style="color:#2b7aa2;"></i> 展现与逻辑分离</li>
+    <li><i class="fas fa-check-circle" style="color:#2b7aa2;"></i> 前后端解耦，维护方便</li>
+    <li><i class="fas fa-check-circle" style="color:#2b7aa2;"></i> 开发效率高，代码提示</li>
+  </ul>
+
+  <h3><i class="fas fa-code"></i> 渲染模板</h3>
+  <div class="code-block"><i class="fab fa-python"></i> from flask import render_template
+
+@app.route('/show_html')
+def show_html():
+    datas = [(1, "name1"), (2, "name2")]
+    return render_template("template.html", datas=datas)</div>
+
+  <h3><i class="fas fa-bolt"></i> 模板语法</h3>
+  <div class="code-block" style="background: #0f222f;"><i class="fas fa-code"></i> &lt;!-- 输出变量 --&gt;
+{{ data }} , {{ data[0] }} , {{ data["id"] }}
+
+&lt;!-- for 循环 --&gt;
+{% for item in navigation %}
+  &lt;li&gt;{{ item.caption }}&lt;/li&gt;
+{% endfor %}
+
+&lt;!-- if 判断 --&gt;
+{% if name %}
+  &lt;h1&gt;Hello {{ name }}!&lt;/h1&gt;
+{% else %}
+  &lt;h1&gt;Hello, World!&lt;/h1&gt;
+{% endif %}</div>
+
+  <!-- ===== 返回 JSON ===== -->
+  <h2><i class="fas fa-code-branch"></i> 返回 JSON 数据</h2>
+  <ol>
+    <li><i class="fas fa-database"></i> 读取文件 / 数据库 / 远程接口</li>
+    <li><i class="fas fa-arrow-right"></i> 通过 <span class="inline-code">json.dumps()</span> 输出 JSON 字符串</li>
+  </ol>
+  <div class="code-block"><i class="fab fa-python"></i> import json
+
+@app.route('/api/data')
+def api_data():
+    data = {"name": "Flask", "version": "2.3"}
+    return json.dumps(data)</div>
+  <div class="highlight-box">
+    <i class="fas fa-lightbulb"></i> <strong>Tip：</strong> Flask 也提供 <span class="inline-code">jsonify()</span> 更方便返回 JSON 响应。
+  </div>
+
+  <!-- ===== 完整示例 ===== -->
+  <h2><i class="fas fa-th-list"></i> 综合示例</h2>
+  <div class="code-block"><i class="fab fa-python"></i> from flask import Flask, render_template, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return 'Hello, Flask!'
+
+@app.route('/user/&lt;name&gt;')
+def user(name):
+    return f'User: {name}'
+
+@app.route('/form', methods=['GET', 'POST'])
+def form_demo():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        return f'Hello, {username}'
+    return render_template('form.html')
+
+@app.route('/api')
+def api():
+    return jsonify({"status": "ok", "data": [1,2,3]})
+
+if __name__ == '__main__':
+    app.run(debug=True)</div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>Flask · 从零到接口</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># Python · Web</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>

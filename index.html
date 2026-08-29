@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>个人工具站 · 淡绿导航</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: #dce8d5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .app {
+            max-width: 1240px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 24px 64px rgba(60, 90, 70, 0.12), 0 8px 20px rgba(0, 20, 10, 0.04);
+            padding: 28px 32px 40px;
+            border: 1px solid rgba(200, 220, 190, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(160, 190, 150, 0.25);
+            margin-bottom: 24px;
+        }
+
+        .top-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: #1f3a2b;
+            letter-spacing: -0.3px;
+        }
+
+        .brand i {
+            color: #2e7d5e;
+            font-size: 1.5rem;
+        }
+
+        .top-badge {
+            background: rgba(70, 130, 100, 0.15);
+            color: #1f4d3a;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            border: 1px solid rgba(100, 150, 120, 0.2);
+        }
+
+        .search-area {
+            background: rgba(235, 248, 230, 0.7);
+            backdrop-filter: blur(2px);
+            border-radius: 60px;
+            padding: 6px 16px 6px 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 6px 0 22px 0;
+            border: 1px solid rgba(130, 180, 140, 0.25);
+            transition: 0.15s;
+        }
+
+        .search-area i {
+            color: #3a7050;
+            font-size: 0.9rem;
+        }
+
+        .search-area input {
+            border: none;
+            background: transparent;
+            padding: 12px 0;
+            width: 100%;
+            font-size: 0.95rem;
+            outline: none;
+            color: #1a3324;
+        }
+
+        .search-area input::placeholder {
+            color: #5f826b;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        /* ===== 分类标签 ===== */
+        .category-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            margin-bottom: 28px;
+            align-items: center;
+        }
+
+        .chip {
+            background: rgba(225, 245, 220, 0.6);
+            backdrop-filter: blur(2px);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #1f3a2b;
+            border: 1px solid rgba(140, 185, 145, 0.25);
+            transition: 0.15s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .chip i {
+            margin-right: 6px;
+            font-size: 0.7rem;
+            color: #317a55;
+        }
+
+        .chip:hover {
+            background: rgba(200, 230, 195, 0.8);
+            border-color: rgba(100, 160, 120, 0.5);
+        }
+
+        .chip.active {
+            background: #1f3a2b;
+            color: #f0f9ec;
+            border-color: #1f3a2b;
+        }
+
+        .chip.active i {
+            color: #d4edc9;
+        }
+
+        /* ===== 模块标题 ===== */
+        .section-label {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin: 30px 0 12px 0;
+            transition: 0.2s;
+        }
+
+        .section-label h3 {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1a3829;
+            letter-spacing: -0.2px;
+            transition: 0.2s;
+        }
+
+        .section-label h3 i {
+            color: #2b7a52;
+            margin-right: 6px;
+        }
+
+        .section-label span {
+            color: #3f7053;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            opacity: 0.8;
+        }
+
+        /* ===== 卡片网格 ===== */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 6px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 22px 20px 22px;
+            border: 1px solid rgba(170, 210, 175, 0.35);
+            box-shadow: 0 6px 18px rgba(60, 100, 70, 0.04);
+            transition: 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            border-color: rgba(110, 180, 130, 0.5);
+            box-shadow: 0 12px 30px rgba(60, 110, 70, 0.08);
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .card-header i {
+            font-size: 1.3rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(180, 220, 180, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            color: #1f6b44;
+        }
+
+        .card-header .title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #143121;
+            letter-spacing: -0.2px;
+        }
+
+        .card-header .badge {
+            margin-left: auto;
+            background: rgba(50, 130, 90, 0.15);
+            color: #1a5839;
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(90, 160, 110, 0.15);
+        }
+
+        .card-desc {
+            color: #2d4d3a;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 8px;
+            margin-bottom: 14px;
+        }
+
+        .tag {
+            background: rgba(200, 230, 195, 0.4);
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #1f4d35;
+            border: 1px solid rgba(140, 190, 145, 0.15);
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+            border-top: 1px solid rgba(160, 200, 165, 0.2);
+            padding-top: 14px;
+        }
+
+        .card-footer .status {
+            color: #3c6b4e;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-footer .status i {
+            color: #2b8c5a;
+            font-size: 0.5rem;
+        }
+
+        .btn-link {
+            background: rgba(200, 230, 195, 0.25);
+            border: 1px solid rgba(130, 180, 140, 0.3);
+            padding: 4px 18px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #1b4630;
+            transition: 0.1s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: default;
+        }
+
+        .btn-link i {
+            font-size: 0.6rem;
+        }
+
+        .btn-link:hover {
+            background: rgba(170, 210, 175, 0.3);
+            border-color: rgba(90, 160, 110, 0.4);
+        }
+
+        /* 特色工具条 */
+        .featured-tools-wrapper {
+            margin-top: 40px;
+        }
+
+        .featured-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+            background: rgba(225, 245, 220, 0.3);
+            backdrop-filter: blur(2px);
+            padding: 20px 18px;
+            border-radius: 32px;
+            border: 1px solid rgba(160, 200, 165, 0.25);
+        }
+
+        .tool-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tool-item .tool-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #153121;
+            letter-spacing: -0.1px;
+        }
+
+        .tool-item .tool-name i {
+            color: #236b44;
+            margin-right: 6px;
+            width: 18px;
+        }
+
+        .tool-item .tool-desc {
+            font-size: 0.7rem;
+            color: #3e6b4e;
+            line-height: 1.4;
+        }
+
+        .tool-item .tool-meta {
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.65rem;
+            color: #1f6b44;
+            font-weight: 500;
+        }
+
+        .tool-item .tool-meta i {
+            font-size: 0.5rem;
+            color: #2b8c5a;
+        }
+
+        .footer-wrapper {
+            margin-top: 32px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid rgba(140, 190, 150, 0.25);
+            margin: 0 0 14px 0;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 22px;
+            font-size: 0.7rem;
+            color: #3d6b4c;
+            padding-top: 6px;
+        }
+
+        .footer-links i {
+            margin-right: 4px;
+            color: #357a53;
+        }
+
+        @media (max-width: 640px) {
+            .app {
+                padding: 18px 16px;
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: start;
+                gap: 12px;
+            }
+            .featured-tools {
+                grid-template-columns: 1fr;
+            }
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+
+    <!-- 顶栏 -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="brand">
+                <i class="fas fa-leaf"></i> 个人工具站
+            </div>
+            <span class="top-badge"><i class="fas fa-circle" style="color: #2b8c5a; font-size: 0.4rem;"></i> 我的数字工作台</span>
+        </div>
+    </div>
+
+    <!-- 搜索 -->
+    <div class="search-area">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="搜索工具、模块或用途" value="Q搜索工具、模块或用途">
+    </div>
+
+    <!-- ===== 分类标签 ===== -->
+    <div class="category-chips">
+        <span class="chip active" data-filter="all" data-label="效率模块"><i class="fas fa-th-large"></i> 全部</span>
+        <span class="chip" data-filter="finance" data-label="财务工具"><i class="fas fa-chart-line"></i> 财务</span>
+        <span class="chip" data-filter="report" data-label="报表工具"><i class="fas fa-table"></i> 报表</span>
+        <span class="chip" data-filter="analysis" data-label="分析工具"><i class="fas fa-chart-pie"></i> 分析</span>
+        <span class="chip" data-filter="data" data-label="数据工具"><i class="fas fa-database"></i> 数据</span>
+        <span class="chip" data-filter="software" data-label="软件工具"><i class="fas fa-laptop-code"></i> 软件</span>
+        <span class="chip" data-filter="efficiency" data-label="效率工具"><i class="fas fa-bolt"></i> 效率</span>
+        <span class="chip" data-filter="media" data-label="媒体工具"><i class="fas fa-photo-video"></i> 媒体</span>
+        <span class="chip" data-filter="planning" data-label="规划工具"><i class="fas fa-route"></i> 规划</span>
+        <span class="chip" style="background: #1f3a2b; color: #f0f9ec; border-color:#1f3a2b; cursor:default;"><i class="fas fa-arrow-right"></i> WORKFLOW · 27TOOL</span>
+    </div>
+
+    <!-- ===== 模块标题（联动） ===== -->
+    <div class="section-label" id="sectionLabel">
+        <h3><i class="fas fa-cog"></i> <span id="moduleTitle">效率模块</span></h3>
+        <span id="moduleSub">把重复的小事交给顺手的小工具。</span>
+    </div>
+
+    <!-- ===== 卡片网格 ===== -->
+    <div class="module-grid" id="cardGrid">
+        <!-- 卡片1 -->
+        <div class="card" data-category="finance efficiency">
+            <div class="card-header">
+                <i class="fas fa-percent"></i>
+                <span class="title">RATE CALC</span>
+                <span class="badge">已上线</span>
+            </div>
+            <div class="card-desc">
+                存款利息与房贷、经营贷还款估算，附LPR与各行挂牌利率参考。
+            </div>
+            <div class="card-tags">
+                <span class="tag">贷款</span>
+                <span class="tag">LPR</span>
+                <span class="tag">还款计划</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入工具 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 已上线</span>
+            </div>
+        </div>
+
+        <!-- 卡片2 -->
+        <div class="card" data-category="finance efficiency">
+            <div class="card-header">
+                <i class="fas fa-dollar-sign"></i>
+                <span class="title">CURRENCY EXCHANGE</span>
+                <span class="badge">已上线</span>
+            </div>
+            <div class="card-desc">
+                实时获取最新汇率，自由选择币种、输入金额，一键换算160+种货币。
+            </div>
+            <div class="card-tags">
+                <span class="tag">多币种</span>
+                <span class="tag">实时</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入工具 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 已上线</span>
+            </div>
+        </div>
+
+        <!-- 卡片3 -->
+        <div class="card" data-category="finance efficiency">
+            <div class="card-header">
+                <i class="fas fa-chart-simple"></i>
+                <span class="title">DCA CALC</span>
+                <span class="badge">已上线</span>
+            </div>
+            <div class="card-desc">
+                每月定投、复利增长测算，直观看到最终资产、总收益与收益率。
+            </div>
+            <div class="card-tags">
+                <span class="tag">定投</span>
+                <span class="tag">复利</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入工具 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 已上线</span>
+            </div>
+        </div>
+
+        <!-- 卡片4 -->
+        <div class="card" data-category="finance report">
+            <div class="card-header">
+                <i class="fas fa-calculator"></i>
+                <span class="title">贷款计算器</span>
+                <span class="badge">NEW</span>
+            </div>
+            <div class="card-desc">
+                等额本息/等额本金，支持LPR浮动利率，生成详细还款计划表。
+            </div>
+            <div class="card-tags">
+                <span class="tag">房贷</span>
+                <span class="tag">经营贷</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 热门</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 进入</span>
+            </div>
+        </div>
+
+        <!-- 卡片5 -->
+        <div class="card" data-category="finance analysis report">
+            <div class="card-header">
+                <i class="fas fa-chart-pie"></i>
+                <span class="title">财务分析</span>
+                <span class="badge">即将上线</span>
+            </div>
+            <div class="card-desc">
+                报表可视化、杜邦分析、现金流监控，辅助经营决策。
+            </div>
+            <div class="card-tags">
+                <span class="tag">报表</span>
+                <span class="tag">分析</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle" style="color: #b68b40;"></i> 内测</span>
+                <span class="btn-link"><i class="fas fa-clock"></i> 即将上线</span>
+            </div>
+        </div>
+
+        <!-- 卡片6 -->
+        <div class="card" data-category="media">
+            <div class="card-header">
+                <i class="fas fa-cloud-sun"></i>
+                <span class="title">Fresh Background</span>
+                <span class="badge">热门</span>
+            </div>
+            <div class="card-desc">
+                精选壁纸与动态背景，每日更新，提升工作台氛围。
+            </div>
+            <div class="card-tags">
+                <span class="tag">媒体</span>
+                <span class="tag">壁纸</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 浏览</span>
+            </div>
+        </div>
+
+        <!-- 卡片7 -->
+        <div class="card" data-category="software efficiency">
+            <div class="card-header">
+                <i class="fas fa-code"></i>
+                <span class="title">代码片段</span>
+                <span class="badge">热门</span>
+            </div>
+            <div class="card-desc">
+                常用代码片段管理，支持多种语言，快速检索与复用。
+            </div>
+            <div class="card-tags">
+                <span class="tag">开发</span>
+                <span class="tag">代码</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 浏览</span>
+            </div>
+        </div>
+
+        <!-- 卡片8 -->
+        <div class="card" data-category="data analysis">
+            <div class="card-header">
+                <i class="fas fa-chart-bar"></i>
+                <span class="title">数据看板</span>
+                <span class="badge">NEW</span>
+            </div>
+            <div class="card-desc">
+                可视化数据仪表盘，支持多数据源接入，实时监控关键指标。
+            </div>
+            <div class="card-tags">
+                <span class="tag">可视化</span>
+                <span class="tag">监控</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 体验</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 特色工具条 -->
+    <div class="featured-tools-wrapper">
+        <div class="featured-tools">
+            <div class="tool-item">
+                <div class="tool-name"><i class="fas fa-coins"></i> RATE CALC</div>
+                <div class="tool-desc">存款利息 · 房贷 · LPR</div>
+                <div class="tool-meta"><i class="fas fa-circle"></i> 已上线 · 进入工具 →</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name"><i class="fas fa-exchange-alt"></i> CURRENCY EXCHANGE</div>
+                <div class="tool-desc">实时汇率 · 160+ 币种</div>
+                <div class="tool-meta"><i class="fas fa-circle"></i> 已上线 · 进入工具 →</div>
+            </div>
+            <div class="tool-item">
+                <div class="tool-name"><i class="fas fa-chart-line"></i> DCA CALC</div>
+                <div class="tool-desc">每月定投 · 复利测算</div>
+                <div class="tool-meta"><i class="fas fa-circle"></i> 已上线 · 进入工具 →</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="footer-wrapper">
+        <hr>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; font-size: 0.7rem; color: #3d6b4c; padding-top: 4px;">
+            <span><i class="fas fa-leaf" style="margin-right: 4px;"></i> 个人工具站 · 我的数字工作台</span>
+            <span><i class="fas fa-code"></i> www.grcommercial.cn 风格</span>
+            <span><i class="fab fa-github"></i> 发现优质编程学习</span>
+        </div>
+        <div class="footer-links">
+            <span><i class="fas fa-fire"></i> How2J的Java教程</span>
+            <span><i class="fas fa-book"></i> 编程词典</span>
+            <span><i class="fas fa-chart-bar"></i> Apache ECharts</span>
+            <span><i class="fas fa-globe"></i> Universalis</span>
+            <span><i class="fas fa-music"></i> Free Sound Effects</span>
+            <span><i class="fas fa-gamepad"></i> CG技术教程</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    (function() {
+        const chips = document.querySelectorAll('.chip[data-filter]');
+        const cards = document.querySelectorAll('.card[data-category]');
+        const moduleTitle = document.getElementById('moduleTitle');
+        const moduleSub = document.getElementById('moduleSub');
+
+        // 标题映射表（可自定义）
+        const titleMap = {
+            'all': { title: '效率模块', sub: '把重复的小事交给顺手的小工具。' },
+            'finance': { title: '财务工具', sub: '理财、贷款、汇率，一站式财务管理。' },
+            'report': { title: '报表工具', sub: '数据报表、可视化，洞察业务全貌。' },
+            'analysis': { title: '分析工具', sub: '深度分析、趋势预测，辅助决策。' },
+            'data': { title: '数据工具', sub: '数据采集、处理、存储，高效管理。' },
+            'software': { title: '软件工具', sub: '开发、运维、效率软件，提升生产力。' },
+            'efficiency': { title: '效率工具', sub: '把重复的小事交给顺手的小工具。' },
+            'media': { title: '媒体工具', sub: '图片、视频、音频，创意无限。' },
+            'planning': { title: '规划工具', sub: '项目规划、日程管理，有条不紊。' }
+        };
+
+        function filterCards(filter) {
+            // 切换卡片显示
+            cards.forEach(card => {
+                const categories = card.dataset.category.split(' ');
+                if (filter === 'all' || categories.includes(filter)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // 更新模块标题
+            const info = titleMap[filter] || titleMap['all'];
+            moduleTitle.textContent = info.title;
+            moduleSub.textContent = info.sub;
+        }
+
+        // 点击标签
+        chips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                chips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.dataset.filter;
+                filterCards(filter);
+            });
+        });
+
+        // 默认加载全部
+        const activeChip = document.querySelector('.chip.active[data-filter]');
+        if (activeChip) {
+            filterCards(activeChip.dataset.filter);
+        } else {
+            filterCards('all');
+        }
+    })();
+</script>
+
+</body>
+</html>

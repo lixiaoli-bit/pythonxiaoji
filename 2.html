@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Python 基础 · 学习导航</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #dce8d5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .app {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 24px 64px rgba(60, 90, 70, 0.12), 0 8px 20px rgba(0, 20, 10, 0.04);
+            padding: 28px 32px 40px;
+            border: 1px solid rgba(200, 220, 190, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        /* ===== 顶栏 ===== */
+        .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(160, 190, 150, 0.25);
+            margin-bottom: 24px;
+        }
+
+        .top-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: #1f3a2b;
+            letter-spacing: -0.3px;
+            text-decoration: none;
+            transition: 0.15s;
+        }
+
+        .brand:hover {
+            color: #0f2a1a;
+        }
+
+        .brand i {
+            color: #2e7d5e;
+            font-size: 1.5rem;
+        }
+
+        .top-badge {
+            background: rgba(70, 130, 100, 0.15);
+            color: #1f4d3a;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            border: 1px solid rgba(100, 150, 120, 0.2);
+            text-decoration: none;
+            transition: 0.15s;
+        }
+
+        .top-badge:hover {
+            background: rgba(70, 130, 100, 0.25);
+        }
+
+        .header-date {
+            font-size: 0.8rem;
+            background: rgba(70, 130, 100, 0.10);
+            padding: 4px 14px;
+            border-radius: 40px;
+            color: #1f4d3a;
+            border: 1px solid rgba(100, 150, 120, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .header-date i {
+            color: #2b7a52;
+        }
+
+        /* ===== 分类标签 ===== */
+        .category-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            margin-bottom: 28px;
+            align-items: center;
+        }
+
+        .chip {
+            background: rgba(225, 245, 220, 0.6);
+            backdrop-filter: blur(2px);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #1f3a2b;
+            border: 1px solid rgba(140, 185, 145, 0.25);
+            transition: 0.15s;
+            cursor: pointer;
+            user-select: none;
+            text-decoration: none;
+        }
+
+        .chip i {
+            margin-right: 6px;
+            font-size: 0.7rem;
+            color: #317a55;
+        }
+
+        .chip:hover {
+            background: rgba(200, 230, 195, 0.8);
+            border-color: rgba(100, 160, 120, 0.5);
+        }
+
+        .chip.active {
+            background: #1f3a2b;
+            color: #f0f9ec;
+            border-color: #1f3a2b;
+        }
+
+        .chip.active i {
+            color: #d4edc9;
+        }
+
+        /* ===== 模块标题 ===== */
+        .section-label {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin: 0 0 16px 0;
+        }
+
+        .section-label h3 {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1a3829;
+            letter-spacing: -0.2px;
+        }
+
+        .section-label h3 i {
+            color: #2b7a52;
+            margin-right: 6px;
+        }
+
+        .section-label span {
+            color: #3f7053;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            opacity: 0.8;
+        }
+
+        /* ===== 卡片网格 ===== */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 6px;
+        }
+
+        .module-grid:has(.card:only-child) {
+            grid-template-columns: 250px;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 22px 20px 22px;
+            border: 1px solid rgba(170, 210, 175, 0.35);
+            box-shadow: 0 6px 18px rgba(60, 100, 70, 0.04);
+            transition: 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(110, 180, 130, 0.5);
+            box-shadow: 0 12px 30px rgba(60, 110, 70, 0.10);
+            transform: translateY(-3px);
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .card-header i {
+            font-size: 1.3rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(180, 220, 180, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            color: #1f6b44;
+        }
+
+        .card-header .title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #143121;
+            letter-spacing: -0.2px;
+        }
+
+        .card-header .badge {
+            margin-left: auto;
+            background: rgba(50, 130, 90, 0.15);
+            color: #1a5839;
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(90, 160, 110, 0.15);
+        }
+
+        .card-desc {
+            color: #2d4d3a;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 8px;
+            margin-bottom: 14px;
+        }
+
+        .tag {
+            background: rgba(200, 230, 195, 0.4);
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #1f4d35;
+            border: 1px solid rgba(140, 190, 145, 0.15);
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+            border-top: 1px solid rgba(160, 200, 165, 0.2);
+            padding-top: 14px;
+        }
+
+        .card-footer .status {
+            color: #3c6b4e;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-footer .status i {
+            color: #2b8c5a;
+            font-size: 0.5rem;
+        }
+
+        .btn-link {
+            background: rgba(200, 230, 195, 0.25);
+            border: 1px solid rgba(130, 180, 140, 0.3);
+            padding: 4px 18px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #1b4630;
+            transition: 0.1s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-link i {
+            font-size: 0.6rem;
+        }
+
+        .btn-link:hover {
+            background: rgba(170, 210, 175, 0.3);
+            border-color: rgba(90, 160, 110, 0.4);
+        }
+
+        /* ===== 特色工具条（底部） ===== */
+        .featured-tools-wrapper {
+            margin-top: 32px;
+        }
+
+        .featured-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            background: rgba(225, 245, 220, 0.35);
+            backdrop-filter: blur(2px);
+            padding: 18px 20px;
+            border-radius: 28px;
+            border: 1px solid rgba(160, 200, 165, 0.3);
+        }
+
+        .tool-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(170, 210, 175, 0.25);
+            transition: 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .tool-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(110, 180, 130, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(60, 110, 70, 0.08);
+        }
+
+        .tool-item .tool-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #153121;
+            letter-spacing: -0.1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-item .tool-name i {
+            color: #236b44;
+            font-size: 1.1rem;
+        }
+
+        .tool-item .tool-desc {
+            font-size: 0.75rem;
+            color: #3e6b4e;
+            line-height: 1.4;
+            opacity: 0.8;
+        }
+
+        .tool-item .tool-meta {
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.7rem;
+            color: #1f6b44;
+            font-weight: 500;
+        }
+
+        .tool-item .tool-meta i {
+            font-size: 0.5rem;
+            color: #2b8c5a;
+        }
+
+        /* ===== 底部 ===== */
+        .footer-wrapper {
+            margin-top: 20px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid rgba(140, 190, 150, 0.25);
+            margin: 0 0 14px 0;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 22px;
+            font-size: 0.7rem;
+            color: #3d6b4c;
+            padding-top: 6px;
+        }
+
+        .footer-links a {
+            color: #3d6b4c;
+            text-decoration: none;
+            transition: 0.15s;
+        }
+
+        .footer-links a:hover {
+            color: #1a4630;
+            text-decoration: underline;
+        }
+
+        .footer-links i {
+            margin-right: 4px;
+            color: #357a53;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 640px) {
+            .app {
+                padding: 18px 16px;
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: start;
+                gap: 12px;
+            }
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+            .module-grid:has(.card:only-child) {
+                grid-template-columns: 1fr;
+                justify-content: center;
+            }
+            .featured-tools {
+                grid-template-columns: 1fr;
+                padding: 14px;
+            }
+            .tool-item {
+                padding: 12px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- ===== 顶栏 ===== -->
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="#" class="brand">
+                <i class="fas fa-leaf"></i> Python 笔记
+            </a>
+            <a href="https://www.ashao.dpdns.org/#/" class="top-badge">
+                <i class="fas fa-circle" style="color: #2b8c5a; font-size: 0.4rem;"></i> 返回主目录
+            </a>
+        </div>
+        <a href="./index.html" class="header-date">
+            <i class="far fa-calendar-alt"></i> <span id="todayDate">2026-08-29</span>
+        </a>
+    </div>
+
+    <!-- ===== 分类标签 ===== -->
+    <div class="category-chips">
+        <span class="chip active" data-filter="all"><i class="fas fa-th-large"></i> 全部</span>
+        <span class="chip" data-filter="python"><i class="fab fa-python"></i> Python 基础</span>
+        <span class="chip" data-filter="flask"><i class="fas fa-flask"></i> Flask</span>
+    </div>
+
+    <!-- ===== 模块标题 ===== -->
+    <div class="section-label">
+        <h3><i class="fas fa-book"></i> <span id="moduleTitle">学习笔记</span></h3>
+        <span id="moduleSub">Python 核心知识 · 点击卡片进入</span>
+    </div>
+
+    <!-- ===== 卡片网格（默认全部展示） ===== -->
+    <div class="module-grid" id="cardGrid">
+
+        <!-- 卡片1：函数 -->
+        <a href="docss/08272hanshu.html" class="card" data-category="python" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-code"></i>
+                <span class="title">Python 函数</span>
+                <span class="badge">核心</span>
+            </div>
+            <div class="card-desc">
+                函数定义、参数传递、返回值、lambda 匿名函数、模块化编程。
+            </div>
+            <div class="card-tags">
+                <span class="tag">def</span>
+                <span class="tag">参数</span>
+                <span class="tag">return</span>
+                <span class="tag">lambda</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
+            </div>
+        </a>
+
+        <!-- 卡片2：面向对象 -->
+        <a href="docss/0828lei.html" class="card" data-category="python" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-cubes"></i>
+                <span class="title">面向对象编程</span>
+                <span class="badge">第九章</span>
+            </div>
+            <div class="card-desc">
+                类与对象、属性修改、列表/字典存储、继承、类练习（婚礼礼金）。
+            </div>
+            <div class="card-tags">
+                <span class="tag">class</span>
+                <span class="tag">继承</span>
+                <span class="tag">__init__</span>
+                <span class="tag">super()</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
+            </div>
+        </a>
+
+        <!-- 卡片3：文件处理 -->
+        <a href="docss/0828wenjian.html" class="card" data-category="python" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-file-code"></i>
+                <span class="title">文件处理</span>
+                <span class="badge">第十章</span>
+            </div>
+            <div class="card-desc">
+                文件读写、按行读取、JSON 存储、异常处理、路径操作。
+            </div>
+            <div class="card-tags">
+                <span class="tag">open</span>
+                <span class="tag">JSON</span>
+                <span class="tag">try/except</span>
+                <span class="tag">with</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
+            </div>
+        </a>
+
+        <!-- 卡片4：文件练习合集 -->
+        <a href="docss/0828wenjian.html" class="card" data-category="python" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-tasks"></i>
+                <span class="title">文件处理 · 4练习</span>
+                <span class="badge">实战</span>
+            </div>
+            <div class="card-desc">
+                英汉词典、婚礼礼金、JSON 成绩录入、异常处理成绩录入 —— 完整源码。
+            </div>
+            <div class="card-tags">
+                <span class="tag">英汉词典</span>
+                <span class="tag">礼金</span>
+                <span class="tag">JSON</span>
+                <span class="tag">异常</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入练习 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 查看</span>
+            </div>
+        </a>
+
+        <!-- 卡片5：Flask 入门 -->
+        <a href="docss/0829flask1.html" class="card" data-category="flask" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-flask"></i>
+                <span class="title">Flask · 入门</span>
+                <span class="badge">Web</span>
+            </div>
+            <div class="card-desc">
+                安装 Flask、路由与参数、请求处理、模板渲染、返回 JSON —— 从零搭建 Web 接口。
+            </div>
+            <div class="card-tags">
+                <span class="tag">路由</span>
+                <span class="tag">render_template</span>
+                <span class="tag">request</span>
+                <span class="tag">jsonify</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- ===== 特色工具条 ===== -->
+    <div class="featured-tools-wrapper">
+        <div class="featured-tools">
+            <a href="https://www.ashao.dpdns.org/#/" class="tool-item" target="_blank">
+                <div class="tool-name">
+                    <i class="fas fa-calendar-day"></i> 100天学习 Python
+                </div>
+                <div class="tool-desc">从零到精通 · 系统学习路线</div>
+                <div class="tool-meta">
+                    <i class="fas fa-circle"></i> 进入工具 →
+                </div>
+            </a>
+            <a href="https://www.ashao.dpdns.org/#/" class="tool-item" target="_blank">
+                <div class="tool-name">
+                    <i class="fas fa-folder-open"></i> 实战项目库
+                </div>
+                <div class="tool-desc">爬虫 · 数据分析 · Web 开发</div>
+                <div class="tool-meta">
+                    <i class="fas fa-circle"></i> 进入工具 →
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== 底部 ===== -->
+    <div class="footer-wrapper">
+        <hr>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; font-size: 0.7rem; color: #3d6b4c; padding-top: 4px;">
+            <a href="./index.html" style="color: #3d6b4c; text-decoration: none;">
+                <i class="fas fa-leaf" style="margin-right: 4px;"></i> Python 基础 · 学习导航
+            </a>
+            <a href="https://github.com" target="_blank" style="color: #3d6b4c; text-decoration: none;">
+                <i class="fas fa-code"></i> 从入门到进阶
+            </a>
+            <a href="https://github.com" target="_blank" style="color: #3d6b4c; text-decoration: none;">
+                <i class="fab fa-github"></i> 源码 · 笔记
+            </a>
+        </div>
+        <div class="footer-links">
+            <a href="./index.html?filter=python"><i class="fab fa-python"></i> Python 基础</a>
+            <a href="./index.html?filter=flask"><i class="fas fa-flask"></i> Flask</a>
+            <a href="docss/08272hanshu.html"><i class="fas fa-cogs"></i> 函数</a>
+            <a href="docss/0828lei.html"><i class="fas fa-cubes"></i> 面向对象</a>
+            <a href="docss/0828wenjian.html"><i class="fas fa-file-code"></i> 文件处理</a>
+            <a href="docss/0829flask1.html"><i class="fas fa-flask"></i> Flask 入门</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ===== 日期 =====
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    document.getElementById('todayDate').textContent = `${year}-${month}-${day}`;
+
+    // ===== 分类筛选 + 标题联动 =====
+    const chips = document.querySelectorAll('.chip[data-filter]');
+    const cards = document.querySelectorAll('.card[data-category]');
+    const moduleTitle = document.getElementById('moduleTitle');
+    const moduleSub = document.getElementById('moduleSub');
+
+    const titleMap = {
+        'all': { title: '学习笔记', sub: 'Python 核心知识 · 点击卡片进入' },
+        'python': { title: 'Python 基础笔记', sub: '函数 · 面向对象 · 文件处理 · 练习' },
+        'flask': { title: 'Flask 笔记', sub: '路由 · 请求 · 模板 · JSON · Web 开发' }
+    };
+
+    function filterCards(filter) {
+        cards.forEach(card => {
+            const categories = card.dataset.category.split(' ');
+            if (filter === 'all' || categories.includes(filter)) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        const info = titleMap[filter] || titleMap['all'];
+        moduleTitle.textContent = info.title;
+        moduleSub.textContent = info.sub;
+    }
+
+    chips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            chips.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+            filterCards(filter);
+        });
+    });
+
+    // ===== 默认展示全部卡片 =====
+    // 移除所有卡片的 hidden 类，并确保 "全部" 标签处于 active 状态
+    cards.forEach(card => {
+        card.classList.remove('hidden');
+    });
+    // 确保 "全部" 标签激活，标题显示正确
+    filterCards('all');
+</script>
+
+</body>
+</html>

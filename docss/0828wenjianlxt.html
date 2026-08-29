@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>文件处理 · 4个练习</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #eef3f7;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      padding: 10px;
+      color: #1a2a3a;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 620px;
+      width: 100%;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 16px 14px 20px;
+      box-shadow: 0 8px 30px rgba(0,20,30,0.12);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 3px solid #1f6390;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #0a293f;
+    }
+    .header h1 i { color: #1f6390; font-size: 1.1rem; }
+    .header-time {
+      font-size: 0.65rem;
+      background: #d2e3f0;
+      padding: 2px 10px;
+      border-radius: 40px;
+      color: #124263;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .header-time i { font-size: 0.55rem; }
+
+    /* 练习卡片 */
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border: 1px solid #e6edf4;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      color: #1a4b6e;
+      margin-bottom: 4px;
+    }
+    .card-title i { color: #2b7aa2; width: 1.2rem; }
+    .file-badge {
+      background: #d4e3f0;
+      border-radius: 30px;
+      padding: 0 10px;
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: #124263;
+      font-family: monospace;
+    }
+    .card-desc {
+      font-size: 0.7rem;
+      color: #3a5a6e;
+      margin-bottom: 6px;
+      padding-left: 4px;
+    }
+    .card-desc i { color: #3d8ec0; width: 1.2rem; }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.6rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid #2b4b64;
+      -webkit-overflow-scrolling: touch;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .code-block::-webkit-scrollbar { width: 4px; }
+    .code-block::-webkit-scrollbar-thumb { background: #3d6a8a; border-radius: 10px; }
+
+    .comment { color: #6a9955; font-style: italic; }
+    .keyword { color: #ff7b72; }
+    .string { color: #a5d6ff; }
+    .builtin { color: #4fc1ff; }
+    .func { color: #d2a8ff; }
+
+    .inline-code {
+      background: #eaf0f6;
+      padding: 0 6px;
+      border-radius: 12px;
+      font-family: monospace;
+      font-size: 0.65rem;
+      color: #0b344f;
+      border: 1px solid #cbdae6;
+    }
+
+    .footer {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid #caddf0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.6rem;
+      color: #4d6a82;
+      flex-wrap: wrap;
+    }
+    .footer i { color: #3d8ec0; }
+
+    @media (max-width: 420px) {
+      .container { padding: 12px 10px; }
+      .header h1 { font-size: 1rem; }
+      .code-block { font-size: 0.55rem; padding: 8px 10px; max-height: 220px; }
+      .card { padding: 10px 10px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header">
+    <h1><i class="fas fa-file-code"></i> 文件处理 · 4练习</h1>
+    <span class="header-time">
+      <i class="far fa-calendar-alt"></i> <span id="date-display">2026-08-28</span>
+      <i class="far fa-clock" style="margin-left:4px;"></i> <span id="time-display">14:30</span>
+    </span>
+  </div>
+
+  <!-- ===== 练习1: 英汉词典 ===== -->
+  <div class="card">
+    <div class="card-title">
+      <i class="fas fa-file-import"></i> 练习1 · 英汉词典读取
+      <span class="file-badge">英汉词典.py</span>
+    </div>
+    <div class="card-desc">
+      <i class="fas fa-list-ul"></i> 读取 <span class="inline-code">英汉词典.txt</span>，构建字典，英文→中文查询，<span class="inline-code">quit</span> 退出
+    </div>
+    <div class="code-block"><span class="comment">""" 英汉词典读取 """</span>
+<span class="keyword">with</span> open(<span class="string">"英汉词典.txt"</span>, encoding=<span class="string">"utf8"</span>) <span class="keyword">as</span> f:
+    eng_dict = {}
+    <span class="keyword">for</span> line <span class="keyword">in</span> f:
+        line = line.rstrip()
+        fields = line.split(<span class="string">","</span>)
+        <span class="keyword">if</span> len(fields) == <span class="builtin">2</span>:
+            eng_dict[fields[<span class="builtin">0</span>]] = fields[<span class="builtin">1</span>]
+
+<span class="keyword">while</span> <span class="builtin">True</span>:
+    info = input(<span class="string">"请输入英文词语: "</span>)
+    <span class="keyword">if</span> info == <span class="string">"quit"</span>: <span class="keyword">break</span>
+    <span class="keyword">if</span> info <span class="keyword">in</span> eng_dict:
+        print(<span class="string">"汉语："</span>, eng_dict[info])
+    <span class="keyword">else</span>:
+        print(<span class="string">"没有这个词语"</span>)</div>
+  </div>
+
+  <!-- ===== 练习2: 婚礼礼金 ===== -->
+  <div class="card">
+    <div class="card-title">
+      <i class="fas fa-hand-holding-heart"></i> 练习2 · 婚礼礼金程序
+      <span class="file-badge">文件的婚礼礼金程序.py</span>
+    </div>
+    <div class="card-desc">
+      <i class="fas fa-list-ul"></i> 写入 <span class="inline-code">婚礼礼金.txt</span>，<span class="inline-code">quit</span> 后统计加和/最高/最低/平均
+    </div>
+    <div class="code-block"><span class="comment">""" 婚礼礼金程序 """</span>
+fname = <span class="string">"婚礼礼金.txt"</span>
+<span class="keyword">with</span> open(fname, <span class="string">"w"</span>, encoding=<span class="string">"utf8"</span>) <span class="keyword">as</span> f:
+    <span class="keyword">while</span> <span class="builtin">True</span>:
+        info = input(<span class="string">"请输入来人和金额: "</span>)
+        <span class="keyword">if</span> info == <span class="string">"quit"</span>: <span class="keyword">break</span>
+        fields = info.split()
+        <span class="keyword">if</span> len(fields) == <span class="builtin">2</span>:
+            name, money = fields
+            f.write(f<span class="string">"{name},{int(money)}\n"</span>)
+
+<span class="keyword">with</span> open(fname, encoding=<span class="string">"utf8"</span>) <span class="keyword">as</span> f:
+    moneys = []
+    <span class="keyword">for</span> line <span class="keyword">in</span> f:
+        fields = line.rstrip().split(<span class="string">","</span>)
+        <span class="keyword">if</span> len(fields) == <span class="builtin">2</span>:
+            moneys.append(int(fields[<span class="builtin">1</span>]))
+    print(<span class="string">"加和:"</span>, sum(moneys))
+    print(<span class="string">"最高:"</span>, max(moneys))
+    print(<span class="string">"最低:"</span>, min(moneys))
+    print(<span class="string">"平均:"</span>, sum(moneys)/len(moneys))</div>
+  </div>
+
+  <!-- ===== 练习3: 成绩录入 JSON ===== -->
+  <div class="card">
+    <div class="card-title">
+      <i class="fas fa-save"></i> 练习3 · 成绩录入 JSON
+      <span class="file-badge">成绩录入json.py</span>
+    </div>
+    <div class="card-desc">
+      <i class="fas fa-list-ul"></i> 加载/保存 <span class="inline-code">成绩录入json.txt</span>，JSON格式存储
+    </div>
+    <div class="code-block"><span class="comment">""" 成绩录入 JSON """</span>
+<span class="keyword">import</span> os, json
+file_name = <span class="string">"成绩录入json.txt"</span>
+grade_dict = {}
+<span class="keyword">if</span> os.path.exists(file_name):
+    <span class="keyword">with</span> open(file_name, encoding=<span class="string">"utf8"</span>) <span class="keyword">as</span> f:
+        grade_dict = json.loads(f.read())
+
+<span class="keyword">while</span> <span class="builtin">True</span>:
+    info = input(<span class="string">"请输入姓名和成绩: "</span>)
+    <span class="keyword">if</span> info == <span class="string">"quit"</span>: <span class="keyword">break</span>
+    fields = info.split()
+    <span class="keyword">if</span> len(fields) == <span class="builtin">2</span>:
+        name, grade = fields
+        grade_dict[name] = int(grade)
+
+<span class="keyword">with</span> open(file_name, <span class="string">"w"</span>, encoding=<span class="string">"utf8"</span>) <span class="keyword">as</span> f:
+    f.write(json.dumps(grade_dict))</div>
+  </div>
+
+  <!-- ===== 练习4: 异常处理成绩录入 ===== -->
+  <div class="card">
+    <div class="card-title">
+      <i class="fas fa-exclamation-triangle"></i> 练习4 · 异常处理成绩录入
+      <span class="file-badge">异常处理学生成绩录入程序.py</span>
+    </div>
+    <div class="card-desc">
+      <i class="fas fa-list-ul"></i> <span class="inline-code">try/except</span> 捕获非数字异常，程序不退出
+    </div>
+    <div class="code-block"><span class="comment">""" 异常处理成绩录入 """</span>
+file_name = <span class="string">"学生成绩带异常处理.txt"</span>
+<span class="keyword">with</span> open(file_name, <span class="string">"w"</span>, encoding=<span class="string">"utf8"</span>) <span class="keyword">as</span> f:
+    <span class="keyword">while</span> <span class="builtin">True</span>:
+        info = input(<span class="string">"请输入姓名和成绩: "</span>)
+        <span class="keyword">try</span>:
+            <span class="keyword">if</span> info == <span class="string">"quit"</span>: <span class="keyword">break</span>
+            name, grade = info.split()
+            grade = int(grade)
+        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+            print(<span class="string">"出现问题了："</span>, e, <span class="string">"你输入的是："</span>, info)
+            <span class="keyword">continue</span>
+        f.write(f<span class="string">"{name},{grade}\n"</span>)
+print(<span class="string">"success"</span>)</div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    <i class="fas fa-rocket"></i>
+    <span>文件处理 · 4个完整练习</span>
+    <i class="fas fa-code" style="margin-left:4px;"></i>
+    <span style="opacity:0.7;"># 读写 · JSON · 异常</span>
+  </div>
+
+</div>
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('date-display').textContent = `${year}-${month}-${day}`;
+    document.getElementById('time-display').textContent = `${hours}:${minutes}`;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+</script>
+
+</body>
+</html>

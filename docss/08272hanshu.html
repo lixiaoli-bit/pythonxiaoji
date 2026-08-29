@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Python 函数 · 学习笔记 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f4f8fc 0%, #e6eef5 100%);
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(0,20,30,0.20), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #1f6390;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #0a293f;
+    }
+
+    h1 i {
+      color: #1f6390;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: #d2e3f0;
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #124263;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1a4b6e;
+      border-left: 6px solid #3d8ec0;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(61,142,192,0.07), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #3d8ec0;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1d4b6b;
+    }
+
+    h3 i {
+      color: #4f9bc9;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(0,20,30,0.2);
+      border: 1px solid #2b4b64;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcbff;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f9f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .inline-code {
+      background: #eaf0f6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #0b344f;
+      border: 1px solid #cbdae6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #d4e3f0;
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #124263;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2b7aa2;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(61, 142, 192, 0.07);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #3d8ec0;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2b7aa2;
+      margin-right: 0.4rem;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border: 1px solid rgba(255,255,255,0.8);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2b7aa2;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4e8, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #4d6a82;
+      border-top: 1px solid #caddf0;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #3d8ec0;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #1f6390;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4b6e;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+    }
+
+    /* 更小屏 (手机窄) */
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-code"></i> 
+    Python 函数2 · 核心笔记
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-08-27</span>
+  </h1>
+
+  <!-- 函数是什么 -->
+  <h2><i class="fas fa-info-circle"></i> 函数是什么</h2>
+  <p><i class="fas fa-puzzle-piece" style="color:#2b7aa2;"></i> 给一段代码起名字，独立调用、重复使用。让编写、阅读、升级都更容易。</p>
+  <div class="highlight-box">
+    <i class="fas fa-thumbs-up"></i> 我们已经用过很多内置函数：
+    <ul style="margin-top: 0.3rem;">
+      <li><i class="fas fa-dice"></i> <span class="inline-code">random.randint(0, 100)</span> 生成随机数</li>
+      <li><i class="fas fa-print"></i> <span class="inline-code">print("hello")</span> 打印输出</li>
+      <li><i class="fas fa-cut"></i> <span class="inline-code">"xiaoming 87".split()</span> 拆分字符串</li>
+      <li><i class="fas fa-keyboard"></i> <span class="inline-code">input("请输入：")</span> 接收输入</li>
+      <li><i class="fas fa-list-ul"></i> <span class="inline-code">len(list)</span> 求长度</li>
+    </ul>
+  </div>
+
+  <!-- 定义 & 调用 -->
+  <h2><i class="fas fa-pen-fancy"></i> 定义 & 调用</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> def print_hello():
+    <span style="color: #8fcbff;">""" 这是一个函数的定义，用于打印一段文字 """</span>
+    print("hello world")
+
+# 调用函数（不要忘了括号）
+print_hello()
+print_hello()</div>
+  <ul>
+    <li><i class="fas fa-key"></i> <span class="inline-code">def</span> 关键字</li>
+    <li><i class="fas fa-tag"></i> 函数名 + <span class="inline-code">()</span> + <span class="inline-code">:</span></li>
+    <li><i class="fas fa-comment"></i> 文档字符串注释 (docstring)</li>
+    <li><i class="fas fa-repeat"></i> 通过名字 + 括号重复调用</li>
+  </ul>
+
+  <!-- 参数 -->
+  <h2><i class="fas fa-sliders-h"></i> 参数传递</h2>
+  <h3><i class="fas fa-user"></i> 单个参数</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> def introduce(name):
+    print(f"大家好，我的名字是：{name}")
+
+introduce("小明")
+introduce("小白")</div>
+
+  <h3><i class="fas fa-users"></i> 多个参数 & 位置实参</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> def introduce(name, gender):
+    print(f"大家好，我的名字是：{name}，是个小{gender}")
+
+introduce("小明", "男生")   # 顺序必须一致</div>
+
+  <h3><i class="fas fa-tags"></i> 关键字实参 (key=value)</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> introduce(name="小明", gender="男生")
+introduce(gender="男生", name="小明")   # 顺序可换</div>
+
+  <h3><i class="fas fa-clock"></i> 默认值参数</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> def introduce(name, gender, age=6):
+    print(f"大家好，我是{name}，小{gender}，今年{age}岁")
+
+introduce("小明", "男生")      # age 使用默认 6
+introduce("小白", "女生", 5)   # 覆盖默认值</div>
+
+  <div class="highlight-box">
+    <i class="fas fa-lightbulb"></i> 多种调用方式：
+    <span class="inline-code">introduce("小明")</span> 、<span class="inline-code">introduce(name="小明")</span> 、<span class="inline-code">introduce("小白", 5)</span> 、<span class="inline-code">introduce(age=5, name="小白")</span>
+  </div>
+
+  <!-- 返回值 -->
+  <h2><i class="fas fa-arrow-left"></i> 返回值 return</h2>
+  <p>用 <span class="inline-code">return</span> 返回结果，函数调用会变成返回值。</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> def add(x, y):
+    return int(x) + int(y)
+
+result = add(3, 5)
+print(result)           # 8
+print(add("4", "6"))    # 10</div>
+
+  <h3><i class="fas fa-book"></i> 返回字典 / 多个值</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> students = { "xiaoming": {"id": 101, "age": 18} }
+
+def get_student(name):
+    if name in students:
+        return students[name]["age"], students[name]["id"]
+    return None, None
+
+age, id = get_student("xiaoming")
+print(age, id)   # 18 101</div>
+
+  <!-- 函数返回练习题 -->
+  <h2><i class="fas fa-arrow-left"></i> 函数返回练习题</h2>
+  <div class="highlight-box" style="border-left-color: #d99f2b;">
+    <i class="fas fa-graduation-cap" style="color:#d99f2b;"></i> 
+    <strong>练习要求：</strong> 编写 <span class="inline-code">compute</span> 函数支持加减乘除，再封装 <span class="inline-code">add</span> 和 <span class="inline-code">sub</span> 函数调用它。
+  </div>
+
+  <h3><i class="fas fa-code"></i> 完整代码实现</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> def compute(x, y, method):
+   
+    if method == "add":
+        return x + y
+    elif method == "sub":
+        return x - y
+    elif method == "mul":
+        return x * y
+    elif method == "div":
+        return x / y
+    else:
+        return "❌ 未知的运算方式"
+
+def add(x, y):
+    return compute(x, y, "add")
+
+def sub(x, y):
+    return compute(x, y, "sub")
+
+def mul(x, y):
+    return compute(x, y, "mul")
+
+def div(x, y):
+    return compute(x, y, "div")
+
+print("=" * 30)
+print("函数返回练习题测试")
+print("=" * 30)
+print(f"add(3, 5)   = {add(3, 5)}")      # 8
+print(f"add(10, 20) = {add(10, 20)}")    # 30
+
+print("=" * 30)</div>
+
+  
+
+  <!-- 模块 -->
+  <h2><i class="fas fa-folder-open"></i> 模块 (module)</h2>
+  <p>将函数存储在 <span class="inline-code">.py</span> 文件中，通过 <span class="inline-code">import</span> 使用。</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> import compute              # compute.add
+import compute as cp        # cp.add
+from compute import add, sub  # 直接使用 add/sub
+from compute import *       # 所有函数</div>
+
+  <!-- 函数模块练习题 -->
+  <h2><i class="fas fa-code-branch"></i> 函数模块练习题 · 学生查询</h2>
+  <div class="highlight-box" style="border-left-color: #d99f2b;">
+    <i class="fas fa-graduation-cap" style="color:#d99f2b;"></i> 
+    <strong>模块拆分练习：</strong> 将学生数据与查询逻辑封装在模块中，并在主程序中循环调用。
+  </div>
+
+  <h3><i class="fas fa-file-code"></i> 文件 1：<span class="file-tag">student_query.py</span></h3>
+  <p>存放学生字典，提供 <span class="inline-code">get(name)</span> 查询函数。</p>
+  <div class="code-block"><i class="fas fa-database"></i> students = {
+    "xiaoming": {"id": 101, "age": 18, "gender": "boy"},
+    "xiaohuang": {"id": 102, "age": 19, "gender": "girl"},
+    "xiaowang": {"id": 103, "age": 17, "gender": "girl"},
+}
+
+def get(name):
+    """根据姓名返回学生信息字典，不存在则返回 None"""
+    return students.get(name)</div>
+
+  <h3><i class="fas fa-file-code"></i> 文件 2：<span class="file-tag">school.py</span> (主程序)</h3>
+  <p>导入 <span class="inline-code">student_query</span> 模块，循环接收输入并查询。</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> import student_query
+
+while True:
+    print("#" * 20)
+    name = input("请输入学生姓名 (输入 quit 退出)：")
+    if name == "quit":
+        break
+
+    info = student_query.get(name)
+    if info:
+        print("✅ 查到了，信息是：", info)
+    else:
+        print("❌ 没有这个学生的信息")</div>
+
+  <div class="highlight-box">
+    <i class="fas fa-play-circle"></i> <strong>运行效果：</strong>
+    <ul style="margin-top: 0.3rem;">
+      <li><i class="fas fa-user"></i> 输入 <span class="inline-code">xiaoming</span> → 输出 <span class="inline-code">{'id': 101, 'age': 18, 'gender': 'boy'}</span></li>
+      <li><i class="fas fa-user"></i> 输入 <span class="inline-code">lilei</span> → 输出 <span class="inline-code">❌ 没有这个学生的信息</span></li>
+      <li><i class="fas fa-sign-out-alt"></i> 输入 <span class="inline-code">quit</span> → 退出循环</li>
+    </ul>
+  </div>
+
+  <!-- lambda -->
+  <h2><i class="fas fa-lambda"></i> lambda 匿名函数</h2>
+  <p>一句话函数，用于简单逻辑，常作为 <span class="inline-code">key</span> 参数传入排序。</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> sum = lambda x, y: x + y
+print(sum(2, 3))   # 5
+
+sgrades = [("xiaoming", 89), ("xiaozhao", 77), ("xiaoxiaozhang", 99)]
+sgrades.sort(key=lambda x: x[1])
+print(sgrades)  # 按成绩升序
+
+print(sorted(sgrades, key=lambda m: m[1], reverse=True))  # 按成绩降序</div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>Python 函数 · 从入门到模块</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 定义 · 参数 · 返回值 · lambda · 模块</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>
