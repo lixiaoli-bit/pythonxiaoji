@@ -496,7 +496,7 @@
         <span id="moduleSub">Python 核心知识 · 点击卡片进入</span>
     </div>
 
-    <!-- ===== 卡片网格（默认全部展示） ===== -->
+    <!-- ===== 卡片网格 ===== -->
     <div class="module-grid" id="cardGrid">
 
         <!-- 卡片1：函数 -->
@@ -609,6 +609,50 @@
             </div>
         </a>
 
+        <!-- ===== 新增卡片6：MySQL 安装 & 命令 ===== -->
+        <a href="docss/0830mysql.html" class="card" data-category="flask" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-database"></i>
+                <span class="title">MySQL · 安装 & 命令</span>
+                <span class="badge">数据库</span>
+            </div>
+            <div class="card-desc">
+                Windows 安装 MySQL、环境变量配置、VS Code 插件、建库建表、增删改查核心命令。
+            </div>
+            <div class="card-tags">
+                <span class="tag">安装</span>
+                <span class="tag">环境变量</span>
+                <span class="tag">CREATE</span>
+                <span class="tag">SELECT</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
+            </div>
+        </a>
+
+        <!-- ===== 新增卡片7：Flask + MySQL 操作 ===== -->
+        <a href="docss/0830flmysql.html" class="card" data-category="flask" target="_blank">
+            <div class="card-header">
+                <i class="fas fa-server"></i>
+                <span class="title">Flask · 数据库操作</span>
+                <span class="badge">实战</span>
+            </div>
+            <div class="card-desc">
+                db.py 连接 MySQL、查询/插入封装；app.py 路由与模板；表单提交、用户列表、详情页。
+            </div>
+            <div class="card-tags">
+                <span class="tag">pymysql</span>
+                <span class="tag">路由</span>
+                <span class="tag">表单</span>
+                <span class="tag">Jinja2</span>
+            </div>
+            <div class="card-footer">
+                <span class="status"><i class="fas fa-circle"></i> 进入笔记 →</span>
+                <span class="btn-link"><i class="fas fa-chevron-right"></i> 阅读</span>
+            </div>
+        </a>
+
     </div>
 
     <!-- ===== 特色工具条 ===== -->
@@ -656,6 +700,8 @@
             <a href="docss/0828lei.html"><i class="fas fa-cubes"></i> 面向对象</a>
             <a href="docss/0828wenjian.html"><i class="fas fa-file-code"></i> 文件处理</a>
             <a href="docss/0829flask1.html"><i class="fas fa-flask"></i> Flask 入门</a>
+            <a href="0830mysql.html"><i class="fas fa-database"></i> MySQL</a>
+            <a href="0830flmysql.html"><i class="fas fa-server"></i> Flask+MySQL</a>
         </div>
     </div>
 
@@ -678,7 +724,7 @@
     const titleMap = {
         'all': { title: '学习笔记', sub: 'Python 核心知识 · 点击卡片进入' },
         'python': { title: 'Python 基础笔记', sub: '函数 · 面向对象 · 文件处理 · 练习' },
-        'flask': { title: 'Flask 笔记', sub: '路由 · 请求 · 模板 · JSON · Web 开发' }
+        'flask': { title: 'Flask 笔记', sub: '路由 · 请求 · 模板 · JSON · Web 开发 · MySQL' }
     };
 
     function filterCards(filter) {
@@ -706,11 +752,9 @@
     });
 
     // ===== 默认展示全部卡片 =====
-    // 移除所有卡片的 hidden 类，并确保 "全部" 标签处于 active 状态
     cards.forEach(card => {
         card.classList.remove('hidden');
     });
-    // 确保 "全部" 标签激活，标题显示正确
     filterCards('all');
 </script>
 

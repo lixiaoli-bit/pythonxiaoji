@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jinja2 模板 - id 姓名 详情</title>
+</head>
+<body>
+    <!-- 模板：循环展示 id 姓名 详情（带链接） -->
+    <div>
+        {% for user in datas %}
+            <div>
+                ID：{{ user.id }}，姓名：{{ user.name }}，
+                <a href="/user/{{ user.id }}">详情</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
