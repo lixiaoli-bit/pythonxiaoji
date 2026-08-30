@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Python 函数 · 学习笔记 · 美化版</title>
+  <title>Python 函数 · 精讲 · 美化版</title>
   <!-- Font Awesome 6 (免费图标库) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -14,7 +14,7 @@
     }
 
     body {
-      background: #dce8d5;  /* 与 index 一致的柔和绿底 */
+      background: #dce8d5;
       font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       padding: 1.2rem 0.8rem;
       color: #1a2a3a;
@@ -192,6 +192,12 @@
       margin-right: 0.4rem;
     }
 
+    /* 绿色系高亮框（用于“为什么需要参数”） */
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
     .grid-2col {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -280,7 +286,6 @@
       .footer-note { font-size: 0.75rem; justify-content: center; }
     }
 
-    /* 更小屏 (手机窄) */
     @media (max-width: 420px) {
       .container { padding: 0.9rem 0.7rem; }
       h1 { font-size: 1.4rem; }
@@ -294,21 +299,18 @@
   <!-- 标题 -->
   <h1>
     <i class="fas fa-code"></i> 
-    Python 函数2 · 核心笔记
-    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-08-27</span>
+    Python 函数 · 精讲
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-08-30</span>
   </h1>
 
   <!-- 函数是什么 -->
-  <h2><i class="fas fa-info-circle"></i> 函数是什么</h2>
+  <h2><i class="fas fa-info-circle"></i> 函数是什么，为什么需要函数</h2>
   <p><i class="fas fa-puzzle-piece" style="color:#2e7d5e;"></i> 给一段代码起名字，独立调用、重复使用。让编写、阅读、升级都更容易。</p>
   <div class="highlight-box">
-    <i class="fas fa-thumbs-up"></i> 我们已经用过很多内置函数：
+    <i class="fas fa-thumbs-up"></i> 比喻：函数是“电梯里的楼层按钮”。
     <ul style="margin-top: 0.3rem;">
-      <li><i class="fas fa-dice"></i> <span class="inline-code">random.randint(0, 100)</span> 生成随机数</li>
-      <li><i class="fas fa-print"></i> <span class="inline-code">print("hello")</span> 打印输出</li>
-      <li><i class="fas fa-cut"></i> <span class="inline-code">"xiaoming 87".split()</span> 拆分字符串</li>
-      <li><i class="fas fa-keyboard"></i> <span class="inline-code">input("请输入：")</span> 接收输入</li>
-      <li><i class="fas fa-list-ul"></i> <span class="inline-code">len(list)</span> 求长度</li>
+      <li><i class="fas fa-arrow-up"></i> 不用重新造电梯，按“10楼”即可</li>
+      <li><i class="fas fa-print"></i> 调用函数，内部处理加速、减速、开关门</li>
     </ul>
   </div>
 
@@ -324,176 +326,168 @@ print_hello()</div>
   <ul>
     <li><i class="fas fa-key"></i> <span class="inline-code">def</span> 关键字</li>
     <li><i class="fas fa-tag"></i> 函数名 + <span class="inline-code">()</span> + <span class="inline-code">:</span></li>
-    <li><i class="fas fa-comment"></i> 文档字符串注释 (docstring)</li>
+    <li><i class="fas fa-comment"></i> 文档字符串 (docstring)</li>
     <li><i class="fas fa-repeat"></i> 通过名字 + 括号重复调用</li>
   </ul>
 
   <!-- 参数 -->
-  <h2><i class="fas fa-sliders-h"></i> 参数传递</h2>
-  <h3><i class="fas fa-user"></i> 单个参数</h3>
-  <div class="code-block"><i class="fas fa-terminal"></i> def introduce(name):
-    print(f"大家好，我的名字是：{name}")
+  <h2><i class="fas fa-sliders-h"></i> 参数 · 4种类型</h2>
+  <p><i class="fas fa-bridge"></i> 参数是“函数与外界的接口”，让函数不再是孤岛。</p>
 
-introduce("小明")
-introduce("小白")</div>
-
-  <h3><i class="fas fa-users"></i> 多个参数 & 位置实参</h3>
-  <div class="code-block"><i class="fas fa-terminal"></i> def introduce(name, gender):
-    print(f"大家好，我的名字是：{name}，是个小{gender}")
-
-introduce("小明", "男生")   # 顺序必须一致</div>
-
-  <h3><i class="fas fa-tags"></i> 关键字实参 (key=value)</h3>
-  <div class="code-block"><i class="fas fa-terminal"></i> introduce(name="小明", gender="男生")
-introduce(gender="男生", name="小明")   # 顺序可换</div>
-
-  <h3><i class="fas fa-clock"></i> 默认值参数</h3>
-  <div class="code-block"><i class="fas fa-terminal"></i> def introduce(name, gender, age=6):
-    print(f"大家好，我是{name}，小{gender}，今年{age}岁")
-
-introduce("小明", "男生")      # age 使用默认 6
-introduce("小白", "女生", 5)   # 覆盖默认值</div>
-
-  <div class="highlight-box">
-    <i class="fas fa-lightbulb"></i> 多种调用方式：
-    <span class="inline-code">introduce("小明")</span> 、<span class="inline-code">introduce(name="小明")</span> 、<span class="inline-code">introduce("小白", 5)</span> 、<span class="inline-code">introduce(age=5, name="小白")</span>
+  <!-- 为什么需要参数 — 绿色系高亮框 -->
+  <div class="highlight-box green-params">
+    <i class="fas fa-question-circle" style="color:#2e7d5e;"></i> 
+    <strong>为什么需要参数？</strong><br>
+    如果函数没有参数，你遇到稍微不同的需求就得重新写一个新函数：<br>
+    · <span class="inline-code">print_hello()</span> 打印"你好"<br>
+    · <span class="inline-code">print_hi()</span> 打印"嗨"<br>
+    · <span class="inline-code">print_goodbye()</span> 打印"再见"<br>
+    你会发现代码里塞满了长得几乎一样、只有细微差别的函数——这不叫编程，这叫<strong>重复造轮子大赛</strong>。<br>
+    而有了参数，你只需要一个函数 <span class="inline-code">print_msg(msg)</span>，传什么就打印什么，干净利落。<br>
+    <i class="fas fa-arrow-right" style="color:#2e7d5e;"></i> 参数就是“函数和外界的接口”——它让函数不再是封闭的孤岛，而是能跟外部世界交互的桥梁。
   </div>
 
-  <!-- 返回值 -->
+  <h3><i class="fas fa-list-ol"></i> 1. 位置参数（最基础）按顺序一一对应，多一个少一个都报错。</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> def greet(name, msg):
+    print(f"{name}，{msg}")
+
+greet("小明", "你好")   # 必须按顺序 不能乱</div>
+
+  <h3><i class="fas fa-clock"></i> 2. 默认参数（偷懒神器）给参数提前设个“保底值”，调用时如果不传就用默认的。
+</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> def greet(name, msg="你好"):
+    print(f"{name}，{msg}")
+
+greet("小明")          # 小明，你好
+greet("小明", "再见")   # 覆盖默认值</div>
+
+  <h3><i class="fas fa-random"></i> 3. 关键字参数（不怕顺序乱）：调用时直接指定参数名，想先传哪个都行</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> greet(msg="你好", name="小明")   # 顺序随意</div>
+
+  <h3><i class="fas fa-boxes"></i> 4. 不定长参数 *args / **kwargs  <br>
+    不知道调用时会传几个参数，就用*args（收一堆位置参数）和**kwargs（收一堆关键字参数）。</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> def collect(*args, **kwargs):
+    print(args)    # 元组 (1,2,3)
+    print(kwargs)  # 字典 {'a':1, 'b':2}
+
+collect(1, 2, 3, a=1, b=2)</div>
+
+  <!-- return -->
   <h2><i class="fas fa-arrow-left"></i> 返回值 return</h2>
-  <p>用 <span class="inline-code">return</span> 返回结果，函数调用会变成返回值。</p>
-  <div class="code-block"><i class="fas fa-terminal"></i> def add(x, y):
-    return int(x) + int(y)
-
-result = add(3, 5)
-print(result)           # 8
-print(add("4", "6"))    # 10</div>
-
-  <h3><i class="fas fa-book"></i> 返回字典 / 多个值</h3>
-  <div class="code-block"><i class="fas fa-terminal"></i> students = { "xiaoming": {"id": 101, "age": 18} }
-
-def get_student(name):
-    if name in students:
-        return students[name]["age"], students[name]["id"]
-    return None, None
-
-age, id = get_student("xiaoming")
-print(age, id)   # 18 101</div>
-
-  <!-- 函数返回练习题 -->
-  <h2><i class="fas fa-arrow-left"></i> 函数返回练习题</h2>
-  <div class="highlight-box" style="border-left-color: #d99f2b;">
-    <i class="fas fa-graduation-cap" style="color:#d99f2b;"></i> 
-    <strong>练习要求：</strong> 编写 <span class="inline-code">compute</span> 函数支持加减乘除，再封装 <span class="inline-code">add</span> 和 <span class="inline-code">sub</span> 函数调用它。
-  </div>
-
-  <h3><i class="fas fa-code"></i> 完整代码实现</h3>
-  <div class="code-block"><i class="fas fa-terminal"></i> def compute(x, y, method):
-   
-    if method == "add":
-        return x + y
-    elif method == "sub":
-        return x - y
-    elif method == "mul":
-        return x * y
-    elif method == "div":
-        return x / y
-    else:
-        return "❌ 未知的运算方式"
-
-def add(x, y):
-    return compute(x, y, "add")
-
-def sub(x, y):
-    return compute(x, y, "sub")
-
-def mul(x, y):
-    return compute(x, y, "mul")
-
-def div(x, y):
-    return compute(x, y, "div")
-
-print("=" * 30)
-print("函数返回练习题测试")
-print("=" * 30)
-print(f"add(3, 5)   = {add(3, 5)}")      # 8
-print(f"add(10, 20) = {add(10, 20)}")    # 30
-
-print("=" * 30)</div>
-
-  
-
-  <!-- 模块 -->
-  <h2><i class="fas fa-folder-open"></i> 模块 (module)</h2>
-  <p>将函数存储在 <span class="inline-code">.py</span> 文件中，通过 <span class="inline-code">import</span> 使用。</p>
-  <div class="code-block"><i class="fas fa-terminal"></i> import compute              # compute.add
-import compute as cp        # cp.add
-from compute import add, sub  # 直接使用 add/sub
-from compute import *       # 所有函数</div>
-
-  <!-- 函数模块练习题 -->
-  <h2><i class="fas fa-code-branch"></i> 函数模块练习题 · 学生查询</h2>
-  <div class="highlight-box" style="border-left-color: #d99f2b;">
-    <i class="fas fa-graduation-cap" style="color:#d99f2b;"></i> 
-    <strong>模块拆分练习：</strong> 将学生数据与查询逻辑封装在模块中，并在主程序中循环调用。
-  </div>
-
-  <h3><i class="fas fa-file-code"></i> 文件 1：<span class="file-tag">student_query.py</span></h3>
-  <p>存放学生字典，提供 <span class="inline-code">get(name)</span> 查询函数。</p>
-  <div class="code-block"><i class="fas fa-database"></i> students = {
-    "xiaoming": {"id": 101, "age": 18, "gender": "boy"},
-    "xiaohuang": {"id": 102, "age": 19, "gender": "girl"},
-    "xiaowang": {"id": 103, "age": 17, "gender": "girl"},
-}
-
-def get(name):
-    """根据姓名返回学生信息字典，不存在则返回 None"""
-    return students.get(name)</div>
-
-  <h3><i class="fas fa-file-code"></i> 文件 2：<span class="file-tag">school.py</span> (主程序)</h3>
-  <p>导入 <span class="inline-code">student_query</span> 模块，循环接收输入并查询。</p>
-  <div class="code-block"><i class="fas fa-terminal"></i> import student_query
-
-while True:
-    print("#" * 20)
-    name = input("请输入学生姓名 (输入 quit 退出)：")
-    if name == "quit":
-        break
-
-    info = student_query.get(name)
-    if info:
-        print("✅ 查到了，信息是：", info)
-    else:
-        print("❌ 没有这个学生的信息")</div>
-
+  <p><i class="fas fa-hand-holding"></i> return 是函数的“产出”，决定干完活后送回什么。</p>
   <div class="highlight-box">
-    <i class="fas fa-play-circle"></i> <strong>运行效果：</strong>
-    <ul style="margin-top: 0.3rem;">
-      <li><i class="fas fa-user"></i> 输入 <span class="inline-code">xiaoming</span> → 输出 <span class="inline-code">{'id': 101, 'age': 18, 'gender': 'boy'}</span></li>
-      <li><i class="fas fa-user"></i> 输入 <span class="inline-code">lilei</span> → 输出 <span class="inline-code">❌ 没有这个学生的信息</span></li>
-      <li><i class="fas fa-sign-out-alt"></i> 输入 <span class="inline-code">quit</span> → 退出循环</li>
-    </ul>
+    <i class="fas fa-utensils"></i> 比喻：让室友带饭 — 你调用函数，室友出门买饭，return 就是把饭递到你手上。
   </div>
+  <ul>
+    <li><i class="fas fa-inbox"></i> 没有 return → 返回 <span class="inline-code">None</span></li>
+    <li><i class="fas fa-stop-circle"></i> return 会“当场终止”函数，后续代码不执行</li>
+  </ul>
+  <div class="code-block"><i class="fas fa-terminal"></i> def test():
+    return 1
+    print("这行永远不会执行")   # 被 return 截胡</div>
+
+  <h3><i class="fas fa-code-branch"></i> print vs return 终极测试</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> def add(a, b):
+    print(a + b)      # 只打印，不返回
+
+def add2(a, b):
+    return a + b      # 返回结果，不打印
+
+# 调用 add(1,2) → 看到3，但变量拿不到
+# result = add2(1,2) → 看不到3，但 result 里存着3</div>
+  <p><i class="fas fa-eye"></i> print 是给人看的，return 是给代码用的。<br>如果你想让函数的结果参与后续逻辑（比如判断、循环、再计算），就必须return。</p>
+
+  <h3><i class="fas fa-gift"></i> return 可以返回哪些值</h3>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-hashtag"></i> 整数、浮点、字符串、布尔、None</div>
+    <div class="grid-item"><i class="fas fa-list"></i> 列表、元组、字典、集合</div>
+    <div class="grid-item"><i class="fas fa-cogs"></i> 函数 / 方法（一等公民）</div>
+    <div class="grid-item"><i class="fas fa-robot"></i> 对象实例</div>
+    <div class="grid-item"><i class="fas fa-infinity"></i> 任何 Python 对象</div>
+  </div>
+
+  <!-- 返回函数（工具）示例 -->
+  <div class="highlight-box" style="border-left-color: #2e7d5e;">
+    <i class="fas fa-toolbox" style="color:#2e7d5e;"></i> 
+    <strong>返回函数 / 方法 —— 寄个“工具”给别人</strong><br>
+    Python 里函数是“一等公民”，可以当数据传递。
+  </div>
+  <div class="code-block"><i class="fas fa-terminal"></i> def outer():
+    def inner():
+        return "我是内部函数"
+    return inner  # 返回函数本身
+
+func = outer()  # func 就是 inner 函数
+result = func()  # 调用它，得到 "我是内部函数"
+<span style="color: #8fcb9f;"># 比喻：就像你寄了个“多功能军刀”（函数），对方收到后可以随时打开用。</span></div>
+
+  <!-- 返回对象实例示例 -->
+  <div class="highlight-box" style="border-left-color: #4b6a8a;">
+    <i class="fas fa-robot" style="color:#4b6a8a;"></i> 
+    <strong>返回对象实例 —— 寄个“活的”东西</strong><br>
+    如果你定义了类，可以返回类的实例。
+  </div>
+  <div class="code-block"><i class="fas fa-terminal"></i> class Person:
+    def __init__(self, name):
+        self.name = name
+
+def create_person():
+    return Person("小明")  # 返回对象
+
+p = create_person()
+print(p.name)  # 输出：小明
+<span style="color: #8fcb9f;"># 比喻：就像你寄了个“机器人”（对象），对方收到后可以调它的功能（方法）、查看它的属性。</span></div>
+
+  <div class="code-block"><i class="fas fa-terminal"></i> # 返回多个值自动打包成元组
+def get_user():
+    return "小明", 18
+name, age = get_user()   # 解包赋值</div>
 
   <!-- lambda -->
   <h2><i class="fas fa-lambda"></i> lambda 匿名函数</h2>
-  <p>一句话函数，用于简单逻辑，常作为 <span class="inline-code">key</span> 参数传入排序。</p>
-  <div class="code-block"><i class="fas fa-terminal"></i> sum = lambda x, y: x + y
-print(sum(2, 3))   # 5
+  <p>一句话写完的函数，不用 def、不用 return，一行搞定。</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> # 普通函数（正餐）
+def add(x, y):
+    return x + y
 
-sgrades = [("xiaoming", 89), ("xiaozhao", 77), ("xiaoxiaozhang", 99)]
-sgrades.sort(key=lambda x: x[1])
-print(sgrades)  # 按成绩升序
+# lambda（快餐）
+lambda x, y: x + y</div>
+  <ul>
+    <li><i class="fas fa-gavel"></i> 只能写一行表达式，自动返回</li>
+    <li><i class="fas fa-tools"></i> 搭配 <span class="inline-code">map</span>、<span class="inline-code">filter</span>、<span class="inline-code">sorted</span> 最经典</li>
+  </ul>
+  <h3><i class="fas fa-arrow-right"></i> 场景1：map 批量处理</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> nums = [1, 2, 3, 4]
+squared = list(map(lambda x: x**2, nums))   # [1, 4, 9, 16]</div>
+  <h3><i class="fas fa-filter"></i> 场景2：filter 筛选</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> nums = [1, 2, 3, 4, 5, 6]
+evens = list(filter(lambda x: x % 2 == 0, nums))   # [2, 4, 6]</div>
+  <h3><i class="fas fa-sort"></i> 场景3：sorted 自定义排序</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> students = [("小明", 90), ("小红", 85), ("小刚", 95)]
+sorted(students, key=lambda x: x[1])   # 按成绩排序</div>
 
-print(sorted(sgrades, key=lambda m: m[1], reverse=True))  # 按成绩降序</div>
+  <div class="highlight-box">
+    <i class="fas fa-bolt"></i> 金句：
+    <span class="inline-code">map</span> 每个元素都变一下，
+    <span class="inline-code">filter</span> 每个元素都问一下（留不留），
+    <span class="inline-code">sorted</span> 每个元素都比一下（谁在前）。
+  </div>
+
+  <!-- 判断标准 -->
+  <h2><i class="fas fa-question-circle"></i> 什么时候用内置函数 / 自己写 for</h2>
+  <div class="highlight-box">
+    <i class="fas fa-check-circle" style="color:#2e7d5e;"></i> 能用内置函数：数据独立处理，每个元素互不影响。<br>
+    <i class="fas fa-code" style="color:#2e7d5e;"></i> 必须自己写 for：数据相互依赖，后面的操作依赖前面的结果。
+  </div>
+  <p><i class="fas fa-brain"></i> 终极判断：<strong>“处理每个元素时，需不需要知道其他元素的状态？”</strong></p>
 
   <!-- 底部 -->
   <hr>
   <div class="footer-note">
     <i class="fas fa-rocket"></i> 
-    <span>Python 函数 · 从入门到模块</span>
+    <span>Python 函数 · 定义 · 参数 · return · lambda</span>
     <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
-    <span style="font-weight: 300; opacity: 0.8;"># 定义 · 参数 · 返回值 · lambda · 模块</span>
+    <span style="font-weight: 300; opacity: 0.8;"># 精简笔记</span>
     <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
   </div>
 
