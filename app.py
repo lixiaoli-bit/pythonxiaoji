@@ -1,47 +1,69 @@
 print("脚本已启动")  # 放在 import 之前
 from flask import Flask,render_template,request
+from db import query_data  # 导入你写好的查询函数
 import db
+
+from pyecharts.charts import Bar, Pie, Line
+
+from pyecharts import options as opts
 
 app = Flask(__name__)   # __name__ 当前模块
 
+
 @app.route('/')
 def hello():
-    return 'Hello, World!'
-
-@app.route('/biaodan')
-def biaodan():
-    return  render_template("biaodan.html")
+    return render_template("e.html")
 
 
-@app.route("/do_add_user", methods=['POST'])
-def do_add_user():
-    print(request.form)
-    name = request.form.get("name")
-    sex = request.form.get("sex")
-    age = request.form.get("age")
-    email = request.form.get("email")
-    sql = f"""
-        insert into user (name, sex, age, email)
-        values ('{name}', '{sex}', {age}, '{email}')
+@app.route("/show_pyecharts")          # 第1行：路由装饰器
+def show_pyecharts():                  # 第2行：视图函数
+    bar = (                     # 第3行：创建图表对象
+        Bar()                     # 第4行：实例化柱状图
+        .add_xaxis(["苹果", "香蕉", "橘子"])   # 第5行：设置横轴
+        .add_yaxis("销量", [50, 80, 30])       # 第6行：设置纵轴
+        .set_global_opts(title_opts=opts.TitleOpts(title="水果销量"))  # 第7行：设置标题
+    )                            # 第8行：括号结束
+    return render_template(
+        "show_pyecharts.html",
+        bar_options=bar.dump_options_with_quotes()  # ✅ 用这个
+    )
+
+
+
+def get_pie() -> Pie:
+    sql = """
+        select sex,count(1) as cnt from user group by sex
     """
-    print(sql)
-    db.insert_or_update_data(sql)
-    return "tianjia success"
-
-# 展示数据库所有数据
-@app.route("/show_users")
-def show_users():
-    sql = "select id,name from user"
     datas = db.query_data(sql)
-    return render_template("show_users.html", datas=datas)
+    c = (
+        Pie()
+            .add("", [(data['sex'], data['cnt']) for data in datas])
+            .set_global_opts(title_opts=opts.TitleOpts(title="Pie-基本示例"))
+            .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}"))
+    )
+    return c
 
-# 展示数据库单个详情
-@app.route("/user/<user_id>")
-def show_user(user_id):
-    sql = "select * from user where id=" + user_id
+
+def get_bar() -> Bar:
+    sql = """
+            select sex,count(1) as cnt from user group by sex
+        """
     datas = db.query_data(sql)
-    user = datas[0]
-    return render_template("show_user.html", user=user)
+    c = (
+        Bar()
+            .add_xaxis([data['sex'] for data in datas])
+            .add_yaxis("数量", [data['cnt'] for data in datas])
+            .set_global_opts(title_opts=opts.TitleOpts(title="Bar-基本示例", subtitle="我是副标题"))
+    )
+    return c
+
+@app.route("/show_myecharts")
+def show_myecharts():
+    pie = get_pie()
+    bar = get_bar()
+    return render_template("show_myecharts.html",
+                           pie_options=pie.dump_options_with_quotes(),
+                           bar_options=bar.dump_options_with_quotes())
 
 
 if __name__ == '__main__':

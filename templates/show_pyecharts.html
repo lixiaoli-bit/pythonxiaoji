@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>pyecharts 图表</title>
+</head>
+<body>
+    <div id="chart" style="width: 700px; height: 400px;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script>
+        var chart = echarts.init(document.getElementById('chart'));
+        // 注意这里：后端传过来的 JSON 字符串要加 |safe，并且转成对象
+        var option = {{ bar_options|safe }};
+        chart.setOption(option);
+    </script>
+</body>
+</html>
