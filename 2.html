@@ -3,16 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Flask · 数据库操作 · 美化版</title>
-  <!-- Font Awesome 6 (免费图标库) -->
+  <title>类 · 继承 · 精讲 · 美化版</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #dce8d5;
       font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -22,7 +16,6 @@
       justify-content: center;
       min-height: 100vh;
     }
-
     .container {
       max-width: 1000px;
       width: 100%;
@@ -31,11 +24,10 @@
       -webkit-backdrop-filter: blur(4px);
       border-radius: 36px;
       padding: 1.8rem 1.4rem;
-      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
-      border: 1px solid rgba(200, 220, 190, 0.5);
+      box-shadow: 0 25px 50px -12px rgba(60,90,70,0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200,220,190,0.5);
       transition: all 0.2s ease;
     }
-
     h1 {
       font-size: 2.1rem;
       font-weight: 600;
@@ -49,16 +41,11 @@
       margin-bottom: 1.8rem;
       color: #1f3a2b;
     }
-
-    h1 i {
-      color: #2e7d5e;
-      font-size: 2rem;
-    }
-
+    h1 i { color: #2e7d5e; font-size: 2rem; }
     .badge-header {
       font-size: 0.85rem;
       margin-left: auto;
-      background: rgba(70, 130, 100, 0.15);
+      background: rgba(70,130,100,0.15);
       padding: 0.2rem 1rem;
       border-radius: 60px;
       font-weight: 400;
@@ -67,9 +54,8 @@
       align-items: center;
       gap: 0.3rem;
       white-space: nowrap;
-      border: 1px solid rgba(100, 150, 120, 0.2);
+      border: 1px solid rgba(100,150,120,0.2);
     }
-
     h2 {
       font-size: 1.5rem;
       font-weight: 500;
@@ -81,17 +67,10 @@
       color: #1f3a2b;
       border-left: 6px solid #2e7d5e;
       padding-left: 1rem;
-      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      background: linear-gradient(to right, rgba(46,125,94,0.06), transparent);
       border-radius: 0 14px 14px 0;
     }
-
-    h2 i {
-      color: #2e7d5e;
-      font-size: 1.4rem;
-      width: 2rem;
-      text-align: center;
-    }
-
+    h2 i { color: #2e7d5e; font-size: 1.4rem; width: 2rem; text-align: center; }
     h3 {
       font-size: 1.12rem;
       font-weight: 500;
@@ -102,13 +81,7 @@
       gap: 0.5rem;
       color: #1f3a2b;
     }
-
-    h3 i {
-      color: #2e7d5e;
-      font-size: 1.2rem;
-      width: 1.8rem;
-    }
-
+    h3 i { color: #2e7d5e; font-size: 1.2rem; width: 1.8rem; }
     .code-block {
       background: #0e1e2b;
       color: #e3f0fa;
@@ -120,26 +93,14 @@
       white-space: pre-wrap;
       word-break: break-word;
       margin: 0.6rem 0 1.2rem 0;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60,90,70,0.2);
       border: 1px solid #2b4b3a;
       position: relative;
       line-height: 1.6;
     }
-
-    .code-block i {
-      color: #8fcb9f;
-      margin-right: 0.3rem;
-    }
-
-    .code-block .comment {
-      color: #6a8f7f;
-      font-style: italic;
-    }
-
-    .code-block .output {
-      color: #7ecf8a;
-    }
-
+    .code-block i { color: #8fcb9f; margin-right: 0.3rem; }
+    .code-block .comment { color: #6a8f7f; font-style: italic; }
+    .code-block .output { color: #7ecf8a; }
     .inline-code {
       background: #eaf0e6;
       padding: 0.1rem 0.7rem;
@@ -150,81 +111,58 @@
       border: 1px solid #c6dac6;
       white-space: nowrap;
     }
-
     .tag {
       display: inline-block;
-      background: rgba(70, 130, 100, 0.15);
+      background: rgba(70,130,100,0.15);
       border-radius: 30px;
       padding: 0.1rem 1rem;
       font-size: 0.75rem;
       font-weight: 500;
       color: #1f4d3a;
     }
-
     ul, ol {
       margin: 0.4rem 0 0.6rem 1.4rem;
       line-height: 1.7;
     }
-
     li {
       margin-bottom: 0.2rem;
       list-style-type: none;
     }
-
-    li i {
-      color: #2e7d5e;
-      width: 1.6rem;
-      text-align: center;
-      margin-right: 0.2rem;
-    }
-
+    li i { color: #2e7d5e; width: 1.6rem; text-align: center; margin-right: 0.2rem; }
     .highlight-box {
-      background: rgba(46, 125, 94, 0.06);
+      background: rgba(46,125,94,0.06);
       border-radius: 20px;
       padding: 0.9rem 1.2rem;
       margin: 1rem 0;
       border-left: 6px solid #2e7d5e;
       backdrop-filter: blur(2px);
     }
-
-    .highlight-box i {
-      color: #2e7d5e;
-      margin-right: 0.4rem;
-    }
-
+    .highlight-box i { color: #2e7d5e; margin-right: 0.4rem; }
     .highlight-box.green-params {
-      background: rgba(46, 125, 94, 0.08);
+      background: rgba(46,125,94,0.08);
       border-left-color: #2e7d5e;
     }
-
     .grid-2col {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.8rem 1.2rem;
       margin: 0.6rem 0;
     }
-
     .grid-item {
       background: white;
       padding: 0.5rem 1rem;
       border-radius: 18px;
-      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
-      border: 1px solid rgba(200, 220, 190, 0.4);
+      box-shadow: 0 2px 8px rgba(60,90,70,0.04);
+      border: 1px solid rgba(200,220,190,0.4);
       backdrop-filter: blur(2px);
     }
-
-    .grid-item i {
-      color: #2e7d5e;
-      margin-right: 0.4rem;
-    }
-
+    .grid-item i { color: #2e7d5e; margin-right: 0.4rem; }
     hr {
       margin: 1.8rem 0 1rem 0;
       border: none;
       height: 2px;
       background: linear-gradient(90deg, #b6d4b6, transparent);
     }
-
     .footer-note {
       margin-top: 2rem;
       text-align: right;
@@ -238,11 +176,7 @@
       gap: 0.6rem;
       flex-wrap: wrap;
     }
-
-    .footer-note i {
-      color: #2e7d5e;
-    }
-
+    .footer-note i { color: #2e7d5e; }
     .step-badge {
       display: inline-block;
       background: #2e7d5e;
@@ -254,7 +188,6 @@
       margin-right: 0.3rem;
       letter-spacing: 0.3px;
     }
-
     .file-tag {
       display: inline-block;
       background: #1f4d3a;
@@ -266,8 +199,6 @@
       margin-right: 0.3rem;
       letter-spacing: 0.3px;
     }
-
-    /* 小屏优化 */
     @media (max-width: 680px) {
       body { padding: 0.8rem 0.4rem; }
       .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
@@ -284,7 +215,6 @@
       li i { width: 1.4rem; }
       .footer-note { font-size: 0.75rem; justify-content: center; }
     }
-
     @media (max-width: 420px) {
       .container { padding: 0.9rem 0.7rem; }
       h1 { font-size: 1.4rem; }
@@ -295,187 +225,209 @@
 <body>
 <div class="container">
 
-  <!-- 标题 -->
   <h1>
-    <i class="fas fa-database"></i> 
-    Flask · 数据库操作
-    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-08-30</span>
+    <i class="fas fa-cubes"></i>
+    Python 类 · 继承 · 精讲
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-08-31</span>
   </h1>
 
-  <!-- db.py 模块 -->
-  <h2><i class="fas fa-file-code"></i> db.py — 连接 & 查询</h2>
-  <div class="code-block"><i class="fas fa-terminal"></i> import pymysql
-
-def get_conn():
-    return pymysql.connect(
-        host='localhost',
-        user='root',
-        password='159874',
-        database='mytest',
-        charset='utf8'
-    )
-
-def query_data(sql):
-    conn = get_conn()
-    try:
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute(sql)
-        return cursor.fetchall()
-    finally:
-        conn.close()
-
-def insert_or_update_data(sql):
-    conn = get_conn()
-    try:
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        conn.commit()
-    finally:
-        conn.close()
-
-<span style="color: #8fcb9f;"># 测试插入 & 查询</span>
-if __name__ == "__main__":
-    sql = "insert user (name, sex, age, email) values('daming', 'man', 30, 'daming@qq.com')"
-    insert_or_update_data(sql)
-    sql = "select * from user"
-    datas = query_data(sql)
-    import pprint
-    pprint.pprint(datas)</div>
-  <ul>
-    <li><i class="fas fa-plug"></i> <span class="inline-code">get_conn()</span> 建立 MySQL 连接</li>
-    <li><i class="fas fa-search"></i> <span class="inline-code">query_data()</span> 查询返回字典列表</li>
-    <li><i class="fas fa-pen"></i> <span class="inline-code">insert_or_update_data()</span> 增删改，自动提交</li>
-  </ul>
-
-  <!-- app.py 路由 -->
-  <h2><i class="fas fa-server"></i> app.py — Flask 路由 & 模板</h2>
-  <div class="code-block"><i class="fas fa-terminal"></i> from flask import Flask, render_template, request
-import db
-
-app = Flask(__name__)
-
-@app.route('/')
-def hello():
-    return 'Hello, World!'
-
-@app.route('/biaodan')
-def biaodan():
-    return render_template("biaodan.html")
-
-@app.route("/do_add_user", methods=['POST'])
-def do_add_user():
-    name = request.form.get("name")
-    sex = request.form.get("sex")
-    age = request.form.get("age")
-    email = request.form.get("email")
-    sql = f"""
-        insert into user (name, sex, age, email)
-        values ('{name}', '{sex}', {age}, '{email}')
-    """
-    db.insert_or_update_data(sql)
-    return "tianjia success"
-
-@app.route("/show_users")
-def show_users():
-    sql = "select id, name from user"
-    datas = db.query_data(sql)
-    return render_template("show_users.html", datas=datas)
-
-@app.route("/user/<user_id>")
-def show_user(user_id):
-    sql = "select * from user where id=" + user_id
-    datas = db.query_data(sql)
-    user = datas[0]
-    return render_template("show_user.html", user=user)
-
-if __name__ == '__main__':
-    app.run(debug=True)</div>
-  <ul>
-    <li><i class="fas fa-route"></i> 路由：<span class="inline-code">/biaodan</span> 表单页，<span class="inline-code">/show_users</span> 列表</li>
-    <li><i class="fas fa-address-card"></i> 动态路由 <span class="inline-code">/user/&lt;user_id&gt;</span> 展示单条详情</li>
-    <li><i class="fas fa-upload"></i> <span class="inline-code">do_add_user</span> 接收 POST，拼接 SQL 插入</li>
-  </ul>
-
-  <!-- 模板文件 -->
-  <h2><i class="fas fa-file-alt"></i> templates / 三个 HTML</h2>
-
-  <h3><i class="fas fa-paste"></i> biaodan.html — 表单提交</h3>
-  <div class="code-block"><i class="fas fa-html5"></i> &lt;body&gt;
-  &lt;div class="card"&gt;
-    &lt;h2&gt;📋 简单表单&lt;/h2&gt;
-    &lt;form action="/do_add_user" method="POST"&gt;
-      &lt;input type="text" name="id" placeholder="id"&gt;
-      &lt;input type="text" name="name" placeholder="姓名"&gt;
-      &lt;input type="number" name="age" placeholder="年龄"&gt;
-      &lt;input type="radio" name="sex" value="男" checked&gt; 男
-      &lt;input type="radio" name="sex" value="女"&gt; 女
-      &lt;input type="email" name="email" placeholder="邮箱"&gt;
-      &lt;button type="submit"&gt;提交&lt;/button&gt;
-    &lt;/form&gt;
-  &lt;/div&gt;
-&lt;/body&gt;</div>
-
-  <h3><i class="fas fa-list-ul"></i> show_users.html — 用户列表</h3>
-  <div class="code-block"><i class="fas fa-html5"></i> &lt;body&gt;
-  &lt;div&gt;
-    {% for user in datas %}
-      &lt;div&gt;
-        ID：{{ user.id }}，姓名：{{ user.name }}，
-        &lt;a href="/user/{{ user.id }}"&gt;详情&lt;/a&gt;
-      &lt;/div&gt;
-    {% endfor %}
-  &lt;/div&gt;
-&lt;/body&gt;</div>
-
-  <h3><i class="fas fa-id-card"></i> show_user.html — 单条详情</h3>
-  <div class="code-block"><i class="fas fa-html5"></i> &lt;body&gt;
-  &lt;div&gt;
-    ID：{{ user.id }}，
-    姓名：{{ user.name }}，
-    年龄：{{ user.age }}，
-    性别：{{ user.sex }}，
-    邮箱：{{ user.email }}
-  &lt;/div&gt;
-&lt;/body&gt;</div>
-
-  <!-- 运行 & 交互 -->
-  <h2><i class="fas fa-play-circle"></i> 运行 & 交互流程</h2>
-  <div class="highlight-box">
-    <i class="fas fa-arrow-right"></i> 
-    <strong>启动 Flask</strong>：<span class="inline-code">python app.py</span> → 访问 <span class="inline-code">http://127.0.0.1:5000/biaodan</span>
-    <ul style="margin-top:0.4rem;">
-      <li><i class="fas fa-check-circle"></i> 填写表单 → 提交 → 数据写入 MySQL</li>
-      <li><i class="fas fa-users"></i> 访问 <span class="inline-code">/show_users</span> 查看所有用户 ID + 姓名</li>
-      <li><i class="fas fa-user"></i> 点击「详情」跳转 <span class="inline-code">/user/&lt;id&gt;</span> 展示完整字段</li>
-    </ul>
+  <!-- 函数 vs 类 -->
+  <h2><i class="fas fa-balance-scale"></i> 什么时候用函数，什么时候用类</h2>
+  <p><i class="fas fa-arrows-spin" style="color:#2e7d5e;"></i> 数据+逻辑简单用函数；数据复杂且需要“管家”来维护，用类。</p>
+  <div class="highlight-box green-params">
+    <i class="fas fa-thumbs-up"></i> <strong>函数 = 自动售货机</strong><br>
+    你投币（输入），它哐当掉出可乐（输出）。它不记得你，每次交易独立。
+  </div>
+  <div class="highlight-box" style="border-left-color: #4b6a8a;">
+    <i class="fas fa-robot"></i> <strong>类 = 私人管家</strong><br>
+    你得先雇佣他（创建实例），他记住你的一切：姓什么、喜欢喝啥（属性）。你要咖啡，他知道加几分糖。
   </div>
 
-  <!-- 数据库字段说明 -->
-  <h2><i class="fas fa-table"></i> 数据表 user 结构</h2>
+  <!-- 类与实例 -->
+  <h2><i class="fas fa-cookie-bite"></i> 类 · 实例 · __init__</h2>
+  <p><i class="fas fa-stamp"></i> <strong>类 = 饼干模具（蓝图）</strong>，<strong>实例 = 压出来的每一块星星饼干</strong></p>
+
+  <div class="code-block"><i class="fas fa-terminal"></i> <span class="comment"># 类定义（模具）</span>
+class Cookie:
+    def __init__(self, flavor):      <span class="comment"># ← 压饼干的"那一下动作"</span>
+        print(f"正在制作 {flavor} 味饼干...")
+        self.flavor = flavor          <span class="comment"># 给这块饼干贴标签</span>
+        self.bites = 0                <span class="comment"># 记录被咬了几口</span>
+
+<span class="comment"># 压两块饼干（实例化）</span>
+c1 = Cookie("巧克力")   <span class="comment"># 输出：正在制作 巧克力 味饼干...</span>
+c2 = Cookie("抹茶")      <span class="comment"># 输出：正在制作 抹茶 味饼干...</span></div>
+
+  <div class="highlight-box green-params">
+    <i class="fas fa-cog"></i> <strong>__init__ 就是"实例的出厂设置"</strong> —— 每个饼干一诞生，就被刻上独属于自己的属性。<br>
+    <i class="fas fa-arrow-right"></i> 比如 <span class="inline-code">c1 = Cookie("巧克力")</span> 里的 <strong>"巧克力"</strong>，就是通过 <span class="inline-code">__init__</span> 塞进 c1 肚子里的第一个数据。
+  </div>
+
+  <h3><i class="fas fa-ruler"></i> __init__ 的 3 个死规矩</h3>
+  <ul>
+    <li><i class="fas fa-signature"></i> 名字必须叫 <span class="inline-code">__init__</span> —— 贴标签的机器必须叫“贴标机”，改名没人认</li>
+    <li><i class="fas fa-user"></i> 第一个参数必须是 <span class="inline-code">self</span> —— 代表当前这块饼干本身</li>
+    <li><i class="fas fa-ban"></i> 不能写 <span class="inline-code">return</span>（或只能 return None）—— 贴标机只管贴，不负责把饼干递给你</li>
+  </ul>
+
+  <h3><i class="fas fa-utensils"></i> 类里面函数（实例方法）</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> class Cookie:
+    def __init__(self, flavor):
+        self.flavor = flavor
+        self.size = 10
+
+    def eat_all(self):          <span class="comment"># 一口吃完</span>
+        self.size = 0           <span class="comment"># 修改属性</span>
+        print(f"{self.flavor}味饼干被吃光了！")
+
+c = Cookie("抹茶")
+c.eat_all()    <span class="comment"># 抹茶味饼干被吃光了！</span>
+print(c.size)  <span class="comment"># 0</span>
+c1.size = 5    <span class="comment"># 也可以这样修改属性</span>
+
+</div>
+
+  <ul>
+    <li><i class="fas fa-bullseye"></i> 实例方法 = 函数里用了 <span class="inline-code">self</span>，代表“某块具体饼干自己”</li>
+    <li><i class="fas fa-play"></i> 必须先创建实例（<span class="inline-code">c1 = Cookie("巧克力")</span>），才能调用方法</li>
+  </ul>
+
+  <h3><i class="fas fa-boxes"></i>实例 对象放进列表（饼干仓库）</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> <span class="comment"># 创建一个空列表（饼干仓库）</span>
+cookie_jar = []
+
+<span class="comment"># 做3块饼干，放进列表</span>
+c1 = Cookie("巧克力")
+c2 = Cookie("抹茶")
+c3 = Cookie("草莓")
+cookie_jar.append(c1)
+cookie_jar.append(c2)
+cookie_jar.append(c3)
+
+<span class="comment"># 遍历列表，让每块饼干自己报口味</span>
+for cookie in cookie_jar:
+    print(cookie.flavor)</div>
+  <ul>
+    <li><i class="fas fa-box"></i> 容器优势：列表便于遍历，字典便于按名字快速查找。</li>
+  </ul>
+
+  <!-- 婚礼礼金程序 -->
+  <h2><i class="fas fa-ring"></i> 类练习题 · 婚礼礼金程序</h2>
+  
+  <div class="highlight-box green-params">
+    <i class="fas fa-clipboard-list"></i> <strong>需求说明</strong><br>
+    朋友结婚，你帮忙收彩礼。记录姓名和礼金，计算统计信息。<br>
+    <i class="fas fa-chevron-right"></i> 新建类 <span class="inline-code">Customer</span>，属性 <span class="inline-code">name</span> 和 <span class="inline-code">money</span><br>
+    <i class="fas fa-chevron-right"></i> 循环输入 <span class="inline-code">"小明 1000"</span>，构造对象存入列表<br>
+    <i class="fas fa-chevron-right"></i> 输入 <span class="inline-code">quit</span> 退出，输出总人数、总金额、最大/最小/平均
+  </div>
+
+  <div class="code-block"><i class="fas fa-terminal"></i> <span class="comment"># 婚礼礼金程序.py</span>
+class Customer:
+    def __init__(self, name, money):
+        self.name = name
+        self.money = money
+
+customers = []
+while True:
+    info = input("请输入来人姓名和金额：")
+    if info == "quit":
+        break
+    name, money = info.split()
+    money = int(money)
+    customers.append(Customer(name, money))
+
+print("访客总人数:", len(customers))
+moneys = [c.money for c in customers]
+print("总金额:", sum(moneys))
+print("最大金额:", max(moneys))
+print("最小金额:", min(moneys))
+print("平均金额:", sum(moneys) / len(moneys))</div>
+  <ul>
+    <li><i class="fas fa-check-circle"></i> 完美融合了类、列表、循环和数据处理。</li>
+  </ul>
+
+  <!-- 继承 -->
+  <h2><i class="fas fa-family"></i> 类的继承</h2>
+  <p><i class="fas fa-dna"></i> 让孩子继承父母的“家产”——一个类可以继承另一个类的属性和方法。</p>
+
+  <h3><i class="fas fa-code-branch"></i> 基本语法</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> <span class="comment"># 父类（基类）</span>
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    def eat(self):
+        print(f"{self.name} 在吃东西")
+
+<span class="comment"># 子类（派生类）</span>
+class Dog(Animal):        <span class="comment"># 括号里写父类名</span>
+    def bark(self):
+        print(f"{self.name} 在汪汪叫")
+
+dog = Dog("旺财")
+dog.eat()   <span class="comment"># 旺财 在吃东西（继承）</span>
+dog.bark()  <span class="comment"># 旺财 在汪汪叫（自己的）</span>
+ <span class="comment"># 关键点：子类 Dog 没写 __init__ 和 eat，但自动拥有了父类 Animal 的所有功能。
+</span>
+</div>
+
+  <h3><i class="fas fa-gem"></i> 继承的三大好处</h3>
   <div class="grid-2col">
-    <div class="grid-item"><i class="fas fa-hashtag"></i> id (INT, 自增)</div>
-    <div class="grid-item"><i class="fas fa-user"></i> name (VARCHAR)</div>
-    <div class="grid-item"><i class="fas fa-venus-mars"></i> sex (VARCHAR)</div>
-    <div class="grid-item"><i class="fas fa-calendar"></i> age (INT)</div>
-    <div class="grid-item"><i class="fas fa-envelope"></i> email (VARCHAR)</div>
+    <div class="grid-item"><i class="fas fa-recycle"></i> 代码复用 — 子类直接用父类方法</div>
+    <div class="grid-item"><i class="fas fa-plus-circle"></i> 扩展功能 — 子类添加新方法</div>
+    <div class="grid-item"><i class="fas fa-shapes"></i> 多态 — 同一方法不同子类不同表现</div>
   </div>
 
-  <!-- 返回函数（工具）示例 -->
-  <div class="highlight-box" style="border-left-color: #2e7d5e;">
-    <i class="fas fa-toolbox" style="color:#2e7d5e;"></i> 
-    <strong>Flask 与 MySQL 协作</strong><br>
-    · db.py 封装连接与 SQL 执行，app.py 专注路由与逻辑。<br>
-    · 模板 (Jinja2) 渲染数据，实现前后端分离的雏形。
+  <h3><i class="fas fa-edit"></i> 重写父类方法（覆盖）</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> class Animal:
+    def speak(self):
+        print("动物在叫")
+
+class Dog(Animal):
+    def speak(self):       <span class="comment"># 重写</span>
+        print("汪汪汪！")
+
+class Cat(Animal):
+    def speak(self):
+        print("喵喵喵～")
+
+dog = Dog()
+dog.speak()   <span class="comment"># 汪汪汪！</span></div>
+
+  <h3><i class="fas fa-tools"></i> 子类自己的 __init__（super()）<br>如果子类有自己的属性，需要先调用父类的 __init__，再初始化自己的：
+</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> class Animal:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+class Dog(Animal):
+    def __init__(self, name, age, breed):   <span class="comment"># breed 子类独有</span>
+        super().__init__(name, age)         <span class="comment"># 调用父类 __init__</span>
+        self.breed = breed
+
+dog = Dog("旺财", 3, "金毛")
+print(dog.name)   <span class="comment"># 旺财（来自父类）</span>
+print(dog.breed)  <span class="comment"># 金毛（自己的）</span></div>
+  <ul>
+    <li><i class="fas fa-bolt"></i> <span class="inline-code">super()</span> 就是“调用父类的方法”，相当于说：“爸，你先把我那份基础东西初始化了，我再弄我自己的”。</li>
+  </ul>
+
+  <div class="highlight-box" style="border-left-color: #4b6a8a;">
+    <i class="fas fa-question-circle"></i> <strong>常见问题 Q&A</strong><br>
+    <i class="fas fa-chevron-right"></i> 如果子类没有自己的 __init__，Python 会自动调用父类的；<br>
+<i class="fas fa-chevron-right"></i>如果子类有自己的 __init__，必须手动调用 super().__init__()，否则父类属性不会被初始化。
+
+
   </div>
 
-  <!-- 底部 -->
   <hr>
   <div class="footer-note">
-    <i class="fas fa-rocket"></i> 
-    <span>Flask + pymysql · 增删改查 · 模板继承</span>
+    <i class="fas fa-rocket"></i>
+    <span>Python 类 · 实例 · __init__ · 继承 · super()</span>
     <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
-    <span style="font-weight: 300; opacity: 0.8;"># 数据库交互笔记</span>
-    <i class="fas fa-database" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 精简笔记</span>
+    <i class="fas fa-cookie" style="margin-left: 0.3rem;"></i>
   </div>
 
 </div>
