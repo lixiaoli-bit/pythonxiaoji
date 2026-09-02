@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Django 项目创建 · 精要指南</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .tree {
+      background: #0e1e2b;
+      color: #c5e0d0;
+      padding: 0.9rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      margin: 0.6rem 0 1.2rem 0;
+      border: 1px solid #2b4b3a;
+      white-space: pre-wrap;
+    }
+
+    .tree i {
+      color: #8fcb9f;
+      margin-right: 0.4rem;
+    }
+
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+      .tree { font-size: 0.72rem; padding: 0.7rem 0.9rem; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-django"></i> 
+    Django 项目 · 从零创建
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-09-02</span>
+  </h1>
+
+  <!-- 前置准备 -->
+  <h2><i class="fas fa-tools"></i> 前置 · 环境</h2>
+  <p><i class="fas fa-check-circle" style="color:#2e7d5e;"></i> 确保 Python 已安装，到指定目录操作。</p>
+
+  <!-- 1. 虚拟环境 -->
+  <h2><i class="fas fa-venus-mars"></i> 1. 创建虚拟环境</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> # Windows   cmd执行
+创建：python3 -m venv .venv
+激活：.venv\Scripts\activate
+
+# Mac / Linux
+python3 -m venv venv
+source venv/bin/activate</div>
+
+  <!-- 2. 安装 Django -->
+  <h2><i class="fas fa-download"></i> 2. 安装 Django</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> pip install django
+# 或指定版本
+pip install django==4.2.15</div>
+
+  <!-- 3. 创建项目 -->
+  <h2><i class="fas fa-folder-open"></i> 3. 创建项目</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> django-admin startproject myproject .</div>
+  <p><i class="fas fa-info-circle" style="color:#2e7d5e;"></i> 末尾加 <span class="inline-code">.</span> 表示当前目录，不加则多嵌套一层 <span class="inline-code">myproject/</span>。</p>
+
+  <!-- 4. 创建应用 -->
+  <h2><i class="fas fa-puzzle-piece"></i> 4. 创建应用 (App)</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> python manage.py startapp blog</div>
+
+  <!-- 5. 注册应用 -->
+  <h2><i class="fas fa-check-double"></i> 5. 注册应用</h2>
+  <p>打开 <span class="inline-code">myproject/settings.py</span>，在 <span class="inline-code">INSTALLED_APPS</span> 中添加：</p>
+  <div class="code-block"><i class="fas fa-code"></i> INSTALLED_APPS = [
+    'django.contrib.admin',
+    # ... 其他默认应用
+    'blog',  # <span class="comment">添加你的应用</span>
+]</div>
+  <div class="highlight-box">
+    <i class="fas fa-bullseye"></i> 注册作用：让 Django 知道这个 App 存在，才能执行迁移、加载模板等。
+  </div>
+
+  <!-- 8. 启动服务器 -->
+  <h2><i class="fas fa-play"></i> 6. 启动开发服务器</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> python manage.py runserver</div>
+  <p><i class="fas fa-globe" style="color:#2e7d5e;"></i> 访问 <span class="inline-code">http://127.0.0.1:8000</span> 查看是否成功。</p>
+
+  <!-- 项目结构示意 -->
+  <h2><i class="fas fa-sitemap"></i> 项目结构示意</h2>
+  <div class="tree"><i class="far fa-folder-open"></i> myproject/
+├── manage.py
+├── <i class="far fa-folder"></i> myproject/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── <i class="far fa-folder"></i> blog/
+    ├── <i class="far fa-folder"></i> migrations/
+    ├── __init__.py
+    ├── admin.py
+    ├── models.py
+    └── views.py</div>
+
+  <hr>
+
+  <!-- 第一个页面 -->
+  <h2><i class="fas fa-file-alt"></i> 创建第一个页面</h2>
+  <p><i class="fas fa-arrow-right" style="color:#2e7d5e;"></i> 让你看到实际效果。</p>
+
+  <!-- 1. 编写视图 -->
+  <h3><i class="fas fa-eye"></i> 1. 编写视图 (views.py)</h3>
+  <div class="code-block"><i class="fas fa-code"></i> from django.shortcuts import render
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Hello, Django! 这是我的第一个页面")</div>
+
+  <!-- 2. 应用内路由 -->
+  <h3><i class="fas fa-route"></i> 2. 创建应用内路由 (blog/urls.py)</h3>
+  <div class="code-block"><i class="fas fa-code"></i> from django.urls import path
+from . import views
+
+app_name = 'blog'  # <span class="comment">命名空间</span>
+
+urlpatterns = [
+    path('', views.home, name='home'),  # <span class="comment">空字符串 -> 根路径</span>
+]</div>
+
+  <!-- 3. 接入项目 -->
+  <h3><i class="fas fa-link"></i> 3. 将应用路由接入项目</h3>
+  <p>修改 <span class="inline-code">myproject/urls.py</span>：</p>
+  <div class="code-block"><i class="fas fa-code"></i> from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),  # <span class="comment">包含 blog 路由</span>
+]</div>
+  <div class="highlight-box">
+    <i class="fas fa-info-circle"></i> <span class="inline-code">path('', include('blog.urls'))</span> 表示所有请求（包括 / ）都交给 blog.urls 处理。<br>
+    <i class="fas fa-arrow-right"></i> 若写 <span class="inline-code">path('blog/', include('blog.urls'))</span> 则所有 <span class="inline-code">/blog/xxx</span> 请求转发。
+  </div>
+
+  <!-- 4. 启动查看 -->
+  <h3><i class="fas fa-rocket"></i> 4. 启动服务器查看效果</h3>
+  <div class="code-block"><i class="fas fa-terminal"></i> python manage.py runserver</div>
+  <p><i class="fas fa-check-circle" style="color:#2e7d5e;"></i> 浏览器访问 <span class="inline-code">http://127.0.0.1:8000</span> ，应该能看到 "Hello, Django! 这是我的第一个页面"。</p>
+
+  
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fab fa-python"></i>
+    <span>Django 创建 · 虚拟环境 · 路由 · 视图</span>
+    <i class="fas fa-django" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 速查笔记</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>
