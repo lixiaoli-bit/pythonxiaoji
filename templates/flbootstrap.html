@@ -1,0 +1,11 @@
+{% include 'head.html' %}
+
+<div class="jumbotron">
+    {% if "user_name" not in session %}
+    <h1>欢迎来到成绩管理系统，请登录后使用</h1>
+    {% else %}
+        <h1>欢迎来到成绩管理系统，
+            已登陆，用户名是{{ session["user_name"] }}</h1>
+    {% endif %}
+</div>
+{% include 'foot.html' %}

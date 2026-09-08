@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Flask + Bootstrap · 项目精讲 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-flask"></i> 
+    Flask + Bootstrap · 精讲
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-09-08</span>
+  </h1>
+
+  <!-- 1. 环境准备 -->
+  <h2><i class="fas fa-rocket"></i> 1. 环境准备</h2>
+  <ul>
+    <li><i class="fab fa-python"></i> 检查Python版本：<span class="inline-code">python --version</span> 或 <span class="inline-code">python3 --version</span></li>
+    <li><i class="fas fa-folder-plus"></i> 创建项目目录：<span class="inline-code">mkdir flask-bootstrap-project</span> 然后 <span class="inline-code">cd flask-bootstrap-project</span></li>
+  </ul>
+
+  <!-- 2. 虚拟环境 -->
+  <h2><i class="fas fa-box"></i> 2. 虚拟环境</h2>
+  <ul>
+    <li><i class="fas fa-terminal"></i> 创建：<span class="inline-code">python3 -m venv .venv</span> (Windows) / <span class="inline-code">python3 -m venv venv</span> (Mac/Linux)</li>
+    <li><i class="fas fa-power-off"></i> 激活：
+      <ul>
+        <li>Windows CMD: <span class="inline-code">.venv\Scripts\activate</span></li>
+       </ul>
+    </li>
+  </ul>
+
+  <!-- 3. 安装 Flask -->
+  <h2><i class="fas fa-download"></i> 3. 安装 Flask</h2>
+  <ul>
+    <li><i class="fas fa-arrow-up"></i> 升级pip（可选）：<span class="inline-code">python -m pip install --upgrade pip</span></li>
+    <li><i class="fas fa-flask"></i> 安装Flask：<span class="inline-code">pip install flask</span></li>
+  </ul>
+
+  <!-- 4. app.py 初始 -->
+  <h2><i class="fas fa-file-code"></i> 4. 创建app.py 里面初始代码</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> print("脚本已启动")  # 放在 import 之前
+from flask import Flask, render_template, request
+import db
+
+app = Flask(__name__)   # __name__ 当前模块
+
+@app.route('/')
+def hello():
+    return render_template('flbootstrap.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)</div>
+
+  <!-- 5. 引入 Bootstrap -->
+  <h2><i class="fab fa-bootstrap"></i> 5. 引入 Bootstrap (CDN)，直接复制运行即可 终端python app.py</h2>
+  <div class="code-block"><i class="fas fa-code"></i> &lt;!doctype html&gt;
+&lt;html lang="zh-CN"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"&gt;
+    &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous"&gt;
+    &lt;title&gt;Hello, world!&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello, world!  hahhah&lt;/h1&gt;
+    &lt;button type="button" class="btn btn-dark"&gt;Dark&lt;/button&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"&gt;&lt;/script&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-7ymO4nGrkm372HoSbq1OY2DP4pEZnMiA+E0F3zPr+JQQtQ82gQ1HPY3QIVtztVua" crossorigin="anonymous"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</div>
+
+  <!-- 6. 拆分 head / foot -->
+  <h2><i class="fas fa-cut"></i> 6. 上面的代码拆分 head.html / foot.html</h2>
+  <div class="highlight-box">
+    <i class="fas fa-code-branch"></i> 将 &lt;body&gt; 以上放入 head.html，&lt;body&gt; 以下放入 foot.html，中间用 <span class="inline-code">{% include %}</span> 引入。
+  </div>
+  <div class="code-block"><i class="fas fa-file"></i> flbootstrap.html
+{% include 'head.html' %}
+    &lt;h1&gt;Hello, world!  已拆分head和foot&lt;/h1&gt;
+    &lt;button type="button" class="btn btn-dark"&gt;Dark&lt;/button&gt;
+{% include 'foot.html' %}</div>
+
+  <!-- 7. 导航栏 (head.html) -->
+  <h2><i class="fas fa-bars"></i> 7. 导航栏 · 放在 head.html，因为每个页面都要有</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> &lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
+  &lt;a class="navbar-brand" href="#"&gt;成绩管理&lt;/a&gt;
+  &lt;button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"&gt;
+    &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class="collapse navbar-collapse" id="navbarSupportedContent"&gt;
+    &lt;ul class="navbar-nav mr-auto"&gt;
+      &lt;li class="nav-item active"&gt;
+        &lt;a class="nav-link" href="#"&gt;Home &lt;span class="sr-only"&gt;(current)&lt;/span&gt;&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a class="nav-link" href="/flluru.html"&gt;成绩录入&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a class="nav-link" href="/flzhanshi.html"&gt;成绩展示&lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+    {% if "user_name" not in session %}
+        &lt;a class="nav-link" href="/login"&gt;登录&lt;/a&gt;
+    {% else %}
+        &lt;a class="nav-link" href="/logout"&gt;退出&lt;/a&gt;
+    {% endif %}
+  &lt;/div&gt;
+&lt;/nav&gt;</div>
+
+  <!-- 8. 登录页面 -->
+  <h2><i class="fas fa-sign-in-alt"></i> 8. 登录页面 fldenglu.html</h2>
+  <div class="code-block"><i class="fas fa-file"></i> {% include 'head.html' %}
+&lt;div class="container"&gt;
+    &lt;h1&gt;欢迎登录&lt;/h1&gt;
+    &lt;form action="/fldenglu" method="post"&gt;
+      &lt;div class="form-group"&gt;
+        &lt;label for="exampleInputEmail1"&gt;Email address&lt;/label&gt;
+        &lt;input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"&gt;
+        &lt;small id="emailHelp" class="form-text text-muted"&gt;We'll never share your email with anyone else.&lt;/small&gt;
+      &lt;/div&gt;
+      &lt;div class="form-group"&gt;
+        &lt;label for="exampleInputPassword1"&gt;Password&lt;/label&gt;
+        &lt;input type="text" name="password" class="form-control" id="exampleInputPassword1"&gt;
+      &lt;/div&gt;
+      &lt;div class="form-group form-check"&gt;
+        &lt;input type="checkbox" class="form-check-input" id="exampleCheck1"&gt;
+        &lt;label class="form-check-label" for="exampleCheck1"&gt;Check me out&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;button type="submit" class="btn btn-primary"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+{% include 'foot.html' %}</div>
+
+  <!-- 9. 登录路由 + session -->
+  <h2><i class="fas fa-route"></i> 9.  app.py 关于登录页面对应的函数</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> app.config["SECRET_KEY"] = 'sdafasfsafsafd'
+
+@app.route('/fldenglu', methods=['POST','GET'])
+def fldenglu():
+    if request.method == "POST":
+        user_name = request.form.get("email")
+        password = request.form.get("password")
+        if user_name == "18435992007@163.com" and password == "bsj1011521":
+            session["user_name"] = "admin"
+            return redirect(url_for("flbootstrap"))
+    return render_template('fldenglu.html')
+
+@app.route('/out')
+def out():
+    session.pop("user_name")
+    return redirect(url_for("flbootstrap"))</div>
+
+  <!-- 10. 成绩展示 -->
+  <h2><i class="fas fa-table"></i> 10. 成绩展示 flzhanshi.html</h2>
+  <div class="code-block"><i class="fas fa-file"></i> {% include 'head.html' %}
+&lt;div class="container"&gt;
+    &lt;div class="jumbotron"&gt;
+        &lt;h1&gt;如下是学生成绩表&lt;/h1&gt;
+    &lt;/div&gt;
+    {{ table_html | safe }}
+&lt;/div&gt;
+{% include 'foot.html' %}</div>
+
+  <div class="code-block"><i class="fas fa-terminal"></i> @app.route("/flzhanshi")
+def flzhanshi():
+    if "user_name" not in session:
+        return redirect(url_for("flbootstrap"))
+    df = pd.read_excel("学生成绩表.xlsx")
+    return render_template("flzhanshi.html",
+                           table_html=df.to_html(classes="table table-hover table-sm"))</div>
+
+  <!-- 11. 录入页面 -->
+  <h2><i class="fas fa-pen"></i> 11. 成绩录入 flluru.html</h2>
+  <div class="code-block"><i class="fas fa-file"></i> {% include 'head.html' %}
+&lt;div class="container"&gt;
+    &lt;div class="jumbotron"&gt;
+        &lt;h1&gt;请录入成绩&lt;/h1&gt;
+        &lt;form action="/flluru" method="post"&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="exampleInputName"&gt;请输入姓名&lt;/label&gt;
+                &lt;input type="text" name="name" class="form-control" id="exampleInputName" aria-describedby="nameHelp"&gt;
+                &lt;small id="nameHelp" class="form-text text-muted"&gt;请输入学生的姓名&lt;/small&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="exampleInputYuwen"&gt;语文成绩&lt;/label&gt;
+                &lt;input type="text" name="yuwen" class="form-control" id="exampleInputYuwen"&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="exampleInputShuxue"&gt;数学成绩&lt;/label&gt;
+                &lt;input type="text" name="shuxue" class="form-control" id="exampleInputShuxue"&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="exampleInputYingyu"&gt;英语成绩&lt;/label&gt;
+                &lt;input type="text" name="yingyu" class="form-control" id="exampleInputYingyu"&gt;
+            &lt;/div&gt;
+            &lt;button type="submit" class="btn btn-primary"&gt;提交&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+{% include 'foot.html' %}</div>
+
+  <!-- 12. 录入路由 -->
+  <h2><i class="fas fa-upload"></i> 12.app.py 关于成绩录入页面对应的函数</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> @app.route("/flluru", methods=["POST", "GET"])
+def submit_grade():
+    if "user_name" not in session:
+        return redirect(url_for("flbootstrap"))
+    if request.method == "POST":
+        name = request.form.get("name")
+        yuwen = request.form.get("yuwen")
+        shuxue = request.form.get("shuxue")
+        yingyu = request.form.get("yingyu")
+        df = pd.read_excel("学生成绩表.xlsx")
+        new_row = pd.DataFrame({
+            "姓名" : [name],
+            "语文成绩" : [yuwen],
+            "数学成绩" : [shuxue],
+            "英语成绩" : [yingyu],
+        })
+        df = pd.concat([new_row, df])
+        df.to_excel("学生成绩表.xlsx", index=False)
+        return redirect(url_for("flzhanshi"))
+    return render_template("flluru.html")</div>
+
+  <!-- 13. 巨幕 + 首页 -->
+  <h2><i class="fas fa-tv"></i> 13. 巨幕效果 · 以及flbootstrap.html 最终效果</h2>
+  <div class="code-block"><i class="fas fa-file"></i> {% include 'head.html' %}
+&lt;div class="jumbotron"&gt;
+    {% if "user_name" not in session %}
+    &lt;h1&gt;欢迎来到成绩管理系统，请登录后使用&lt;/h1&gt;
+    {% else %}
+        &lt;h1&gt;欢迎来到成绩管理系统，已登陆，用户名是{{ session["user_name"] }}&lt;/h1&gt;
+    {% endif %}
+&lt;/div&gt;
+{% include 'foot.html' %}</div>
+
+ 
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-flask"></i> 
+    <span>Flask + Bootstrap · 项目精讲</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 完整笔记</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>
