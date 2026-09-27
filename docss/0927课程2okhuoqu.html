@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>OKX 拉取 BTC 日K · 环境变量代理版 · 美化</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .code-block .string {
+      color: #a3e4a1;
+    }
+
+    .code-block .keyword {
+      color: #f1c40f;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-chart-candlestick"></i> 
+    OKX 拉取 BTC 日K
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-09-27</span>
+  </h1>
+
+  <!-- 概述 -->
+  <div class="highlight-box" style="margin-top: 0.2rem;">
+    <i class="fas fa-info-circle"></i> 
+    <strong>课程4 · 03 OKX 拉取 BTC 日K（环境变量代理版）</strong><br>
+    <i class="fas fa-terminal" style="margin-top: 0.3rem;"></i> 
+    运行前先设置代理环境变量，端口示例为 <span class="inline-code">10090</span>
+  </div>
+
+  <!-- 运行方式 -->
+  <h2><i class="fas fa-play-circle"></i> 运行方式 · 环境变量代理</h2>
+  <div class="code-block">
+<span class="comment"># 每次新开 PowerShell 窗口都要先设这两行（端口就是 10090）</span>
+<span class="keyword">$env:HTTPS_PROXY</span> = <span class="string">"http://127.0.0.1:10090"</span>
+<span class="keyword">$env:HTTP_PROXY</span>  = <span class="string">"http://127.0.0.1:10090"</span>
+
+<span class="comment"># 再跑脚本</span>
+<span class="keyword">cd</span> C:\text\karalianghua\课程2
+<span class="keyword">python</span> .\0403修改版.py
+  </div>
+  <div class="highlight-box" style="padding: 0.6rem 1.2rem;">
+    <i class="fas fa-lightbulb"></i> 将 <span class="inline-code">10090</span> 替换为你的代理软件 HTTP 端口，常见 7890 / 7891 / 10809。
+  </div>
+
+  <!-- 自检与环境 -->
+  <h2><i class="fas fa-check-double"></i> 自检 · 环境 & 依赖</h2>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-python"></i> Python 版本 & 解释器路径</div>
+    <div class="grid-item"><i class="fas fa-box"></i> ccxt 版本</div>
+    <div class="grid-item"><i class="fas fa-table"></i> pandas 版本</div>
+    <div class="grid-item"><i class="fas fa-shield-alt"></i> 代理读取状态</div>
+  </div>
+
+  <!-- 核心代码 1：环境检查 -->
+  <h3><i class="fas fa-microchip"></i> 1. 环境与依赖检查</h3>
+  <div class="code-block">
+<span class="keyword">import</span> os, sys, platform
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+os.chdir(SCRIPT_DIR)
+
+<span class="keyword">print</span>(<span class="string">'='</span> * 64)
+<span class="keyword">print</span>(<span class="string">'课程4 · 03 OKX 拉取 BTC 日K（环境变量代理版）'</span>)
+<span class="keyword">print</span>(<span class="string">'='</span> * 64)
+<span class="keyword">print</span>(<span class="string">f'当前目录：{SCRIPT_DIR}'</span>)
+
+<span class="comment"># 环境检查</span>
+<span class="keyword">print</span>(<span class="string">f'\n[1/2] 环境检查'</span>)
+<span class="keyword">print</span>(<span class="string">f'  Python: {platform.python_version()}'</span>)
+
+<span class="comment"># 依赖检查</span>
+<span class="keyword">try</span>:
+    <span class="keyword">import</span> ccxt
+    <span class="keyword">print</span>(<span class="string">f'  ✅ ccxt: {ccxt.__version__}'</span>)
+<span class="keyword">except</span> ImportError:
+    <span class="keyword">print</span>(<span class="string">f'  ❌ ccxt 未安装。请执行：pip install ccxt pandas'</span>)
+    sys.exit(1)
+
+<span class="keyword">try</span>:
+    <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+    <span class="keyword">print</span>(<span class="string">f'  ✅ pandas: {pd.__version__}'</span>)
+<span class="keyword">except</span> ImportError:
+    <span class="keyword">print</span>(<span class="string">f'  ❌ pandas 未安装。请执行：pip install ccxt pandas'</span>)
+    sys.exit(1)
+  </div>
+
+  <!-- 核心代码 2：代理配置 -->
+  <h3><i class="fas fa-globe"></i> 2. 配置 ccxt + 从环境变量读代理</h3>
+  <div class="code-block">
+exchange = ccxt.okx()          <span class="comment"># 想换交易所改这一行：ccxt.binance() / ccxt.coinbase()</span>
+exchange.timeout = 60000
+
+<span class="comment"># ★ 方案 3 的核心：从环境变量读代理，填进 exchange.proxies</span>
+PROXY = os.environ.get(<span class="string">'HTTPS_PROXY'</span>) <span class="keyword">or</span> os.environ.get(<span class="string">'HTTP_PROXY'</span>)
+<span class="keyword">if</span> PROXY:
+    exchange.proxies = {
+        <span class="string">'http'</span>:  PROXY,
+        <span class="string">'https'</span>: PROXY,
+    }
+    <span class="keyword">print</span>(<span class="string">f'  ✅ 已从环境变量读取代理：{PROXY}'</span>)
+<span class="keyword">else</span>:
+    <span class="keyword">print</span>(<span class="string">f'  ⚠️  未检测到 HTTPS_PROXY / HTTP_PROXY 环境变量'</span>)
+    <span class="keyword">print</span>(<span class="string">f'     将直连 OKX（国内大概率超时）'</span>)
+
+<span class="keyword">print</span>(<span class="string">f'  已配置 timeout：{exchange.timeout} ms'</span>)
+  </div>
+
+  <!-- 核心代码 3：拉数据与保存 -->
+  <h3><i class="fas fa-download"></i> 3. 拉取数据 & 保存 CSV</h3>
+  <div class="code-block">
+<span class="keyword">try</span>:
+    data = exchange.fetch_ohlcv(<span class="string">'BTC/USDT'</span>, <span class="string">'1d'</span>, limit=10)
+<span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+    <span class="keyword">print</span>(<span class="string">f'\n❌ 请求失败：{type(e).__name__}'</span>)
+    <span class="keyword">print</span>(<span class="string">f'   {str(e)[:300]}'</span>)
+    <span class="keyword">print</span>(<span class="string">f'\n排查清单：'</span>)
+    <span class="keyword">print</span>(<span class="string">f'  1) 代理软件是否开启？'</span>)
+    <span class="keyword">print</span>(<span class="string">f'  2) 环境变量 HTTPS_PROXY 是否设了？当前值：{PROXY or "（空）"}'</span>)
+    <span class="keyword">print</span>(<span class="string">f'  3) 端口号对吗？'</span>)
+    <span class="keyword">print</span>(<span class="string">f'  4) 出口 IP 不能是美国（OKX 封美国 IP）'</span>)
+    sys.exit(1)
+
+<span class="keyword">if</span> <span class="keyword">not</span> data:
+    <span class="keyword">print</span>(<span class="string">f'\n❌ 拉到了空数据，检查交易对/周期'</span>)
+    sys.exit(1)
+
+df = pd.DataFrame(data, columns=[<span class="string">'timestamp'</span>, <span class="string">'open'</span>, <span class="string">'high'</span>, <span class="string">'low'</span>, <span class="string">'close'</span>, <span class="string">'volume'</span>])
+df[<span class="string">'date'</span>] = pd.to_datetime(df[<span class="string">'timestamp'</span>], unit=<span class="string">'ms'</span>)
+
+<span class="keyword">print</span>(<span class="string">f'\n成功拉取 BTC/USDT 最近 {len(df)} 根日K：'</span>)
+<span class="keyword">print</span>(df[[<span class="string">'date'</span>, <span class="string">'open'</span>, <span class="string">'high'</span>, <span class="string">'low'</span>, <span class="string">'close'</span>, <span class="string">'volume'</span>]].to_string(index=<span class="keyword">False</span>))
+
+<span class="comment"># 保存 CSV</span>
+csv_path = os.path.join(SCRIPT_DIR, <span class="string">'btc_usdt_1d.csv'</span>)
+df.to_csv(csv_path, index=<span class="keyword">False</span>)
+<span class="keyword">print</span>(<span class="string">f'\n✅ 已保存：{csv_path}'</span>)
+<span class="keyword">print</span>(<span class="string">f'\n💡 时区提醒：OKX 日K时间是 UTC 0 时区，北京时间是 UTC+8'</span>)
+  </div>
+
+  
+
+  <!-- 时区提醒 -->
+  <div class="highlight-box" style="border-left-color: #2e7d5e;">
+    <i class="fas fa-clock" style="color:#2e7d5e;"></i> 
+    <strong>时区提醒：</strong>OKX 日K时间是 UTC 0 时区，北京时间是 UTC+8。
+  </div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>OKX · BTC/USDT · 日K · 环境变量代理版</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 课程4-03</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>datetime_demo · 时间处理演示 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .code-block .string {
+      color: #a3e4a1;
+    }
+
+    .code-block .keyword {
+      color: #f1c40f;
+    }
+
+    .code-block .number {
+      color: #f5b78a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    /* 绿色系高亮框 */
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 运行输出终端样式 */
+    .terminal-output {
+      background: #0a1620;
+      border-radius: 18px;
+      padding: 1.2rem 1.3rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: #b8d4e3;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: inset 0 2px 12px rgba(0,0,0,0.5), 0 8px 20px -8px rgba(0, 30, 40, 0.3);
+      border: 1px solid #1f3a4a;
+      margin: 0.6rem 0 0.4rem 0;
+    }
+
+    .terminal-output .prompt {
+      color: #6fcf97;
+      font-weight: 600;
+    }
+
+    .terminal-output .info {
+      color: #82c9ff;
+    }
+
+    .terminal-output .warn {
+      color: #f5b78a;
+    }
+
+    .terminal-output .table-head {
+      color: #a3e4a1;
+      font-weight: 500;
+    }
+
+    .terminal-output .highlight {
+      color: #f1c40f;
+      font-weight: 500;
+    }
+
+    .terminal-output .success {
+      color: #6fcf97;
+      font-weight: 500;
+    }
+
+    .terminal-output .danger {
+      color: #f77f7f;
+      font-weight: 500;
+    }
+
+    .terminal-output .dim {
+      color: #5e7d8f;
+    }
+
+    .terminal-output .weekend {
+      color: #f5b78a;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .terminal-output { font-size: 0.7rem; padding: 0.9rem 0.9rem; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+      .terminal-output { font-size: 0.65rem; padding: 0.7rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-clock"></i> 
+    datetime_demo · 时间处理演示
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-09-27</span>
+  </h1>
+
+  <!-- 概述 -->
+  <div class="highlight-box" style="margin-top: 0.2rem;">
+    <i class="fas fa-list-check"></i> 
+    <strong>内容：</strong><br>
+    <i class="fas fa-calendar-day"></i> 基础：datetime / timedelta，字符串 <span class="inline-code">2026-08-14</span> ↔ 时间 互转<br>
+    <i class="fas fa-table"></i> 与 pandas 联动：pd.to_datetime、按时间切片<br>
+    <i class="fas fa-lightbulb"></i> 冷知识：自然日 ≠ 交易日（行情数据自动跳过周末和节假日）
+  </div>
+
+  <!-- 导入 -->
+  <h2><i class="fas fa-box-open"></i> 导入</h2>
+  <div class="code-block">
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta
+<span class="comment"># from datetime import datetime, timedelta：从 datetime 包里拿两个东西</span>
+<span class="comment"># datetime：一个时间点；timedelta：一段时间（比如 1 天）</span>
+
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd  <span class="comment"># pandas：表格处理</span>
+
+<span class="keyword">from</span> quant_data <span class="keyword">import</span> get_kline  <span class="comment"># 从数据工具箱拿"拉数据"的函数（真实行情）</span>
+  </div>
+
+  <!-- 1. 基础 -->
+  <h2><i class="fas fa-calendar-day"></i> 1. 基础 · datetime / timedelta</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>两个核心方法：</strong>
+    <span class="inline-code">strptime</span> 字符串 → 时间（P = parse，解析）；
+    <span class="inline-code">strftime</span> 时间 → 字符串（F = format，格式化）。
+  </div>
+  <div class="code-block">
+<span class="comment"># ========== 1. 基础 ==========</span>
+<span class="keyword">print</span>(<span class="string">"===== datetime 基础 ====="</span>)
+<span class="comment"># strptime：把"字符串"解析成"时间"（P 是 parse = 解析）</span>
+t = datetime.strptime(<span class="string">"2026-08-24 09:30:00"</span>, <span class="string">"%Y-%m-%d %H:%M:%S"</span>)
+<span class="comment"># 第二个参数是格式：%Y 年 %m 月 %d 日 %H 时 %M 分 %S 秒</span>
+<span class="keyword">print</span>(<span class="string">"解析字符串 ->"</span>, t)
+<span class="keyword">print</span>(<span class="string">"加一天     ->"</span>, t + timedelta(days=1))  <span class="comment"># 时间 + 时间段 = 新时间</span>
+<span class="keyword">print</span>(<span class="string">"减 7 小时  ->"</span>, t - timedelta(hours=7))  <span class="comment"># 时间 - 时间段 = 新时间</span>
+<span class="comment"># strftime：反过来，"时间"变回"字符串"（F 是 format = 格式化）</span>
+<span class="keyword">print</span>(<span class="string">"反向格式化 ->"</span>, t.strftime(<span class="string">"%Y/%m/%d %H:%M"</span>))
+<span class="keyword">print</span>(<span class="string">"取出年月日 ->"</span>, t.year, <span class="string">"年"</span>, t.month, <span class="string">"月"</span>, t.day, <span class="string">"日"</span>)
+<span class="comment"># .year / .month / .day：直接取时间里的年、月、日</span>
+<span class="keyword">print</span>(<span class="string">"今天是星期几 ->"</span>, t.weekday(), <span class="string">"（0=周一 ... 4=周五, 5=周六, 6=周日）"</span>)
+  </div>
+
+  <!-- 2. 与 pandas 联动 -->
+  <h2><i class="fas fa-table"></i> 2. 与 pandas 联动</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>核心方法：</strong>
+    <span class="inline-code">pd.date_range</span> 生成连续日期；
+    <span class="inline-code">df.loc["起":"止"]</span> 按时间切片。
+  </div>
+
+  <h3><i class="fas fa-calendar-week"></i> date_range 生成自然日</h3>
+  <div class="code-block">
+<span class="comment"># ========== 2. 与 pandas 联动 ==========</span>
+<span class="keyword">print</span>(<span class="string">"\n===== 与 pandas 联动 ====="</span>)
+<span class="comment"># date_range：pandas 生成一串连续的日期</span>
+dates = pd.date_range(<span class="string">"2026-08-01"</span>, <span class="string">"2026-08-24"</span>, freq=<span class="string">"D"</span>)
+<span class="comment"># freq="D"：按"天"生成；D = Day（天）</span>
+<span class="keyword">print</span>(<span class="string">"8 月 1~24 日（自然日）:"</span>)
+<span class="keyword">for</span> d <span class="keyword">in</span> dates:  <span class="comment"># 循环：把每个日期拿出来</span>
+    <span class="keyword">if</span> d.weekday() &lt; 5:  <span class="comment"># 条件分支：星期几小于 5（周一~周五）</span>
+        tag = <span class="string">""</span>  <span class="comment"># 工作日：不做标注</span>
+    <span class="keyword">else</span>:  <span class="comment"># 周六周日</span>
+        tag = <span class="string">"  &lt;- 周末"</span>  <span class="comment"># 标注周末</span>
+    <span class="keyword">print</span>(<span class="string">f"  {d.strftime('%Y-%m-%d')} 星期{d.weekday() + 1}{tag}"</span>)
+
+<span class="comment"># 只保留工作日</span>
+workdays = dates[dates.weekday &lt; 5]
+<span class="comment"># 布尔筛选：dates.weekday 是每个日期是星期几，&lt;5 就是工作日</span>
+<span class="keyword">print</span>(<span class="string">f"\n去掉周末后还剩 {len(workdays)} 天 —— 这就是'交易日'的雏形"</span>)
+  </div>
+
+  <h3><i class="fas fa-cut"></i> 真实行情按时间切片</h3>
+  <div class="code-block">
+<span class="comment"># "按时间切片"（datetime 和 pandas 联动的场景）</span>
+<span class="keyword">print</span>(<span class="string">"\n===== 真实行情按时间切片 ====="</span>)
+df = get_kline(start_date=<span class="string">"20250101"</span>)  <span class="comment"># 拉 2025 年以来的股票日线</span>
+df_2025 = df.loc[<span class="string">"2025-01-01"</span>:<span class="string">"2025-12-31"</span>]
+<span class="comment"># .loc[起点:终点]：按日期切片，两端都算</span>
+<span class="keyword">print</span>(<span class="string">f"2025 年自然日 365 天，行情实际只有 {len(df_2025)} 个交易日"</span>)
+<span class="keyword">print</span>(<span class="string">"原因：行情数据自动跳过周末和节假日 —— 自然日 ≠ 交易日"</span>)
+march = df_2025.loc[<span class="string">"2025-03-01"</span>:<span class="string">"2025-03-31"</span>]  <span class="comment"># 再切一个月的试试</span>
+<span class="keyword">print</span>(<span class="string">"切出 2025 年 3 月:"</span>, len(march), <span class="string">"天"</span>)
+  </div>
+
+  <!-- 3. 时间戳换算 -->
+  <h2><i class="fas fa-hashtag"></i> 3. 时间戳换算</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>Unix 时间戳：</strong>从 1970 年 1 月 1 日算起的秒数，很多加密交易所接口用它传时间。
+  </div>
+  <div class="code-block">
+<span class="comment"># ========== 3. 时间戳换算 ==========</span>
+<span class="keyword">print</span>(<span class="string">"\n===== 时间戳 ====="</span>)
+now = datetime.now()  <span class="comment"># 现在这一刻</span>
+<span class="keyword">print</span>(<span class="string">"现在:"</span>, now.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>))  <span class="comment"># 格式化打印</span>
+epoch = int(now.timestamp())
+<span class="comment"># .timestamp()：把时间变成"从 1970 年 1 月 1 日算起的秒数"，叫 Unix 时间戳</span>
+<span class="keyword">print</span>(<span class="string">"Unix 时间戳:"</span>, epoch, <span class="string">"（很多加密交易所接口用它传时间）"</span>)
+<span class="keyword">print</span>(<span class="string">"从时间戳还原:"</span>, datetime.fromtimestamp(epoch))
+<span class="comment"># fromtimestamp：反过来，把秒数变回时间</span>
+  </div>
+
+  <!-- 核心要点速览 -->
+  <h2><i class="fas fa-list-check"></i> 核心要点速览</h2>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-arrow-right"></i> <strong>字符串→时间</strong>：strptime</div>
+    <div class="grid-item"><i class="fas fa-arrow-left"></i> <strong>时间→字符串</strong>：strftime</div>
+    <div class="grid-item"><i class="fas fa-plus-circle"></i> <strong>时间加减</strong>：timedelta(days=1)</div>
+    <div class="grid-item"><i class="fas fa-calendar"></i> <strong>取年月日</strong>：.year / .month / .day</div>
+    <div class="grid-item"><i class="fas fa-calendar-week"></i> <strong>生成日期</strong>：pd.date_range</div>
+    <div class="grid-item"><i class="fas fa-cut"></i> <strong>时间切片</strong>：df.loc["起":"止"]</div>
+    <div class="grid-item"><i class="fas fa-lightbulb"></i> <strong>自然日</strong>：365 天（含周末）</div>
+    <div class="grid-item"><i class="fas fa-chart-line"></i> <strong>交易日</strong>：约 250 天（跳过周末）</div>
+    <div class="grid-item"><i class="fas fa-clock"></i> <strong>Unix 时间戳</strong>：.timestamp()</div>
+    <div class="grid-item"><i class="fas fa-redo"></i> <strong>时间戳还原</strong>：datetime.fromtimestamp()</div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="highlight-box">
+    <i class="fas fa-bolt"></i> 金句：
+    <span class="inline-code">strptime</span> 解析字符串，
+    <span class="inline-code">strftime</span> 格式化输出，
+    <span class="inline-code">timedelta</span> 加减时间 ——
+    datetime 把"时间"变成"可以计算的数字"。
+  </div>
+
+  <!-- ========== 运行输出展示 ========== -->
+  <h2><i class="fas fa-terminal"></i> 运行输出 · <span class="inline-code" style="font-size:0.95rem;">python .\datetime_demo.py</span></h2>
+  <div class="terminal-output">
+<span class="prompt">PS&gt;</span> python .\datetime_demo.py
+<span class="table-head">===== datetime 基础 =====</span>
+解析字符串 -&gt; 2026-08-24 09:30:00
+加一天     -&gt; 2026-08-25 09:30:00
+减 7 小时  -&gt; 2026-08-24 02:30:00
+反向格式化 -&gt; 2026/08/24 09:30
+取出年月日 -&gt; 2026 年 8 月 24 日
+今天是星期几 -&gt; 0 （0=周一 ... 4=周五, 5=周六, 6=周日）
+
+<span class="table-head">===== 与 pandas 联动 =====</span>
+8 月 1~24 日（自然日）:
+  2026-08-01 星期6  <span class="weekend">&lt;- 周末</span>
+  2026-08-02 星期7  <span class="weekend">&lt;- 周末</span>
+  2026-08-03 星期1
+  2026-08-04 星期2
+  2026-08-05 星期3
+  2026-08-06 星期4
+  2026-08-07 星期5
+  2026-08-08 星期6  <span class="weekend">&lt;- 周末</span>
+  2026-08-09 星期7  <span class="weekend">&lt;- 周末</span>
+  2026-08-10 星期1
+  2026-08-11 星期2
+  2026-08-12 星期3
+  2026-08-13 星期4
+  2026-08-14 星期5
+  2026-08-15 星期6  <span class="weekend">&lt;- 周末</span>
+  2026-08-16 星期7  <span class="weekend">&lt;- 周末</span>
+  2026-08-17 星期1
+  2026-08-18 星期2
+  2026-08-19 星期3
+  2026-08-20 星期4
+  2026-08-21 星期5
+  2026-08-22 星期6  <span class="weekend">&lt;- 周末</span>
+  2026-08-23 星期7  <span class="weekend">&lt;- 周末</span>
+  2026-08-24 星期1
+
+去掉周末后还剩 <span class="highlight">16 天</span> —— 这就是'交易日'的雏形
+
+<span class="table-head">===== 真实行情按时间切片 =====</span>
+<span class="warn">[数据源] akshare 不可用（ProxyError），尝试 baostock...</span>
+login success!
+logout success!
+<span class="success">[数据源] baostock 获取成功，共 421 条</span>
+2025 年自然日 365 天，行情实际只有 <span class="highlight">243 个交易日</span>
+原因：行情数据自动跳过周末和节假日 —— 自然日 ≠ 交易日
+切出 2025 年 3 月: <span class="highlight">21 天</span>
+
+<span class="table-head">===== 时间戳 =====</span>
+现在: 2026-09-27 22:59:29
+Unix 时间戳: 1790521169 （很多加密交易所接口用它传时间）
+从时间戳还原: 2026-09-27 22:59:29
+  </div>
+  <div class="highlight-box" style="margin-top: 0.6rem; padding: 0.6rem 1.2rem;">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>关键结论：</strong>8 月 1~24 日共 24 个自然日，去掉周末只剩 <strong>16 个工作日</strong>；<br>
+    2025 年 365 个自然日，行情实际只有 <strong>243 个交易日</strong> —— 自然日 ≠ 交易日。
+  </div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>datetime_demo · 时间解析 · pandas 联动 · 时间戳</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 精简笔记</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>

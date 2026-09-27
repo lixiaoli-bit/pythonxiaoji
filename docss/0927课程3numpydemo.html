@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>numpy_demo · 向量化演示 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .code-block .string {
+      color: #a3e4a1;
+    }
+
+    .code-block .keyword {
+      color: #f1c40f;
+    }
+
+    .code-block .number {
+      color: #f5b78a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    /* 绿色系高亮框 */
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 运行输出终端样式 */
+    .terminal-output {
+      background: #0a1620;
+      border-radius: 18px;
+      padding: 1.2rem 1.3rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: #b8d4e3;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: inset 0 2px 12px rgba(0,0,0,0.5), 0 8px 20px -8px rgba(0, 30, 40, 0.3);
+      border: 1px solid #1f3a4a;
+      margin: 0.6rem 0 0.4rem 0;
+    }
+
+    .terminal-output .prompt {
+      color: #6fcf97;
+      font-weight: 600;
+    }
+
+    .terminal-output .info {
+      color: #82c9ff;
+    }
+
+    .terminal-output .warn {
+      color: #f5b78a;
+    }
+
+    .terminal-output .table-head {
+      color: #a3e4a1;
+      font-weight: 500;
+    }
+
+    .terminal-output .highlight {
+      color: #f1c40f;
+      font-weight: 500;
+    }
+
+    .terminal-output .success {
+      color: #6fcf97;
+      font-weight: 500;
+    }
+
+    .terminal-output .dim {
+      color: #5e7d8f;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .terminal-output { font-size: 0.7rem; padding: 0.9rem 0.9rem; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+      .terminal-output { font-size: 0.65rem; padding: 0.7rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-rocket"></i> 
+    numpy_demo · 向量化演示
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-09-27</span>
+  </h1>
+
+  <!-- 概述 -->
+  <div class="highlight-box" style="margin-top: 0.2rem;">
+    <i class="fas fa-list-check"></i> 
+    <strong>内容：</strong><br>
+    <i class="fas fa-database"></i> 从 quant_data 导入"拉数据"函数，拿到茅台真实日线<br>
+    <i class="fas fa-array"></i> 收盘价转成 numpy 数组<br>
+    <i class="fas fa-bolt"></i> 日收益率：for 循环 vs 向量化，性能对比<br>
+    <i class="fas fa-tools"></i> numpy 常用操作：切片 / 统计 / np.where 生成信号
+  </div>
+
+  <!-- 导入与主入口 -->
+  <h2><i class="fas fa-box-open"></i> 导入与主入口</h2>
+  <div class="code-block">
+<span class="keyword">import</span> time  <span class="comment"># time：Python 自带，用来给代码计时</span>
+
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np  <span class="comment"># numpy：数值计算库（发动机）</span>
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd  <span class="comment"># pandas：表格处理库（工作台）</span>
+
+<span class="comment"># from ... import ...：从别的文件里"拿"一个函数来用</span>
+<span class="comment"># quant_data 是咱们自己写的数据工具箱（quant_data.py），里面有 get_kline</span>
+<span class="keyword">from</span> quant_data <span class="keyword">import</span> get_kline  <span class="comment"># get_kline：拉 A 股日线（自动兜底数据源）</span>
+
+
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:  <span class="comment"># 只有直接运行本文件时才执行下面的代码</span>
+  </div>
+
+  <!-- 1. 拉取真实日线 -->
+  <h2><i class="fas fa-download"></i> 1. 拉取真实日线</h2>
+  <div class="code-block">
+    <span class="comment"># ========== 1. 拉取真实日线 ==========</span>
+    df = get_kline()  <span class="comment"># 调用函数，一行拿到 近1月日线表格</span>
+    <span class="keyword">print</span>(<span class="string">"\n----- 最近 5 个交易日 -----"</span>)
+    <span class="keyword">print</span>(df.tail(5).to_string())  <span class="comment"># .tail(5)：取最后 5 行；.to_string()：转成文字打印</span>
+    <span class="keyword">print</span>(<span class="string">"\n共"</span>, len(df), <span class="string">"条数据，每一条都是从服务器实时拉下来的真实行情"</span>)
+    <span class="comment"># len(df)：表格有多少行（多少天）</span>
+  </div>
+
+  <!-- 2. 收盘价 -> numpy 数组 -->
+  <h2><i class="fas fa-array"></i> 2. 收盘价 → numpy 数组</h2>
+  <div class="code-block">
+    <span class="comment"># ========== 2. 收盘价 -> numpy 数组 ==========</span>
+    close = df[<span class="string">"close"</span>].to_numpy()
+    <span class="comment"># df["close"]：取出"收盘价"这一列（Series）</span>
+    <span class="comment"># .to_numpy()：把这一列转成 numpy 数组（发动机的"专用油"）</span>
+    <span class="keyword">print</span>(<span class="string">"\n收盘价数组（前 5 个）:"</span>, close[:5])  <span class="comment"># \n：换行</span>
+    <span class="comment"># close[:5]：切片，取前 5 个元素（开头到第 5 个）</span>
+    <span class="keyword">print</span>(<span class="string">"数组形状:"</span>, close.shape)
+    <span class="comment"># .shape：通常就是和数组一起使用，它用于返回数组的维度信息；这里说明下这是属性不是函数；</span>
+    <span class="comment"># 就是说数组长什么样，比如 (1360,) 表示一维、1360 个元素；再比如(2, 3) 表示一个2行3列的二维数组矩阵，以此类推。</span>
+  </div>
+
+  <!-- 3. 日收益率：for 循环 vs 向量化 -->
+  <h2><i class="fas fa-bolt"></i> 3. 日收益率：for 循环 vs 向量化</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>先用真实数据验证两种写法结果一致，再放大到 200 万条感受性能差距。</strong>
+  </div>
+
+  <h3><i class="fas fa-redo"></i> for 循环版本</h3>
+  <div class="code-block">
+    <span class="comment"># ========== 3. 日收益率：for 循环 vs 向量化 ==========</span>
+    <span class="comment"># 先用真实数据验证两种写法结果一致</span>
+    ret_loop = []  <span class="comment"># 建一个空列表，准备装每天的收益率</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(1, len(close)):  <span class="comment"># 循环：从第 2 天到最后一天</span>
+        <span class="comment"># 日收益率 = (今天价格 - 昨天价格) / 昨天价格</span>
+        today_ret = (close[i] - close[i - 1]) / close[i - 1]
+        ret_loop.append(today_ret)  <span class="comment"># .append()：把结果装进列表末尾</span>
+    ret_loop = np.array(ret_loop)  <span class="comment"># 列表转成 numpy 数组，方便和下面比较</span>
+  </div>
+
+  <h3><i class="fas fa-bolt"></i> 向量化版本</h3>
+  <div class="code-block">
+    ret_vec = np.diff(close) / close[:-1]
+    <span class="comment"># np.diff(close)：相邻两天的差值（今天-昨天），自动得到 len-1 个</span>
+    <span class="comment"># close[:-1]：切片，去掉最后一个元素（[:-1] 表示"开头到倒数第 2 个"）</span>
+    <span class="comment"># 一行就算完了整段历史的收益率 —— 这就是向量化</span>
+
+    <span class="keyword">print</span>(<span class="string">"\n逻辑验证：两种写法结果一致:"</span>, np.allclose(ret_loop, ret_vec, equal_nan=<span class="keyword">True</span>))
+    <span class="comment"># np.allclose(数组1, 数组2)：判断两个数组里的数是不是基本一样</span>
+  </div>
+
+  <h3><i class="fas fa-expand"></i> 放大到 200 万条 · 性能对比</h3>
+  <div class="code-block">
+    <span class="comment"># 再把真实序列复制放大到约 200 万条，感受真实量化场景的差距</span>
+    big = np.tile(close, int(2_000_000 / len(close)) + 1)
+    <span class="comment"># np.tile(数组, n)：把数组整体重复 n 遍</span>
+    <span class="comment"># 2_000_000 就是 2000000，下划线只是方便人看</span>
+    <span class="keyword">print</span>(<span class="string">f"放大后的数组大小: {len(big):,} 条"</span>)
+    <span class="comment"># f-string：{变量} 把值塞进字符串</span>
+    <span class="comment"># {len(big):,} 里的 , 表示千分位分隔符，显示成 2,000,560</span>
+
+    t0 = time.perf_counter()  <span class="comment"># 记下"现在"的时间（计时开始）</span>
+    ret_loop_big = []  <span class="comment"># 空列表</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(1, len(big)):  <span class="comment"># 循环 200 万次，一格一格算</span>
+        ret_loop_big.append((big[i] - big[i - 1]) / big[i - 1])
+    ret_loop_big = np.array(ret_loop_big)  <span class="comment"># 转数组</span>
+    t_loop = time.perf_counter() - t0  <span class="comment"># 计时结束，算出 for 循环用了多少秒</span>
+
+    t0 = time.perf_counter()  <span class="comment"># 计时开始</span>
+    ret_vec_big = np.diff(big) / big[:-1]  <span class="comment"># 向量化，一行算完</span>
+    t_vec = time.perf_counter() - t0  <span class="comment"># 计时结束，算出向量化用了多少秒</span>
+
+    <span class="keyword">print</span>(<span class="string">"\n----- 性能对比（同样的数学，不同的写法）-----"</span>)
+    <span class="keyword">print</span>(<span class="string">f"for 循环  : {t_loop * 1000:8.1f} ms"</span>)
+    <span class="comment"># 秒乘 1000 变成毫秒（ms）；{:8.1f} 表示宽度 8、保留 1 位小数</span>
+    <span class="keyword">print</span>(<span class="string">f"向量化    : {t_vec * 1000:8.1f} ms"</span>)
+    <span class="comment"># 防止除数为 0，用 max() 兜底一下</span>
+    <span class="keyword">print</span>(<span class="string">f"快约 {t_loop / max(t_vec, 1e-9):.0f} 倍"</span>)
+    <span class="comment"># 大数字除以小数字 = 快了多少倍；{:0f} 表示不留小数</span>
+  </div>
+
+  <!-- 4. 常用操作 -->
+  <h2><i class="fas fa-tools"></i> 4. numpy 常用操作</h2>
+  <div class="code-block">
+    <span class="comment"># ========== 4. 常用操作 ==========</span>
+    <span class="keyword">print</span>(<span class="string">"\n----- numpy 常用操作 -----"</span>)
+    <span class="keyword">print</span>(<span class="string">"最近 5 天收盘价 close[-5:]:"</span>, close[-5:])
+    <span class="comment"># close[-5:]：负数切片，从倒数第 5 个一直到最后（最近的 5 天）</span>
+    <span class="keyword">print</span>(<span class="string">"全部均值 close.mean()     :"</span>, round(close.mean(), 2))
+    <span class="comment"># .mean()：求平均值；round(数, 2)：保留 2 位小数</span>
+    <span class="keyword">print</span>(<span class="string">"波动 close.std()          :"</span>, round(close.std(), 2))
+    <span class="comment"># .std()：标准差，衡量价格波动大不大</span>
+    <span class="keyword">print</span>(<span class="string">"最高 close.max()          :"</span>, close.max())  <span class="comment"># 最大值</span>
+    <span class="keyword">print</span>(<span class="string">"最低 close.min()          :"</span>, close.min())  <span class="comment"># 最小值</span>
+
+    <span class="comment"># np.where(条件, 满足填什么, 不满足填什么)：生成 0/1 信号</span>
+    signal = np.where(close &gt; close.mean(), 1, 0)
+    <span class="keyword">print</span>(<span class="string">"\n信号序列（前 20 个）:"</span>, signal[:20])
+    <span class="keyword">print</span>(<span class="string">"含义：1 = 收盘价高于五年均值，0 = 低于均值 —— 这就是策略信号的雏形"</span>)
+  </div>
+
+  <!-- 核心要点速览 -->
+  <h2><i class="fas fa-list-check"></i> 核心要点速览</h2>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-array"></i> <strong>数组转换</strong>：df["close"].to_numpy()</div>
+    <div class="grid-item"><i class="fas fa-bolt"></i> <strong>向量化</strong>：np.diff(close) / close[:-1]</div>
+    <div class="grid-item"><i class="fas fa-redo"></i> <strong>for 循环</strong>：一格一格算，慢但直观</div>
+    <div class="grid-item"><i class="fas fa-tachometer-alt"></i> <strong>性能对比</strong>：200 万条数据实测</div>
+    <div class="grid-item"><i class="fas fa-cut"></i> <strong>切片</strong>：close[-5:] 取最近 5 天</div>
+    <div class="grid-item"><i class="fas fa-chart-bar"></i> <strong>统计</strong>：mean / std / max / min</div>
+    <div class="grid-item"><i class="fas fa-signal"></i> <strong>信号</strong>：np.where(close &gt; mean, 1, 0)</div>
+    <div class="grid-item"><i class="fas fa-stopwatch"></i> <strong>计时</strong>：time.perf_counter()</div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="highlight-box">
+    <i class="fas fa-bolt"></i> 金句：
+    <span class="inline-code">np.diff</span> 一口气算出全部差值，
+    <span class="inline-code">np.where</span> 一行生成 0/1 信号 ——
+    numpy 把"数学"变成"一行代码"。
+  </div>
+
+  <!-- ========== 运行输出展示 ========== -->
+  <h2><i class="fas fa-terminal"></i> 运行输出 · <span class="inline-code" style="font-size:0.95rem;">python .\numpy_demo.py</span></h2>
+  <div class="terminal-output">
+<span class="prompt">PS&gt;</span> python .\numpy_demo.py
+<span class="warn">[数据源] akshare 不可用（ProxyError），尝试 baostock...</span>
+login success!
+logout success!
+<span class="success">[数据源] baostock 获取成功，共 178 条</span>
+
+<span class="table-head">----- 最近 5 个交易日 -----</span>
+               open     high      low    close   volume
+date                                                   
+2026-09-18  1262.99  1265.88  1256.10  1257.12  2489087
+2026-09-21  1259.00  1259.95  1250.80  1252.57  2501689
+2026-09-22  1252.15  1265.88  1248.10  1253.80  2457294
+2026-09-23  1255.03  1271.50  1250.89  1251.24  3098122
+2026-09-24  1250.01  1256.13  1231.05  1237.00  3123935
+
+共 178 条数据，每一条都是从服务器实时拉下来的真实行情
+
+收盘价数组（前 5 个）: [1393.035158   1394.99869283 1390.45618688 1379.6518609  1386.2946653 ]
+数组形状: (178,)
+
+逻辑验证：两种写法结果一致: <span class="success">True</span>
+放大后的数组大小: 2,000,008 条
+
+<span class="table-head">----- 性能对比（同样的数学，不同的写法）-----</span>
+for 循环  :   5130.7 ms
+向量化    :     26.4 ms
+快约 <span class="highlight">194 倍</span>
+
+<span class="table-head">----- numpy 常用操作 -----</span>
+最近 5 天收盘价 close[-5:]: [1257.12 1252.57 1253.8  1251.24 1237.  ]
+全部均值 close.mean()     : 1326.43
+波动 close.std()          : 76.99
+最高 close.max()          : 1519.053065
+最低 close.min()          : 1168.63
+
+信号序列（前 20 个）: [1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1 1]
+含义：1 = 收盘价高于五年均值，0 = 低于均值 —— 这就是策略信号的雏形
+  </div>
+  <div class="highlight-box" style="margin-top: 0.6rem; padding: 0.6rem 1.2rem;">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>关键结论：</strong>同样的数学，向量化比 for 循环快约 <strong>194 倍</strong>（5130.7 ms → 26.4 ms）。
+  </div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>numpy_demo · 向量化 · 性能对比 · 常用操作</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 精简笔记</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>

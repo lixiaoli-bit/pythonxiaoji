@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>quant_data · 数据工具箱 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .code-block .string {
+      color: #a3e4a1;
+    }
+
+    .code-block .keyword {
+      color: #f1c40f;
+    }
+
+    .code-block .number {
+      color: #f5b78a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-toolbox"></i> 
+    quant_data · 数据工具箱
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-09-27</span>
+  </h1>
+
+  <!-- 概述 -->
+  <div class="highlight-box" style="margin-top: 0.2rem;">
+    <i class="fas fa-cubes"></i> 
+    <strong>把"拉行情数据"这件事封装成函数，其他脚本 import 之后就能直接用。</strong><br>
+    <i class="fas fa-download" style="margin-top: 0.3rem;"></i> 
+    安装 akshare：<span class="inline-code">pip install akshare</span>
+  </div>
+
+  <!-- 依赖与导入 -->
+  <h2><i class="fas fa-box-open"></i> 依赖与基础导入</h2>
+  <div class="code-block">
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime  <span class="comment"># 导入 datetime：Python 自带，用来处理时间</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np              <span class="comment"># 导入 numpy：数值计算库（我们叫它"发动机"）</span>
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd             <span class="comment"># 导入 pandas：表格处理库（我们叫它"工作台"）</span>
+  </div>
+
+  <!-- 函数 1: get_kline -->
+  <h2><i class="fas fa-chart-line"></i> get_kline · A股日线</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-shield-alt"></i> 
+    <strong>数据源自动兜底：</strong>akshare → baostock → 腾讯，谁通就用谁。<br>
+    <i class="fas fa-tag"></i> 参数：<span class="inline-code">symbol</span>（默认 600519 贵州茅台）、<span class="inline-code">start_date</span>、<span class="inline-code">end_date</span>
+  </div>
+
+  <h3><i class="fas fa-file-code"></i> 函数定义与文档字符串</h3>
+  <div class="code-block">
+<span class="keyword">def</span> get_kline(symbol=<span class="string">"600519"</span>, start_date=<span class="string">"20260101"</span>, end_date=<span class="keyword">None</span>):
+    <span class="string">"""
+    拉取 A 股日线，返回一张表格，列名统一为：
+    open（开盘）high（最高）low（最低）close（收盘）volume（成交量）
+    数据源自动兜底：akshare -> baostock -> 腾讯，谁通就用谁。
+    symbol 是股票代码，默认贵州茅台 600519。
+    """</span>
+    <span class="keyword">import</span> akshare <span class="keyword">as</span> ak  <span class="comment"># akshare：免费 A 股数据源</span>
+    <span class="keyword">import</span> baostock <span class="keyword">as</span> bs  <span class="comment"># baostock：备用数据源</span>
+    <span class="keyword">import</span> requests  <span class="comment"># requests：用来访问网络接口</span>
+  </div>
+
+  <h3><i class="fas fa-cog"></i> 日期处理与格式转换</h3>
+  <div class="code-block">
+    <span class="comment"># 如果调用时没传 end_date，就用今天的日期</span>
+    <span class="keyword">if</span> end_date <span class="keyword">is</span> <span class="keyword">None</span>:
+        end_date = datetime.now().strftime(<span class="string">"%Y%m%d"</span>)
+        <span class="comment"># datetime.now()：拿到当前这一刻的时间</span>
+        <span class="comment"># strftime("%Y%m%d")：把时间格式化成"年月日"连写，如 20260814</span>
+
+    <span class="comment"># baostock 要的是带横杠的日期，把 "20260101" 拆成 "2026-01-01"</span>
+    end_dash = <span class="string">f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:]}"</span>
+    start_dash = <span class="string">f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:]}"</span>
+    <span class="comment"># f-string（新语法）：字符串前加 f，就能用 {变量} 把值塞进字符串里</span>
+    <span class="comment"># 字符串切片：end_date[:4] 取前 4 个字符（年份），[4:6] 取第 5、6 个（月份）</span>
+  </div>
+
+  <h3><i class="fas fa-database"></i> 数据源 1：akshare（东财，免费、最常用）</h3>
+  <div class="code-block">
+    <span class="comment"># ---- 数据源 1：akshare（东财，免费、最常用）----</span>
+    <span class="keyword">try</span>:  <span class="comment"># try："尝试"运行下面几行；万一报错不崩溃，会跳到 except</span>
+        raw = ak.stock_zh_a_hist(  <span class="comment"># 调用 akshare 的"A 股历史行情"接口</span>
+            symbol=symbol,  <span class="comment"># 股票代码</span>
+            period=<span class="string">"daily"</span>,  <span class="comment"># 周期：daily 表示日线</span>
+            start_date=start_date,  <span class="comment"># 开始日期</span>
+            end_date=end_date,  <span class="comment"># 结束日期</span>
+            adjust=<span class="string">"qfq"</span>,  <span class="comment"># 前复权：把分红除权的影响折算回价格里</span>
+        )
+        <span class="comment"># 判断：确实拿到了数据才继续（raw 不是空、行数大于 0）</span>
+        <span class="keyword">if</span> raw <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span> <span class="keyword">and</span> len(raw) &gt; 0:
+            <span class="comment"># 把 akshare 返回的中文列，整理成统一的英文列</span>
+            df = pd.DataFrame({  <span class="comment"># DataFrame：pandas 的"一张表"</span>
+                <span class="string">"date"</span>: pd.to_datetime(raw[<span class="string">"日期"</span>]),  <span class="comment"># 日期列转成时间格式</span>
+                <span class="string">"open"</span>: raw[<span class="string">"开盘"</span>].astype(float),  <span class="comment"># 开盘价，转成小数</span>
+                <span class="string">"high"</span>: raw[<span class="string">"最高"</span>].astype(float),  <span class="comment"># 最高价</span>
+                <span class="string">"low"</span>: raw[<span class="string">"最低"</span>].astype(float),  <span class="comment"># 最低价</span>
+                <span class="string">"close"</span>: raw[<span class="string">"收盘"</span>].astype(float),  <span class="comment"># 收盘价</span>
+                <span class="string">"volume"</span>: raw[<span class="string">"成交量"</span>].astype(float),  <span class="comment"># 成交量</span>
+            })
+            <span class="comment"># 把"日期"这一列设为表格的索引（以后就能按日期切片、排序）</span>
+            df = df.set_index(<span class="string">"date"</span>)
+            <span class="keyword">print</span>(<span class="string">f"[数据源] akshare 获取成功，共 {len(df)} 条"</span>)  <span class="comment"># 打印来源，方便排错</span>
+            <span class="keyword">return</span> df  <span class="comment"># return：把表格返回给调用这个函数的地方</span>
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:  <span class="comment"># 如果上面 try 里报错了，就跳到这一行</span>
+        <span class="keyword">print</span>(<span class="string">f"[数据源] akshare 不可用（{type(e).__name__}），尝试 baostock..."</span>)
+        <span class="comment"># type(e).__name__：把错误类型变成名字打印出来，方便知道错在哪</span>
+  </div>
+
+  <h3><i class="fas fa-database"></i> 数据源 2：baostock（稳定，数据截至上一个交易日）</h3>
+  <div class="code-block">
+    <span class="comment"># ---- 数据源 2：baostock（稳定，数据截至上一个交易日）----</span>
+    <span class="keyword">try</span>:
+        <span class="comment"># baostock 的股票代码带市场前缀：6 开头是上海（sh），其他是深圳（sz）</span>
+        bs_code = (<span class="string">"sh."</span> <span class="keyword">if</span> symbol.startswith(<span class="string">"6"</span>) <span class="keyword">else</span> <span class="string">"sz."</span>) + symbol
+        bs.login()  <span class="comment"># baostock 要先登录（免费的，不用注册密码）</span>
+        rs = bs.query_history_k_data_plus(  <span class="comment"># 查询历史日线</span>
+            bs_code,  <span class="comment"># 带前缀的股票代码</span>
+            <span class="string">"date,open,high,low,close,volume"</span>,  <span class="comment"># 要哪些字段</span>
+            start_date=start_dash,  <span class="comment"># 开始日期（带横杠格式）</span>
+            end_date=end_dash,  <span class="comment"># 结束日期</span>
+            frequency=<span class="string">"d"</span>,  <span class="comment"># 频率：d = 日线</span>
+            adjustflag=<span class="string">"2"</span>,  <span class="comment"># 2 = 前复权</span>
+        )
+        rows = []  <span class="comment"># 建一个空列表，准备装每一行数据</span>
+        <span class="keyword">while</span> rs.error_code == <span class="string">"0"</span> <span class="keyword">and</span> rs.next():  <span class="comment"># 循环：一页一页拿数据</span>
+            rows.append(rs.get_row_data())  <span class="comment"># 把这一行装进列表</span>
+        bs.logout()  <span class="comment"># 用完退出登录</span>
+        <span class="keyword">if</span> rows:  <span class="comment"># 如果确实拿到了数据</span>
+            <span class="comment"># 把列表变成表格，并指定列名</span>
+            df = pd.DataFrame(rows, columns=[<span class="string">"date"</span>, <span class="string">"open"</span>, <span class="string">"high"</span>, <span class="string">"low"</span>, <span class="string">"close"</span>, <span class="string">"volume"</span>])
+            <span class="keyword">for</span> c <span class="keyword">in</span> (<span class="string">"open"</span>, <span class="string">"high"</span>, <span class="string">"low"</span>, <span class="string">"close"</span>, <span class="string">"volume"</span>):  <span class="comment"># 遍历这 5 个价格列</span>
+                df[c] = pd.to_numeric(df[c])  <span class="comment"># 字符串转成数字</span>
+            df[<span class="string">"date"</span>] = pd.to_datetime(df[<span class="string">"date"</span>])  <span class="comment"># 日期列转成时间格式</span>
+            df = df.set_index(<span class="string">"date"</span>)  <span class="comment"># 日期设为索引</span>
+            <span class="keyword">print</span>(<span class="string">f"[数据源] baostock 获取成功，共 {len(df)} 条"</span>)
+            <span class="keyword">return</span> df  <span class="comment"># 返回表格</span>
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        <span class="keyword">print</span>(<span class="string">f"[数据源] baostock 不可用（{type(e).__name__}），尝试腾讯..."</span>)
+  </div>
+
+  <h3><i class="fas fa-database"></i> 数据源 3：腾讯 ifzq（前复权，最多 1000 条）</h3>
+  <div class="code-block">
+    <span class="comment"># ---- 数据源 3：腾讯 ifzq（前复权，最多 1000 条）----</span>
+    <span class="keyword">try</span>:
+        ten_code = (<span class="string">"sh"</span> <span class="keyword">if</span> symbol.startswith(<span class="string">"6"</span>) <span class="keyword">else</span> <span class="string">"sz"</span>) + symbol  <span class="comment"># 腾讯格式代码</span>
+        url = <span class="string">"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get"</span>  <span class="comment"># 腾讯 K 线接口</span>
+        r = requests.get(url, params={<span class="string">"param"</span>: <span class="string">f"{ten_code},day,,,1000,qfq"</span>}, timeout=15)
+        <span class="comment"># requests.get：向接口发请求；params：接口要的参数；timeout：最多等 15 秒</span>
+        kline = r.json()[<span class="string">"data"</span>][ten_code]  <span class="comment"># 把返回的 JSON 数据取出来</span>
+        key = <span class="string">"qfqday"</span> <span class="keyword">if</span> <span class="string">"qfqday"</span> <span class="keyword">in</span> kline <span class="keyword">else</span> <span class="string">"day"</span>  <span class="comment"># 有前复权数据就用它</span>
+        rows = kline[key]  <span class="comment"># 取出行情列表</span>
+        <span class="comment"># 注意：腾讯返回的顺序是 日期/开盘/收盘/最高/最低/成交量</span>
+        df = pd.DataFrame(rows, columns=[<span class="string">"date"</span>, <span class="string">"open"</span>, <span class="string">"close"</span>, <span class="string">"high"</span>, <span class="string">"low"</span>, <span class="string">"volume"</span>])
+        <span class="keyword">for</span> c <span class="keyword">in</span> (<span class="string">"open"</span>, <span class="string">"close"</span>, <span class="string">"high"</span>, <span class="string">"low"</span>, <span class="string">"volume"</span>):  <span class="comment"># 5 列都转成数字</span>
+            df[c] = pd.to_numeric(df[c])
+        df[<span class="string">"date"</span>] = pd.to_datetime(df[<span class="string">"date"</span>])  <span class="comment"># 日期转时间格式</span>
+        df = df.set_index(<span class="string">"date"</span>)  <span class="comment"># 日期设为索引</span>
+        <span class="keyword">print</span>(<span class="string">f"[数据源] 腾讯 ifzq 获取成功，共 {len(df)} 条"</span>)
+        <span class="keyword">return</span> df  <span class="comment"># 返回表格</span>
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        <span class="keyword">print</span>(<span class="string">f"[数据源] 腾讯也不可用（{type(e).__name__}）"</span>)
+
+    <span class="comment"># 三个数据源都不行，主动报错提示检查网络</span>
+    <span class="keyword">raise</span> RuntimeError(<span class="string">"所有 A 股数据源都不可用，请检查网络"</span>)
+  </div>
+
+  <!-- 函数 2: get_kline_crypto -->
+  <h2><i class="fas fa-bitcoin-sign"></i> get_kline_crypto · 加密日线</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-shield-alt"></i> 
+    <strong>数据源自动兜底：</strong>ccxt + OKX → 币安公开行情。<br>
+    <i class="fas fa-tag"></i> 参数：<span class="inline-code">symbol</span>（默认 BTC/USDT）、<span class="inline-code">limit</span>（默认 1500）
+  </div>
+
+  <h3><i class="fas fa-file-code"></i> 函数定义与文档字符串</h3>
+  <div class="code-block">
+<span class="keyword">def</span> get_kline_crypto(symbol=<span class="string">"BTC/USDT"</span>, limit=1500):
+    <span class="string">"""
+    拉取加密市场日线，列名统一为 open/high/low/close/volume。
+    数据源自动兜底：ccxt + OKX（上期注册的交易所）-> 币安公开行情。
+    symbol 是交易对，默认 BTC/USDT。
+    """</span>
+    <span class="keyword">import</span> ccxt  <span class="comment"># ccxt：一个库连接几百家交易所（上期介绍过）</span>
+    <span class="keyword">import</span> requests  <span class="comment"># requests：访问网络接口</span>
+  </div>
+
+  <h3><i class="fas fa-database"></i> 数据源 1：ccxt + OKX（上期注册的 API，可选）</h3>
+  <div class="code-block">
+    <span class="comment"># ---- 数据源 1：ccxt + OKX（上期注册的 API，可选）----</span>
+    <span class="keyword">try</span>:
+        <span class="comment"># 如果 .env 里配了 Key（okx_setup.py 教过），就带上 Key 连接</span>
+        <span class="keyword">import</span> os  <span class="comment"># os：读取系统设置（环境变量）</span>
+        api_key = os.getenv(<span class="string">"OKX_API_KEY"</span>, <span class="string">""</span>).strip()  <span class="comment"># 读 API Key（没有就是空）</span>
+        secret = os.getenv(<span class="string">"OKX_SECRET"</span>, <span class="string">""</span>).strip()  <span class="comment"># 读 Secret</span>
+        password = os.getenv(<span class="string">"OKX_PASSWORD"</span>, <span class="string">""</span>).strip()  <span class="comment"># 读密码短语</span>
+        <span class="comment"># 构造 OKX 连接对象；三个值都有才带上 Key，否则就是匿名访问</span>
+        <span class="keyword">if</span> api_key <span class="keyword">and</span> secret <span class="keyword">and</span> password:  <span class="comment"># 三个都填了</span>
+            ex = ccxt.okx({<span class="string">"apiKey"</span>: api_key, <span class="string">"secret"</span>: secret,
+                           <span class="string">"password"</span>: password, <span class="string">"enableRateLimit"</span>: <span class="keyword">True</span>,
+                           <span class="string">"timeout"</span>: 30000})
+        <span class="keyword">else</span>:  <span class="comment"># 没填 Key</span>
+            ex = ccxt.okx({<span class="string">"enableRateLimit"</span>: <span class="keyword">True</span>, <span class="string">"timeout"</span>: 30000})
+        <span class="comment"># enableRateLimit：自动控制请求频率，防止被限流</span>
+        proxy = os.getenv(<span class="string">"OKX_PROXY"</span>, <span class="string">""</span>).strip()  <span class="comment"># 可选的代理地址</span>
+        <span class="keyword">if</span> proxy:  <span class="comment"># 如果配了代理</span>
+            ex.proxies = {<span class="string">"http"</span>: proxy, <span class="string">"https"</span>: proxy}  <span class="comment"># 走代理访问</span>
+        bars = ex.fetch_ohlcv(symbol, <span class="string">"1d"</span>, limit=limit)  <span class="comment"># 拉日线（1d=一天一根）</span>
+        <span class="keyword">if</span> bars:  <span class="comment"># 拿到了数据</span>
+            <span class="comment"># fetch_ohlcv 返回的是列表套列表，转成表格</span>
+            df = pd.DataFrame(bars, columns=[<span class="string">"ts"</span>, <span class="string">"open"</span>, <span class="string">"high"</span>, <span class="string">"low"</span>, <span class="string">"close"</span>, <span class="string">"volume"</span>])
+            df[<span class="string">"date"</span>] = pd.to_datetime(df[<span class="string">"ts"</span>], unit=<span class="string">"ms"</span>)  <span class="comment"># 毫秒时间戳转日期</span>
+            df = df.set_index(<span class="string">"date"</span>)  <span class="comment"># 日期设为索引</span>
+            df = df.drop(columns=[<span class="string">"ts"</span>])  <span class="comment"># 把原始时间戳列删掉</span>
+            <span class="keyword">print</span>(<span class="string">f"[数据源] OKX(ccxt) 获取成功，共 {len(df)} 条"</span>)
+            <span class="keyword">return</span> df  <span class="comment"># 返回表格</span>
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        <span class="keyword">print</span>(<span class="string">f"[数据源] OKX 不可用（{type(e).__name__}），尝试币安公开行情..."</span>)
+  </div>
+
+  <h3><i class="fas fa-database"></i> 数据源 2：币安公开行情（无需注册，直连稳定）</h3>
+  <div class="code-block">
+    <span class="comment"># ---- 数据源 2：币安公开行情（无需注册，直连稳定）----</span>
+    <span class="keyword">try</span>:
+        base = symbol.replace(<span class="string">"/"</span>, <span class="string">""</span>)  <span class="comment"># "BTC/USDT" 去掉斜杠变成 "BTCUSDT"</span>
+        url = <span class="string">"https://data-api.binance.vision/api/v3/klines"</span>  <span class="comment"># 币安公开行情接口</span>
+        r = requests.get(url, params={<span class="string">"symbol"</span>: base, <span class="string">"interval"</span>: <span class="string">"1d"</span>, <span class="string">"limit"</span>: limit},
+                         timeout=20)
+        bars = r.json()  <span class="comment"># 解析返回的 JSON</span>
+        <span class="keyword">if</span> isinstance(bars, list) <span class="keyword">and</span> bars:  <span class="comment"># isinstance：判断是不是列表且非空</span>
+            <span class="comment"># 币安返回 12 列，我们只取前 6 列（时间/开/高/低/收/量）</span>
+            df = pd.DataFrame(bars, columns=[
+                <span class="string">"ts"</span>, <span class="string">"open"</span>, <span class="string">"high"</span>, <span class="string">"low"</span>, <span class="string">"close"</span>, <span class="string">"volume"</span>,
+                <span class="string">"close_ts"</span>, <span class="string">"quote_vol"</span>, <span class="string">"n"</span>, <span class="string">"taker_buy"</span>, <span class="string">"taker_buy_quote"</span>, <span class="string">"ignore"</span>,
+            ])
+            df = df[[<span class="string">"ts"</span>, <span class="string">"open"</span>, <span class="string">"high"</span>, <span class="string">"low"</span>, <span class="string">"close"</span>, <span class="string">"volume"</span>]]  <span class="comment"># 只留需要的列</span>
+            <span class="keyword">for</span> c <span class="keyword">in</span> (<span class="string">"open"</span>, <span class="string">"high"</span>, <span class="string">"low"</span>, <span class="string">"close"</span>, <span class="string">"volume"</span>):  <span class="comment"># 价格列转数字</span>
+                df[c] = pd.to_numeric(df[c])
+            df[<span class="string">"date"</span>] = pd.to_datetime(df[<span class="string">"ts"</span>], unit=<span class="string">"ms"</span>)  <span class="comment"># 时间戳转日期</span>
+            df = df.set_index(<span class="string">"date"</span>)  <span class="comment"># 日期设为索引</span>
+            df = df.drop(columns=[<span class="string">"ts"</span>])  <span class="comment"># 删掉时间戳列</span>
+            <span class="keyword">print</span>(<span class="string">f"[数据源] 币安公开行情 获取成功，共 {len(df)} 条"</span>)
+            <span class="keyword">return</span> df  <span class="comment"># 返回表格</span>
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        <span class="keyword">print</span>(<span class="string">f"[数据源] 币安也不可用（{type(e).__name__}）"</span>)
+
+    <span class="keyword">raise</span> RuntimeError(<span class="string">"所有加密数据源都不可用，请检查网络"</span>)
+  </div>
+
+  <!-- 函数速览 -->
+  <h2><i class="fas fa-list-check"></i> 函数速览</h2>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-chart-line"></i> <strong>get_kline</strong> · A股日线（三源兜底）</div>
+    <div class="grid-item"><i class="fas fa-bitcoin-sign"></i> <strong>get_kline_crypto</strong> · 加密日线（双源兜底）</div>
+    <div class="grid-item"><i class="fas fa-columns"></i> 列名统一：open/high/low/close/volume</div>
+    <div class="grid-item"><i class="fas fa-calendar"></i> 索引统一：date（datetime）</div>
+    <div class="grid-item"><i class="fas fa-shield-halved"></i> 自动兜底：谁通就用谁</div>
+    <div class="grid-item"><i class="fas fa-plug"></i> 支持代理：OKX_PROXY 环境变量</div>
+  </div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>quant_data · 数据工具箱 · A股 / 加密</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 精简笔记</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>

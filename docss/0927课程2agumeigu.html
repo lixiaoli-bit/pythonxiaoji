@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>免费数据源全景 · 演示 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.6rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      font-weight: 500;
+      margin-top: 1.8rem;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.35rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.08rem;
+      font-weight: 500;
+      margin-top: 1.2rem;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.1rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 0.9rem 1.1rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.83rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.5rem 0 1rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.55;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .string {
+      color: #a3e4a1;
+    }
+
+    .code-block .keyword {
+      color: #f1c40f;
+    }
+
+    .code-block .number {
+      color: #f5b78a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: #1f4d3a;
+      white-space: nowrap;
+    }
+
+    .tag.orange {
+      background: rgba(180, 100, 30, 0.12);
+      color: #9a5518;
+    }
+
+    ul, ol {
+      margin: 0.3rem 0 0.5rem 1.2rem;
+      line-height: 1.65;
+    }
+
+    li {
+      margin-bottom: 0.15rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.5rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.8rem 1.1rem;
+      margin: 0.8rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+      line-height: 1.6;
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    /* 卡片网格布局 */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem 1rem;
+      margin: 0.5rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.6rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      font-size: 1.1rem;
+      width: 1.5rem;
+      text-align: center;
+    }
+
+    hr {
+      margin: 1.5rem 0 0.8rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 1.6rem;
+      text-align: right;
+      font-size: 0.82rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .meta-note {
+      font-size: 0.78rem;
+      color: #3d6b4c;
+      margin-top: 0.2rem;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-note i {
+      color: #2e7d5e;
+    }
+
+    /* 紧凑样式微调 */
+    .compact-p {
+      margin: 0.3rem 0 0.5rem 0;
+      line-height: 1.6;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.72rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.25rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.1rem; width: 1.6rem; }
+      h3 { font-size: 0.98rem; }
+      .code-block { font-size: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 14px; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.4rem; }
+      .inline-code { font-size: 0.75rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.3rem; }
+      .footer-note { font-size: 0.72rem; justify-content: center; }
+      .grid-item { font-size: 0.82rem; padding: 0.5rem 0.8rem; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.7rem; padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-database"></i> 
+    免费数据源全景
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-09-27</span>
+  </h1>
+
+  <!-- 运行方式 & 依赖 -->
+  <div class="highlight-box" style="margin-top: 0.2rem;">
+    <i class="fas fa-play-circle"></i> 
+    <strong>运行方式：</strong>激活 quant 环境后 <span class="inline-code">python 02_免费数据源全景.py</span><br>
+    <i class="fas fa-download" style="margin-top: 0.3rem;"></i> 
+    <strong>依赖安装：</strong><span class="inline-code">pip install baostock yfinance pandas-datareader</span><br>
+    <i class="fas fa-info-circle"></i> 
+    A股 / 美股 / 宏观 三段可独立运行；akshare、tushare 见文末注释（可按需启用）
+  </div>
+
+  <!-- ① A股：baostock -->
+  <h2><i class="fas fa-chart-line"></i> ① A股 · baostock <span style="font-size:0.8rem; font-weight:400; color:#3d6b4c; margin-left:0.5rem;">全免费 · 免注册 · 入门首选</span></h2>
+  <div class="meta-note">
+    <i class="fas fa-tag"></i> 股票代码：<span class="inline-code">sh.600000</span> 浦发银行
+    <span class="tag" style="margin-left:0.3rem;">前复权 adjustflag=2</span>
+  </div>
+  <div class="code-block">
+<span class="comment"># ① A股：baostock（全免费、免注册，入门首选）</span>
+<span class="keyword">import</span> baostock <span class="keyword">as</span> bs
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+bs.login()  <span class="comment"># 免费登录（无需账号密码），不登录拿不到数据</span>
+
+rs = bs.query_history_k_data_plus(
+    <span class="string">"sh.600000"</span>,                       <span class="comment"># 股票代码：sh=上交所、sz=深交所、bj=北交所</span>
+    <span class="string">"date,open,high,low,close,volume"</span>, <span class="comment"># 要哪些字段</span>
+    start_date=<span class="string">'2026-08-01'</span>,           <span class="comment"># 开始日期</span>
+    end_date=<span class="string">'2026-08-07'</span>,             <span class="comment"># 结束日期</span>
+    frequency=<span class="string">"d"</span>,                     <span class="comment"># d=日线，w=周线，m=月线，5/15/30/60=分钟线</span>
+    adjustflag=<span class="string">"2"</span>)  <span class="comment"># 2=前复权</span>
+
+rows = []
+<span class="keyword">while</span> (rs.error_code == <span class="string">'0'</span>) & rs.next():
+    rows.append(rs.get_row_data())
+df = pd.DataFrame(rows, columns=rs.fields)
+<span class="keyword">print</span>(df.head())                            <span class="comment"># 打印前 5 行看看</span>
+bs.logout()                                 <span class="comment"># 退出登录，养成好习惯</span>
+  </div>
+  <div class="highlight-box" style="padding:0.5rem 1rem; margin-top:0.2rem;">
+    <i class="fas fa-lightbulb"></i> 支持日线/周线/分钟线，前复权通过 <span class="inline-code">adjustflag="2"</span> 设置。
+  </div>
+
+  <!-- ② 美股：yfinance -->
+  <h2><i class="fas fa-globe-americas"></i> ② 美股 · yfinance <span style="font-size:0.8rem; font-weight:400; color:#3d6b4c; margin-left:0.5rem;">免费 · 免key · 雅虎数据</span></h2>
+  <div class="meta-note">
+    <i class="fas fa-tag"></i> 标的：<span class="inline-code">AAPL</span> 苹果 · 可换 <span class="inline-code">MSFT</span> / <span class="inline-code">TSLA</span>
+  </div>
+  <div class="code-block">
+<span class="comment"># ② 美股：yfinance（免费、免 key，雅虎数据）</span>
+<span class="keyword">import</span> yfinance <span class="keyword">as</span> yf
+
+df_us = yf.download(<span class="string">'AAPL'</span>, start=<span class="string">'2026-01-01'</span>, end=<span class="string">'2026-08-07'</span>)
+<span class="comment"># 'AAPL' 是苹果；换成 'MSFT'（微软）'TSLA'（特斯拉）都可以</span>
+<span class="keyword">print</span>(df_us.head())
+  </div>
+  <div class="highlight-box" style="padding:0.5rem 1rem; margin-top:0.2rem;">
+    <i class="fas fa-bolt"></i> 无需注册，直接调用，全球指数、个股、外汇均可获取。
+  </div>
+
+  <!-- ③ 宏观：FRED -->
+  <h2><i class="fas fa-landmark"></i> ③ 宏观 · FRED <span style="font-size:0.8rem; font-weight:400; color:#3d6b4c; margin-left:0.5rem;">美联储官方 · 需免费注册key</span></h2>
+  <div class="meta-note">
+    <i class="fas fa-key"></i> API Key: <span class="inline-code">83650e2c4f4bcaca3cc015e48cf26d8d</span>
+    <span class="tag orange" style="margin-left:0.3rem;">免费注册</span>
+  </div>
+  <div class="code-block">
+<span class="comment"># ③ 宏观：FRED（美联储官方数据，需免费注册一个 key）</span>
+<span class="comment"># 去 https://fred.stlouisfed.org 免费注册，申请 API key 后填到下面</span>
+FRED_KEY = <span class="string">'83650e2c4f4bcaca3cc015e48cf26d8d'</span>
+
+<span class="keyword">import</span> pandas_datareader.data <span class="keyword">as</span> web
+df_macro = web.DataReader(<span class="string">'GDP'</span>, <span class="string">'fred'</span>, start=<span class="string">'2020-01-01'</span>, api_key=FRED_KEY)
+<span class="comment"># 'GDP' 是国内生产总值；还可换 'UNRATE'（失业率）、'CPIAUCSL'（CPI）</span>
+<span class="keyword">print</span>(df_macro.head())
+  </div>
+  <div class="highlight-box" style="padding:0.5rem 1rem; margin-top:0.2rem;">
+    <i class="fas fa-chart-simple"></i> 常用指标：GDP、UNRATE（失业率）、CPIAUCSL（CPI）。
+  </div>
+
+  <!-- ④ A股进阶：akshare -->
+  <h2><i class="fas fa-cubes"></i> ④ A股进阶 · akshare <span style="font-size:0.8rem; font-weight:400; color:#3d6b4c; margin-left:0.5rem;">接口超全 · 免费免注册</span></h2>
+  <div class="meta-note">
+    <i class="fas fa-tag"></i> 安装：<span class="inline-code">pip install akshare</span>
+    <span class="tag" style="margin-left:0.3rem;">包大 · 接口偶尔变动</span>
+  </div>
+  <div class="code-block">
+<span class="comment"># ④ A股进阶：akshare（接口超全、免费免注册；包大、接口偶尔变动）</span>
+<span class="comment"># 安装：pip install akshare</span>
+<span class="keyword">import</span> akshare <span class="keyword">as</span> ak
+df = ak.stock_zh_a_hist(symbol=<span class="string">"000001"</span>, period=<span class="string">"daily"</span>,
+                        start_date=<span class="string">"20240101"</span>, end_date=<span class="string">"20241231"</span>, adjust=<span class="string">"qfq"</span>)
+<span class="comment"># symbol 不带交易所前缀；adjust="qfq" 是前复权。接口以官方文档为准。</span>
+  </div>
+
+  <!-- ⑤ A股专业向：tushare -->
+  <h2><i class="fas fa-microchip"></i> ⑤ A股专业向 · tushare <span style="font-size:0.8rem; font-weight:400; color:#3d6b4c; margin-left:0.5rem;">接口最全最专业 · 需注册+积分</span></h2>
+  <div class="meta-note">
+    <i class="fas fa-tag"></i> 安装：<span class="inline-code">pip install tushare</span>
+    <span class="tag orange" style="margin-left:0.3rem;">需token</span>
+  </div>
+  <div class="code-block">
+<span class="comment"># ⑤ A股专业向：tushare（接口最全最专业，但要注册+积分）</span>
+<span class="comment"># 安装：pip install tushare</span>
+<span class="keyword">import</span> tushare <span class="keyword">as</span> ts
+pro = ts.pro_api(<span class="string">'你的token'</span>)           <span class="comment"># 官网注册后拿 token</span>
+df = pro.daily(ts_code=<span class="string">'000001.SZ'</span>, start_date=<span class="string">'20240101'</span>, end_date=<span class="string">'20241231'</span>)
+  </div>
+
+  <!-- 数据源对比小卡片 -->
+  <h2><i class="fas fa-table"></i> 数据源速览</h2>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-chart-line"></i> baostock · A股免费免注册</div>
+    <div class="grid-item"><i class="fas fa-globe-americas"></i> yfinance · 美股免费免key</div>
+    <div class="grid-item"><i class="fas fa-landmark"></i> FRED · 宏观需免费key</div>
+    <div class="grid-item"><i class="fas fa-cubes"></i> akshare · A股接口超全</div>
+    <div class="grid-item"><i class="fas fa-microchip"></i> tushare · 专业向积分制</div>
+    <div class="grid-item"><i class="fas fa-check-circle"></i> 所有数据源均有免费方案</div>
+  </div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>免费数据源 · A股 / 美股 / 宏观 · 课程4-02</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 精简笔记</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>
