@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>pitfalls · 回测两大坑 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .code-block .string {
+      color: #a3e4a1;
+    }
+
+    .code-block .keyword {
+      color: #f1c40f;
+    }
+
+    .code-block .number {
+      color: #f5b78a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    /* 绿色系高亮框 */
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    /* 橙色警告框 */
+    .highlight-box.orange-warn {
+      background: rgba(220, 120, 60, 0.08);
+      border-left-color: #b45f1b;
+      color: #7a3d10;
+    }
+
+    .highlight-box.orange-warn i {
+      color: #b45f1b;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 参数卡片 */
+    .param-card {
+      background: white;
+      border-radius: 18px;
+      padding: 0.8rem 1.2rem;
+      margin: 0.4rem 0;
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .param-card i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+      text-align: center;
+    }
+
+    .param-card .param-name {
+      font-weight: 600;
+      color: #1f3a2b;
+      min-width: 80px;
+    }
+
+    .param-card .param-value {
+      font-family: 'JetBrains Mono', monospace;
+      background: #eaf0e6;
+      padding: 0.15rem 0.7rem;
+      border-radius: 20px;
+      color: #1f4d3a;
+      font-size: 0.85rem;
+      border: 1px solid #c6dac6;
+    }
+
+    .param-card .param-desc {
+      color: #5b7e6b;
+      font-size: 0.85rem;
+    }
+
+    /* 运行输出终端样式 */
+    .terminal-output {
+      background: #0a1620;
+      border-radius: 18px;
+      padding: 1.2rem 1.3rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: #b8d4e3;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: inset 0 2px 12px rgba(0,0,0,0.5), 0 8px 20px -8px rgba(0, 30, 40, 0.3);
+      border: 1px solid #1f3a4a;
+      margin: 0.6rem 0 0.4rem 0;
+    }
+
+    .terminal-output .prompt {
+      color: #6fcf97;
+      font-weight: 600;
+    }
+
+    .terminal-output .info {
+      color: #82c9ff;
+    }
+
+    .terminal-output .warn {
+      color: #f5b78a;
+    }
+
+    .terminal-output .table-head {
+      color: #a3e4a1;
+      font-weight: 500;
+    }
+
+    .terminal-output .highlight {
+      color: #f1c40f;
+      font-weight: 500;
+    }
+
+    .terminal-output .success {
+      color: #6fcf97;
+      font-weight: 500;
+    }
+
+    .terminal-output .danger {
+      color: #f77f7f;
+      font-weight: 500;
+    }
+
+    .terminal-output .dim {
+      color: #5e7d8f;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .terminal-output { font-size: 0.7rem; padding: 0.9rem 0.9rem; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+      .param-card { padding: 0.6rem 0.9rem; }
+      .param-card .param-name { min-width: 60px; font-size: 0.85rem; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+      .terminal-output { font-size: 0.65rem; padding: 0.7rem 0.7rem; }
+      .param-card { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-triangle-exclamation"></i> 
+    pitfalls · 回测两大坑
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-09-28</span>
+  </h1>
+
+  <!-- 概述 -->
+  <div class="highlight-box" style="margin-top: 0.2rem;">
+    <i class="fas fa-list-check"></i> 
+    <strong>内容：</strong><br>
+    <i class="fas fa-clock-rotate-left"></i> <strong>坑一：未来函数</strong>（用了当时根本不可能知道的信息）<br>
+    <i class="fas fa-coins"></i> <strong>坑二：交易成本</strong>（手续费 / 印花税 / 滑点）<br>
+    <i class="fas fa-terminal" style="margin-top: 0.3rem;"></i> 
+    用法：在终端运行 <span class="inline-code">python pitfalls.py</span>
+  </div>
+
+  <!-- 警告 -->
+  <div class="highlight-box orange-warn">
+    <i class="fas fa-exclamation-triangle"></i> 
+    <strong>本脚本为教学演示，不构成投资建议</strong>
+  </div>
+
+  <!-- 导入 -->
+  <h2><i class="fas fa-box-open"></i> 导入</h2>
+  <div class="code-block">
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime            <span class="comment"># 从 datetime 模块导入 datetime 类（上期学过：处理时间）</span>
+<span class="keyword">from</span> quant_data <span class="keyword">import</span> get_kline         <span class="comment"># 从数据工具箱导入 get_kline（上期写的：负责拉行情）</span>
+<span class="keyword">from</span> metrics <span class="keyword">import</span> make_signals         <span class="comment"># 从指标工具箱导入 make_signals（本期的：负责算信号）</span>
+  </div>
+
+  <!-- 参数区 -->
+  <h2><i class="fas fa-sliders-h"></i> 参数区 · 三个"假设值"</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>三个假设值都可以改</strong>，改完重新运行看差别。
+  </div>
+  <div class="param-card">
+    <i class="fas fa-arrow-trend-up"></i>
+    <span class="param-name">滑点率</span>
+    <span class="param-value">0.001</span>
+    <span class="param-desc">你想买，实际成交价比预期贵一点；假设千分之一（0.1%）</span>
+  </div>
+  <div class="param-card">
+    <i class="fas fa-hand-holding-dollar"></i>
+    <span class="param-name">手续费率</span>
+    <span class="param-value">0.0003</span>
+    <span class="param-desc">佣金：券商收的，买卖各收一次；假设万分之三（0.03%）</span>
+  </div>
+  <div class="param-card">
+    <i class="fas fa-file-invoice-dollar"></i>
+    <span class="param-name">印花税率</span>
+    <span class="param-value">0.0005</span>
+    <span class="param-desc">印花税：卖出时单边收；假设万分之五（0.05%）</span>
+  </div>
+
+  <div class="code-block" style="margin-top: 0.8rem;">
+<span class="comment"># ============================================================</span>
+<span class="comment"># 参数区：三个"假设值"，都可以改，改完重新运行看差别</span>
+<span class="comment"># ============================================================</span>
+滑点率 = 0.001      <span class="comment"># 滑点：你想买，实际成交价比预期贵一点；这里假设千分之一（0.1%）</span>
+手续费率 = 0.0003   <span class="comment"># 佣金：券商收的，买卖各收一次；这里假设万分之三（0.03%）</span>
+印花税率 = 0.0005   <span class="comment"># 印花税：卖出时单边收；这里假设万分之五（0.05%）</span>
+  </div>
+
+  <!-- ① 拉数据 -->
+  <h2><i class="fas fa-download"></i> ① 拉数据</h2>
+  <div class="code-block">
+<span class="comment"># ============================================================</span>
+<span class="comment"># ① 拉数据：结束日期用 datetime.now() </span>
+<span class="comment"># ============================================================</span>
+df = get_kline(                                        <span class="comment"># 调用数据工具箱，拿 A 股日线</span>
+    symbol=<span class="string">"600519"</span>,                                   <span class="comment"># 标的代码：贵州茅台（你可以换成任意一只）</span>
+    start_date=<span class="string">"20230101"</span>,                             <span class="comment"># 开始日期</span>
+    end_date=datetime.now().strftime(<span class="string">"%Y%m%d"</span>),         <span class="comment"># 结束日期 = 今天（strftime：把时间变成文字）</span>
+)
+df[<span class="string">"收益率"</span>] = df[<span class="string">"close"</span>].pct_change()                 <span class="comment"># 新增列"收益率"：今天比昨天涨跌百分之几</span>
+df = make_signals(df)                                  <span class="comment"># 调用指标工具箱，把信号列算出来</span>
+  </div>
+
+  <!-- ② 坑一：未来函数 -->
+  <h2><i class="fas fa-clock-rotate-left"></i> ② 坑一：未来函数</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>两种"成交假设"对比：</strong><br>
+    <i class="fas fa-xmark" style="color:#b45f1b;"></i> 作弊版：今天的信号 × 今天的收益<br>
+    <i class="fas fa-check" style="color:#2e7d5e;"></i> 正确版：昨天的信号 × 今天的收益（<span class="inline-code">shift(1)</span>）
+  </div>
+  <div class="code-block">
+<span class="comment"># ============================================================</span>
+<span class="comment"># ② 坑一：未来函数 —— 两种"成交假设"对比</span>
+<span class="comment"># ============================================================</span>
+<span class="comment"># 【作弊版】今天的信号 × 今天的收益</span>
+df[<span class="string">"持仓_作弊"</span>] = df[<span class="string">"signal"</span>]                          <span class="comment"># 直接把今天的信号当成今天的持仓</span>
+
+<span class="comment"># 【正确版】昨天的信号 × 今天的收益</span>
+df[<span class="string">"持仓_正确"</span>] = df[<span class="string">"signal"</span>].shift(1).fillna(0)       <span class="comment"># .shift(1)：整列往下挪一行</span>
+
+df[<span class="string">"收益_作弊"</span>] = df[<span class="string">"持仓_作弊"</span>] * df[<span class="string">"收益率"</span>]         <span class="comment"># 作弊版每天的收益 = 持仓 × 当日涨跌</span>
+df[<span class="string">"收益_正确"</span>] = df[<span class="string">"持仓_正确"</span>] * df[<span class="string">"收益率"</span>]         <span class="comment"># 正确版每天的收益 = 持仓 × 当日涨跌</span>
+
+<span class="comment"># .cumprod()：把每天的 (1 + 当日收益) 依次累乘 —— 就是"1 块钱一天天滚下去变成多少"</span>
+净值_作弊 = (1 + df[<span class="string">"收益_作弊"</span>].fillna(0)).cumprod()    <span class="comment"># fillna(0)：第一天没有收益，空值填 0</span>
+净值_正确 = (1 + df[<span class="string">"收益_正确"</span>].fillna(0)).cumprod()
+
+<span class="keyword">print</span>(<span class="string">"\n===== 坑一：未来函数（同一份数据，两种成交假设）====="</span>)
+<span class="keyword">print</span>(<span class="string">f"作弊版（今天的信号赚今天的收益）累计收益：{(净值_作弊.iloc[-1] - 1) * 100:.2f}%"</span>)
+<span class="keyword">print</span>(<span class="string">f"正确版（昨天的信号赚今天的收益）累计收益：{(净值_正确.iloc[-1] - 1) * 100:.2f}%"</span>)
+<span class="comment"># .iloc[-1]：按位置取最后一行（期末净值），-1 表示倒数第一个</span>
+<span class="comment"># 冒号后的 .2f：把数字保留两位小数显示</span>
+  </div>
+
+  <!-- ③ 坑二：交易成本 -->
+  <h2><i class="fas fa-coins"></i> ③ 坑二：交易成本</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>买一次：</strong>滑点（买贵了）+ 手续费（佣金）<br>
+    <strong>卖一次：</strong>滑点（卖便宜了）+ 手续费 + 印花税
+  </div>
+  <div class="code-block">
+<span class="comment"># ============================================================</span>
+<span class="comment"># ③ 坑二：交易成本 —— 有成本 vs 没成本</span>
+<span class="comment"># ============================================================</span>
+<span class="comment"># 买一次要摊上：滑点（买贵了）+ 手续费（佣金）</span>
+买入成本比例 = (1 + 滑点率) * (1 + 手续费率) - 1              <span class="comment"># 买入这一下大概扣掉百分之几</span>
+
+<span class="comment"># 卖一次要摊上：滑点（卖便宜了）+ 手续费 + 印花税</span>
+卖出成本比例 = 1 - (1 - 滑点率) * (1 - 手续费率 - 印花税率)    <span class="comment"># 卖出这一下大概扣掉百分之几</span>
+
+df[<span class="string">"成本"</span>] = 0.0                                            <span class="comment"># 新增列"成本"，初始全为 0</span>
+
+df.loc[df[<span class="string">"signal_change"</span>] == 1, <span class="string">"成本"</span>] = 买入成本比例       <span class="comment"># 金叉那天（要买入）记上买入成本</span>
+df.loc[df[<span class="string">"signal_change"</span>] == -1, <span class="string">"成本"</span>] = 卖出成本比例      <span class="comment"># 死叉那天（要卖出）记上卖出成本</span>
+
+<span class="keyword">if</span> df[<span class="string">"signal_change"</span>].iloc[-1] == 1:                        <span class="comment"># 最后一天是金叉</span>
+    df.loc[df.index[-1], <span class="string">"成本"</span>] = 0.0                        <span class="comment"># 把最后一天的成本改回 0</span>
+
+df[<span class="string">"收益_含成本"</span>] = df[<span class="string">"收益_正确"</span>] - df[<span class="string">"成本"</span>]              <span class="comment"># 含成本的每日收益</span>
+净值_无成本 = 净值_正确                                      <span class="comment"># 不算成本的净值（上面已算好，直接用）</span>
+净值_有成本 = (1 + df[<span class="string">"收益_含成本"</span>].fillna(0)).cumprod()     <span class="comment"># 算了成本的净值</span>
+
+<span class="keyword">print</span>(<span class="string">"\n===== 坑二：交易成本（滑点 0.1% / 佣金 0.03% / 印花税 0.05%）====="</span>)
+<span class="keyword">print</span>(<span class="string">f"不算成本：累计收益 {(净值_无成本.iloc[-1] - 1) * 100:.2f}%"</span>)
+<span class="keyword">print</span>(<span class="string">f"算了成本：累计收益 {(净值_有成本.iloc[-1] - 1) * 100:.2f}%"</span>)
+差价 = (净值_无成本.iloc[-1] - 净值_有成本.iloc[-1]) * 100    <span class="comment"># 两条曲线差了几个百分点</span>
+<span class="keyword">print</span>(<span class="string">f"被成本吃掉：{差价:.2f} 个百分点"</span>)                       <span class="comment"># 打印差距</span>
+交易次数 = len(df[df[<span class="string">"signal_change"</span>] != 0])                   <span class="comment"># len：数行数 = 动了几次手</span>
+<span class="keyword">print</span>(<span class="string">f"期间一共动了 {交易次数} 次（买一次卖一次算两次）"</span>)
+
+<span class="keyword">print</span>(<span class="string">"\n⚠️ 以上费率都是教学用的假设值，实盘以你的券商费率为准。"</span>)
+<span class="keyword">print</span>(<span class="string">"⚠️ 教学演示，不构成投资建议。"</span>)
+  </div>
+
+  <!-- 核心要点速览 -->
+  <h2><i class="fas fa-list-check"></i> 核心要点速览</h2>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-clock-rotate-left"></i> <strong>未来函数</strong>：用了当时不知道的信息</div>
+    <div class="grid-item"><i class="fas fa-coins"></i> <strong>交易成本</strong>：滑点 + 佣金 + 印花税</div>
+    <div class="grid-item"><i class="fas fa-shield-alt"></i> <strong>防未来函数</strong>：signal.shift(1)</div>
+    <div class="grid-item"><i class="fas fa-calculator"></i> <strong>买入成本</strong>：(1+滑点)×(1+佣金)-1</div>
+    <div class="grid-item"><i class="fas fa-calculator"></i> <strong>卖出成本</strong>：1-(1-滑点)×(1-佣金-印花税)</div>
+    <div class="grid-item"><i class="fas fa-chart-line"></i> <strong>净值曲线</strong>：(1+收益).cumprod()</div>
+    <div class="grid-item"><i class="fas fa-scale-balanced"></i> <strong>对比</strong>：作弊版 vs 正确版</div>
+    <div class="grid-item"><i class="fas fa-bullseye"></i> <strong>结论</strong>：成本会吃掉真金白银</div>
+  </div>
+
+  <!-- 金句 -->
+  <div class="highlight-box">
+    <i class="fas fa-bolt"></i> 金句：
+    <span class="inline-code">shift(1)</span> 防未来函数，
+    <span class="inline-code">cumprod()</span> 算净值曲线 ——
+    回测不排坑，实盘两行泪。
+  </div>
+
+  <!-- ========== 运行输出展示 ========== -->
+  <h2><i class="fas fa-terminal"></i> 运行输出 · <span class="inline-code" style="font-size:0.95rem;">python .\1.py</span></h2>
+  <div class="terminal-output">
+<span class="prompt">PS&gt;</span> python .\1.py
+<span class="warn">[数据源] akshare 不可用（ProxyError），尝试 baostock...</span>
+login success!
+logout success!
+<span class="success">[数据源] baostock 获取成功，共 179 条</span>
+
+<span class="table-head">===== 坑一：未来函数（同一份数据，两种成交假设）=====</span>
+作弊版（今天的信号赚今天的收益）累计收益：<span class="highlight">-2.59%</span>
+正确版（昨天的信号赚今天的收益）累计收益：<span class="danger">-5.82%</span>
+
+<span class="table-head">===== 坑二：交易成本（滑点 0.1% / 佣金 0.03% / 印花税 0.05%）=====</span>
+不算成本：累计收益 <span class="danger">-5.82%</span>
+算了成本：累计收益 <span class="danger">-7.27%</span>
+被成本吃掉：<span class="highlight">1.45 个百分点</span>
+期间一共动了 <span class="highlight">10 次</span>（买一次卖一次算两次）
+
+<span class="warn">⚠️ 以上费率都是教学用的假设值，实盘以你的券商费率为准。</span>
+<span class="warn">⚠️ 教学演示，不构成投资建议。</span>
+  </div>
+  <div class="highlight-box" style="margin-top: 0.6rem; padding: 0.6rem 1.2rem;">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>关键结论：</strong>作弊版 <strong>-2.59%</strong> vs 正确版 <strong>-5.82%</strong> —— 未来函数虚增了 3.23 个百分点；<br>
+    加成本后从 <strong>-5.82%</strong> 变成 <strong>-7.27%</strong>，被成本吃掉 <strong>1.45 个百分点</strong>；<br>
+    期间共交易 <strong>10 次</strong>（买 5 次 + 卖 5 次）。
+  </div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>pitfalls · 未来函数 · 交易成本 · 回测排坑</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 精简笔记</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>

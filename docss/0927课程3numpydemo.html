@@ -370,6 +370,7 @@
   <div class="highlight-box" style="margin-top: 0.2rem;">
     <i class="fas fa-list-check"></i> 
     <strong>内容：</strong><br>
+    <i class="fas fa-database"></i> 使用 NumPy的目的 / 科学计算库 /方便计算<br>
     <i class="fas fa-database"></i> 从 quant_data 导入"拉数据"函数，拿到茅台真实日线<br>
     <i class="fas fa-array"></i> 收盘价转成 numpy 数组<br>
     <i class="fas fa-bolt"></i> 日收益率：for 循环 vs 向量化，性能对比<br>
@@ -408,8 +409,9 @@
   <div class="code-block">
     <span class="comment"># ========== 2. 收盘价 -> numpy 数组 ==========</span>
     close = df[<span class="string">"close"</span>].to_numpy()
-    <span class="comment"># df["close"]：取出"收盘价"这一列（Series）</span>
-    <span class="comment"># .to_numpy()：把这一列转成 numpy 数组（发动机的"专用油"）</span>
+    <span class="comment"># df["close"]：取出"收盘价"这一列（Series）Series 除了数据，还带一套索引（index）、名字（name）等元信息</span>
+    <span class="comment"># .to_numpy()：把这一列转成 numpy 数组（发动机的"专用油"）原因：NumPy 数组不带索引，只存纯数据，方便计算</span>
+    <span class="comment"># close = df["close"].to_numpy() 就是把 close 这一列从带索引的 Series 变成纯数据的 NumPy 数组，方便做数组运算、传给科学计算库，也更快更省内存</span>
     <span class="keyword">print</span>(<span class="string">"\n收盘价数组（前 5 个）:"</span>, close[:5])  <span class="comment"># \n：换行</span>
     <span class="comment"># close[:5]：切片，取前 5 个元素（开头到第 5 个）</span>
     <span class="keyword">print</span>(<span class="string">"数组形状:"</span>, close.shape)
