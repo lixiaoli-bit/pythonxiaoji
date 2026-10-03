@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>单只股票 · 历史K线数据 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-chart-candlestick"></i> 
+    单只股票 · 历史K线数据
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-10-02</span>
+  </h1>
+
+  <!-- 简介 -->
+  <div class="highlight-box" style="margin-bottom: 1.8rem;">
+    <i class="fas fa-quote-left"></i>
+    <strong>简介</strong> —— 这段 Python 脚本使用 <span class="inline-code">baostock</span> 接口，查询贵州茅台（<span class="tag">sh.600519</span>）在 <span class="inline-code">2026-08-01</span> 至 <span class="inline-code">2026-09-01</span> 期间的日线 K 线数据。代码涵盖了登录、查询历史行情、遍历结果集、构建 DataFrame、导出 CSV、登出等完整流程，是 A 股量化数据获取的典型示例。
+  </div>
+
+  <!-- 1. 导入库 -->
+  <h2><i class="fas fa-box-open"></i> 1. 导入所需库</h2>
+  <p><i class="fas fa-cube" style="color:#2e7d5e;"></i> 两个核心库：Baostock 数据接口与 Pandas 数据处理。</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> import baostock as bs
+import pandas as pd</div>
+  <ul>
+    <li><i class="fas fa-database"></i> <span class="inline-code">baostock</span> — 免费开源的证券数据平台，提供 A 股历史行情、财务数据等</li>
+    <li><i class="fas fa-table"></i> <span class="inline-code">pandas</span> — 将结果集转为 DataFrame 并导出 CSV</li>
+  </ul>
+
+  <!-- 2. 登陆系统 -->
+  <h2><i class="fas fa-sign-in-alt"></i> 2. 登陆 Baostock 系统</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-info-circle" style="color:#2e7d5e;"></i> 
+    <strong>说明</strong> — 使用 Baostock 任何接口前必须先 <span class="inline-code">login()</span>，返回对象包含 <span class="inline-code">error_code</span> 与 <span class="inline-code">error_msg</span>。
+  </div>
+  <div class="code-block"><i class="fas fa-terminal"></i> #### 登陆系统 ####
+lg = bs.login()
+# 显示登陆返回信息
+print('login respond error_code:' + lg.error_code)
+print('login respond  error_msg:' + lg.error_msg)</div>
+  <ul>
+    <li><i class="fas fa-check-circle"></i> <span class="inline-code">error_code == '0'</span> 表示登录成功</li>
+    <li><i class="fas fa-exclamation-triangle"></i> 若失败，<span class="inline-code">error_msg</span> 会给出原因</li>
+  </ul>
+
+  <!-- 3. 获取历史K线数据 -->
+  <h2><i class="fas fa-history"></i> 3. 获取历史 K 线数据</h2>
+  <div class="highlight-box">
+    <i class="fas fa-book"></i> <strong>指标参数说明</strong> — “分钟线”与“日线”参数不同；“分钟线”不包含指数。
+    <ul style="margin-top: 0.3rem;">
+      <li><i class="fas fa-clock"></i> 分钟线指标：date,time,code,open,high,low,close,volume,amount,adjustflag</li>
+      <li><i class="fas fa-calendar-week"></i> 周月线指标：date,code,open,high,low,close,volume,amount,adjustflag,turn,pctChg</li>
+    </ul>
+  </div>
+  <div class="code-block"><i class="fas fa-terminal"></i> #### 获取沪深A股历史K线数据 ####
+# 详细指标参数，参见“历史行情指标参数”章节；“分钟线”参数与“日线”参数不同。“分钟线”不包含指数。
+# 分钟线指标：date,time,code,open,high,low,close,volume,amount,adjustflag
+# 周月线指标：date,code,open,high,low,close,volume,amount,adjustflag,turn,pctChg
+rs = bs.query_history_k_data_plus("sh.600519",
+    "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,isST",
+    start_date='2026-08-01', end_date='2026-09-01',
+    frequency="d", adjustflag="3")
+print('query_history_k_data_plus respond error_code:' + rs.error_code)
+print('query_history_k_data_plus respond  error_msg:' + rs.error_msg)</div>
+  <ul>
+    <li><i class="fas fa-coins"></i> <span class="inline-code">sh.600519</span> — 贵州茅台（上海交易所）</li>
+    <li><i class="fas fa-list"></i> 请求字段：日期、代码、开盘、最高、最低、收盘、前收、成交量、成交额、复权标志、换手率、交易状态、涨跌幅、是否ST</li>
+    <li><i class="fas fa-calendar-alt"></i> <span class="inline-code">start_date</span> / <span class="inline-code">end_date</span> — 查询区间</li>
+    <li><i class="fas fa-chart-line"></i> <span class="inline-code">frequency="d"</span> — 日线</li>
+    <li><i class="fas fa-sliders-h"></i> <span class="inline-code">adjustflag="3"</span> — 复权类型（3 表示不复权）</li>
+  </ul>
+
+  <!-- 4. 遍历结果集 -->
+  <h2><i class="fas fa-arrows-alt-h"></i> 4. 遍历结果集并构建 DataFrame</h2>
+  <div class="highlight-box">
+    <i class="fas fa-sync-alt"></i> 使用 <span class="inline-code">while</span> 循环配合 <span class="inline-code">rs.next()</span> 逐行读取，<span class="inline-code">rs.get_row_data()</span> 获取当前行数据。
+  </div>
+  <div class="code-block"><i class="fas fa-terminal"></i> #### 打印结果集 ####
+data_list = []
+while (rs.error_code == '0') & rs.next():
+    # 获取一条记录，将记录合并在一起
+    data_list.append(rs.get_row_data())
+result = pd.DataFrame(data_list, columns=rs.fields)</div>
+  <ul>
+    <li><i class="fas fa-check-double"></i> <span class="inline-code">rs.error_code == '0'</span> 确保查询无错</li>
+    <li><i class="fas fa-forward"></i> <span class="inline-code">rs.next()</span> 移动到下一行，返回 <span class="inline-code">True/False</span></li>
+    <li><i class="fas fa-columns"></i> <span class="inline-code">rs.fields</span> 提供列名</li>
+  </ul>
+
+  <!-- 5. 保存 CSV & 打印 -->
+  <h2><i class="fas fa-file-csv"></i> 5. 保存 CSV & 打印结果</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> #### 结果集输出到csv文件 ####
+result.to_csv("history_A_stock_k_data.csv", index=False)
+print(result)</div>
+  <div class="highlight-box" style="background: rgba(70, 130, 100, 0.08);">
+    <i class="fas fa-lightbulb"></i> <strong>提示</strong> — <span class="inline-code">index=False</span> 避免将 DataFrame 索引写入 CSV，保持文件整洁。
+  </div>
+
+  <!-- 6. 登出系统 -->
+  <h2><i class="fas fa-sign-out-alt"></i> 6. 登出系统</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> #### 登出系统 ####
+bs.logout()</div>
+  <p><i class="fas fa-shield-alt" style="color:#2e7d5e;"></i> 良好的编程习惯：使用完毕后主动登出，释放连接资源。</p>
+
+  <!-- 完整代码 -->
+  <h2><i class="fas fa-file-code"></i> 完整代码</h2>
+  <div class="code-block" style="max-height: 520px; overflow-y: auto;"><i class="fas fa-terminal"></i> import baostock as bs
+import pandas as pd
+
+#### 登陆系统 ####
+lg = bs.login()
+# 显示登陆返回信息
+print('login respond error_code:' + lg.error_code)
+print('login respond  error_msg:' + lg.error_msg)
+
+#### 获取沪深A股历史K线数据 ####
+# 详细指标参数，参见“历史行情指标参数”章节；“分钟线”参数与“日线”参数不同。“分钟线”不包含指数。
+# 分钟线指标：date,time,code,open,high,low,close,volume,amount,adjustflag
+# 周月线指标：date,code,open,high,low,close,volume,amount,adjustflag,turn,pctChg
+rs = bs.query_history_k_data_plus("sh.600519",
+    "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,isST",
+    start_date='2026-08-01', end_date='2026-09-01',
+    frequency="d", adjustflag="3")
+print('query_history_k_data_plus respond error_code:' + rs.error_code)
+print('query_history_k_data_plus respond  error_msg:' + rs.error_msg)
+
+#### 打印结果集 ####
+data_list = []
+while (rs.error_code == '0') & rs.next():
+    # 获取一条记录，将记录合并在一起
+    data_list.append(rs.get_row_data())
+result = pd.DataFrame(data_list, columns=rs.fields)
+
+#### 结果集输出到csv文件 ####
+result.to_csv("history_A_stock_k_data.csv", index=False)
+print(result)
+
+#### 登出系统 ####
+bs.logout()</div>
+
+  <!-- 关键点总结 -->
+  <h2><i class="fas fa-clipboard-check"></i> 关键点总结</h2>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-sign-in-alt"></i> <span class="inline-code">bs.login()</span> 必须先登录</div>
+    <div class="grid-item"><i class="fas fa-coins"></i> <span class="inline-code">sh.600519</span> 贵州茅台</div>
+    <div class="grid-item"><i class="fas fa-history"></i> <span class="inline-code">query_history_k_data_plus()</span> 查询K线</div>
+    <div class="grid-item"><i class="fas fa-sliders-h"></i> <span class="inline-code">frequency="d"</span> 日线</div>
+    <div class="grid-item"><i class="fas fa-file-csv"></i> 保存为 <span class="inline-code">history_A_stock_k_data.csv</span></div>
+    <div class="grid-item"><i class="fas fa-sign-out-alt"></i> <span class="inline-code">bs.logout()</span> 释放资源</div>
+  </div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>Baostock · 单只股票 · 历史K线数据</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 保留原始注释</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>

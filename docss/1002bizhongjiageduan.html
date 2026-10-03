@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>BNB 价格 · K线数据抓取 · 美化版</title>
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce8d5;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem 0.8rem;
+      color: #1a2a3a;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 25px 50px -12px rgba(60, 90, 70, 0.16), 0 8px 24px -6px rgba(0,0,0,0.04);
+      border: 1px solid rgba(200, 220, 190, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.8rem;
+      border-bottom: 4px solid #2e7d5e;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: #1f3a2b;
+    }
+
+    h1 i {
+      color: #2e7d5e;
+      font-size: 2rem;
+    }
+
+    .badge-header {
+      font-size: 0.85rem;
+      margin-left: auto;
+      background: rgba(70, 130, 100, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      font-weight: 400;
+      color: #1f4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      border: 1px solid rgba(100, 150, 120, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1f3a2b;
+      border-left: 6px solid #2e7d5e;
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(46, 125, 94, 0.06), transparent);
+      border-radius: 0 14px 14px 0;
+    }
+
+    h2 i {
+      color: #2e7d5e;
+      font-size: 1.4rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #1f3a2b;
+    }
+
+    h3 i {
+      color: #2e7d5e;
+      font-size: 1.2rem;
+      width: 1.8rem;
+    }
+
+    .code-block {
+      background: #0e1e2b;
+      color: #e3f0fa;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.6rem 0 1.2rem 0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 6px 14px -6px rgba(60, 90, 70, 0.2);
+      border: 1px solid #2b4b3a;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .code-block i {
+      color: #8fcb9f;
+      margin-right: 0.3rem;
+    }
+
+    .code-block .comment {
+      color: #6a8f7f;
+      font-style: italic;
+    }
+
+    .code-block .output {
+      color: #7ecf8a;
+    }
+
+    .inline-code {
+      background: #eaf0e6;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #1f4d3a;
+      border: 1px solid #c6dac6;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(70, 130, 100, 0.15);
+      border-radius: 30px;
+      padding: 0.1rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1f4d3a;
+    }
+
+    ul, ol {
+      margin: 0.4rem 0 0.6rem 1.4rem;
+      line-height: 1.7;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      list-style-type: none;
+    }
+
+    li i {
+      color: #2e7d5e;
+      width: 1.6rem;
+      text-align: center;
+      margin-right: 0.2rem;
+    }
+
+    .highlight-box {
+      background: rgba(46, 125, 94, 0.06);
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid #2e7d5e;
+      backdrop-filter: blur(2px);
+    }
+
+    .highlight-box i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    .highlight-box.green-params {
+      background: rgba(46, 125, 94, 0.08);
+      border-left-color: #2e7d5e;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.2rem;
+      margin: 0.6rem 0;
+    }
+
+    .grid-item {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(60, 90, 70, 0.04);
+      border: 1px solid rgba(200, 220, 190, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .grid-item i {
+      color: #2e7d5e;
+      margin-right: 0.4rem;
+    }
+
+    hr {
+      margin: 1.8rem 0 1rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #b6d4b6, transparent);
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: right;
+      font-size: 0.85rem;
+      color: #3d6b4c;
+      border-top: 1px solid #c6dac6;
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note i {
+      color: #2e7d5e;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #2e7d5e;
+      color: white;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.9rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      background: #1f4d3a;
+      color: white;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 1rem;
+      margin-right: 0.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 小屏优化 */
+    @media (max-width: 680px) {
+      body { padding: 0.8rem 0.4rem; }
+      .container { padding: 1.2rem 0.9rem; border-radius: 28px; }
+      h1 { font-size: 1.7rem; gap: 0.3rem; }
+      h1 i { font-size: 1.6rem; }
+      .badge-header { font-size: 0.75rem; padding: 0.1rem 0.8rem; margin-left: 0; width: 100%; justify-content: center; }
+      h2 { font-size: 1.3rem; padding-left: 0.8rem; }
+      h2 i { font-size: 1.2rem; width: 1.6rem; }
+      h3 { font-size: 1rem; }
+      .code-block { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 14px; }
+      .grid-2col { grid-template-columns: 1fr; gap: 0.5rem; }
+      .inline-code { font-size: 0.78rem; padding: 0.05rem 0.5rem; }
+      ul, ol { margin-left: 0.8rem; }
+      li i { width: 1.4rem; }
+      .footer-note { font-size: 0.75rem; justify-content: center; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0.9rem 0.7rem; }
+      h1 { font-size: 1.4rem; }
+      .code-block { font-size: 0.72rem; padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 标题 -->
+  <h1>
+    <i class="fas fa-chart-line"></i> 
+    BNB 价格 · K线抓取  · 2020年开始
+    <span class="badge-header"><i class="far fa-calendar-alt"></i> 2026-10-02</span>
+  </h1>
+
+  <!-- 简介 -->
+  <div class="highlight-box" style="margin-bottom: 1.8rem;">
+    <i class="fas fa-quote-left"></i>
+    <strong>简介</strong> —— 这段 Python 脚本通过币安公开 API 获取 BNB/USDT <span class="inline-code">【这里可以修改为你想要的币种】</span>的日线 K 线数据，用 Pandas 整理成表格，并保存为 CSV 文件。代码虽短，但涵盖了 <span class="inline-code">requests</span> 网络请求、<span class="inline-code">pandas</span> 数据清洗、<span class="inline-code">matplotlib</span> 可视化准备等核心操作。
+  </div>
+
+  <!-- 1. 导入库 -->
+  <h2><i class="fas fa-box-open"></i> 1. 导入所需库</h2>
+  <p><i class="fas fa-cube" style="color:#2e7d5e;"></i> 三个核心库：网络请求、数据处理、绘图准备。</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> import requests
+import pandas as pd
+import matplotlib.pyplot as plt</div>
+  <ul>
+    <li><i class="fas fa-cloud"></i> <span class="inline-code">requests</span> — 发送 HTTP 请求，获取币安 API 数据</li>
+    <li><i class="fas fa-table"></i> <span class="inline-code">pandas</span> — 强大的数据分析工具，处理表格数据</li>
+    <li><i class="fas fa-chart-bar"></i> <span class="inline-code">matplotlib.pyplot</span> — 绘图库，为后续可视化做准备</li>
+  </ul>
+
+  <!-- 2. API 配置 -->
+  <h2><i class="fas fa-sliders-h"></i> 2. 配置币安 K 线接口</h2>
+  <div class="highlight-box green-params">
+    <i class="fas fa-info-circle" style="color:#2e7d5e;"></i> 
+    <strong>接口说明</strong> — 币安 <span class="inline-code">/api/v3/klines</span> 返回数组列表，包含开高低收、成交量等字段。
+  </div>
+  <div class="code-block"><i class="fas fa-terminal"></i> # 币安 K线接口，1d = 日线，limit=365 取约一年数据
+url = "https://api.binance.com/api/v3/klines"
+params = {
+    "symbol": "BNBUSDT",
+    "interval": "1d",
+    "limit": 10
+}</div>
+  <ul>
+    <li><i class="fas fa-link"></i> <span class="inline-code">url</span> — 币安公开 K 线端点</li>
+    <li><i class="fas fa-coins"></i> <span class="inline-code">symbol</span> — 交易对 <span class="tag">BNBUSDT</span></li>
+    <li><i class="fas fa-calendar-day"></i> <span class="inline-code">interval</span> — <span class="tag">1d</span> 表示日线</li>
+    <li><i class="fas fa-list-ol"></i> <span class="inline-code">limit</span> — 数据条数，示例取 10 条</li>
+  </ul>
+
+  <!-- 3. 发送请求 -->
+  <h2><i class="fas fa-paper-plane"></i> 3. 发送请求 & 获取数据</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> resp = requests.get(url, params=params)
+data = resp.json()</div>
+  <p><i class="fas fa-check-circle" style="color:#2e7d5e;"></i> <span class="inline-code">resp.json()</span> 将返回的 JSON 数据解析为 Python 列表。</p>
+
+  <!-- 4. DataFrame 构建 -->
+  <h2><i class="fas fa-table"></i> 4. 转换为 DataFrame</h2>
+  <div class="highlight-box">
+    <i class="fas fa-columns"></i> 币安返回的每个元素是一个包含 12 个字段的数组，需要手动指定列名。
+  </div>
+  <div class="code-block"><i class="fas fa-terminal"></i> # 币安返回的是数组列表，转成 DataFrame
+df = pd.DataFrame(data, columns=[
+    "OpenTime", "Open", "High", "Low", "Close", "Volume",
+    "CloseTime", "QuoteVolume", "Trades", "TakerBuyBase", "TakerBuyQuote", "Ignore"
+])</div>
+
+  <!-- 5. 数据类型转换 -->
+  <h2><i class="fas fa-exchange-alt"></i> 5. 数据类型处理</h2>
+  <p><i class="fas fa-clock" style="color:#2e7d5e;"></i> 将时间戳转换为可读日期，将价格、成交量转为浮点数。</p>
+  <div class="code-block"><i class="fas fa-terminal"></i> # 处理数据类型
+df["Date"] = pd.to_datetime(df["OpenTime"], unit="ms")
+df["Close"] = df["Close"].astype(float)
+df["Open"] = df["Open"].astype(float)
+df["High"] = df["High"].astype(float)
+df["Low"] = df["Low"].astype(float)
+df["Volume"] = df["Volume"].astype(float)
+df = df.set_index("Date")</div>
+
+  <!-- 6. 选取列 & 保存 -->
+  <h2><i class="fas fa-filter"></i> 6. 选取需要的列 & 保存 CSV</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> # 只保留需要的列
+df = df[["Open", "High", "Low", "Close", "Volume"]]
+
+# ---------- 保存 CSV ----------
+df.to_csv("bnb_daily.csv", encoding="utf-8-sig")
+print("✅ 已保存到 btc_daily.csv")   # 注意：原文写的是 btc_daily.csv，保留原注释</div>
+  <div class="highlight-box" style="background: rgba(70, 130, 100, 0.08);">
+    <i class="fas fa-lightbulb"></i> <strong>提示</strong> — <span class="inline-code">encoding="utf-8-sig"</span> 确保中文/表情符号在 Excel 中正常显示。
+  </div>
+
+  <!-- 7. 打印预览 -->
+  <h2><i class="fas fa-print"></i> 7. 打印数据预览</h2>
+  <div class="code-block"><i class="fas fa-terminal"></i> print("=== 前5天 ===")
+print(df.head())
+print("\n=== 最近5天 ===")
+print(df.tail())
+print("\n=== 统计概览 ===")
+print(df.describe())</div>
+  <ul>
+    <li><i class="fas fa-eye"></i> <span class="inline-code">df.head()</span> — 查看前 5 行</li>
+    <li><i class="fas fa-history"></i> <span class="inline-code">df.tail()</span> — 查看最后 5 行</li>
+    <li><i class="fas fa-calculator"></i> <span class="inline-code">df.describe()</span> — 统计概览（均值、标准差、分位数等）</li>
+  </ul>
+
+  <!-- 完整代码块 -->
+  <h2><i class="fas fa-file-code"></i> 完整代码</h2>
+  <div class="code-block" style="max-height: 500px; overflow-y: auto;"><i class="fas fa-terminal"></i> import requests
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 币安 K线接口，1d = 日线，limit=365 取约一年数据
+url = "https://api.binance.com/api/v3/klines"
+params = {
+    "symbol": "BNBUSDT",
+    "interval": "1d",
+    "limit": 10   #目前此代码只能抓取1000条数据，想要更多的数据，看另一份代码
+}
+
+resp = requests.get(url, params=params)
+data = resp.json()
+
+# 币安返回的是数组列表，转成 DataFrame
+df = pd.DataFrame(data, columns=[
+    "OpenTime", "Open", "High", "Low", "Close", "Volume",
+    "CloseTime", "QuoteVolume", "Trades", "TakerBuyBase", "TakerBuyQuote", "Ignore"
+])
+
+# 处理数据类型
+df["Date"] = pd.to_datetime(df["OpenTime"], unit="ms")
+df["Close"] = df["Close"].astype(float)
+df["Open"] = df["Open"].astype(float)
+df["High"] = df["High"].astype(float)
+df["Low"] = df["Low"].astype(float)
+df["Volume"] = df["Volume"].astype(float)
+df = df.set_index("Date")
+
+# 只保留需要的列
+df = df[["Open", "High", "Low", "Close", "Volume"]]
+
+# ---------- 保存 CSV ----------
+df.to_csv("bnb_daily.csv", encoding="utf-8-sig")
+print("✅ 已保存到 btc_daily.csv")
+
+print("=== 前5天 ===")
+print(df.head())
+print("\n=== 最近5天 ===")
+print(df.tail())
+print("\n=== 统计概览 ===")
+print(df.describe())</div>
+
+  <!-- 关键点总结 -->
+  <h2><i class="fas fa-clipboard-check"></i> 关键点总结</h2>
+  <div class="grid-2col">
+    <div class="grid-item"><i class="fas fa-cloud-download-alt"></i> 使用 <span class="inline-code">requests</span> 获取实盘数据</div>
+    <div class="grid-item"><i class="fas fa-th"></i> <span class="inline-code">pd.DataFrame</span> 指定列名</div>
+    <div class="grid-item"><i class="fas fa-clock"></i> 毫秒时间戳转日期索引</div>
+    <div class="grid-item"><i class="fas fa-file-csv"></i> 保存为 <span class="inline-code">bnb_daily.csv</span></div>
+    <div class="grid-item"><i class="fas fa-chart-simple"></i> 为 matplotlib 绘图预留数据</div>
+    <div class="grid-item"><i class="fas fa-check-double"></i> 保留所有原始注释</div>
+  </div>
+
+  <!-- 底部 -->
+  <hr>
+  <div class="footer-note">
+    <i class="fas fa-rocket"></i> 
+    <span>BNB 价格 · K线数据 · 币安 API</span>
+    <i class="fas fa-code" style="margin-left: 0.3rem;"></i>
+    <span style="font-weight: 300; opacity: 0.8;"># 保留原始注释</span>
+    <i class="fas fa-terminal" style="margin-left: 0.3rem;"></i>
+  </div>
+
+</div>
+</body>
+</html>
